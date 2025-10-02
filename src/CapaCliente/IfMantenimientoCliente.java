@@ -6,7 +6,7 @@ package CapaCliente;
 
 /**
  *
- * @author Mercurio5
+ * @author Julon
  */
 public class IfMantenimientoCliente extends javax.swing.JInternalFrame {
 
