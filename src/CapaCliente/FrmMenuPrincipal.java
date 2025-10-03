@@ -1,11 +1,9 @@
-  /*
+   /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package CapaCliente;
 
-
-import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -13,7 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
@@ -22,12 +19,10 @@ import javax.swing.SwingUtilities;
  */
 public class FrmMenuPrincipal extends javax.swing.JFrame {
 
-    FondoPanel fondo = new FondoPanel();
-    FondoLogo logo = new FondoLogo();
-    
+      private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmMenuPrincipal.class.getName());
     public FrmMenuPrincipal() {
       
-        this.setContentPane(logo);
+    
         //setExtendedState(MAXIMIZED_BOTH);
           SwingUtilities.invokeLater(() -> setExtendedState(JFrame.MAXIMIZED_BOTH));
         initComponents();
@@ -55,15 +50,18 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         pnlMenu.add(btnAcercaDe);
     }
 
+ImageIcon imageIcon = new ImageIcon(getClass().getResource("/Recursos/logo.png"));
+Image resizedImage =  resizedImage = imageIcon.getImage().getScaledInstance(116,72 , Image.SCALE_SMOOTH);
+     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        JpLogo = new FondoLogo();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         pnlMenu = new javax.swing.JPanel();
         btnReportes = new javax.swing.JButton();
         btnAcercaDe = new javax.swing.JButton();
@@ -83,19 +81,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(31, 41, 55));
         jPanel2.setPreferredSize(new java.awt.Dimension(1200, 100));
 
-        JpLogo.setPreferredSize(new java.awt.Dimension(116, 72));
-
-        javax.swing.GroupLayout JpLogoLayout = new javax.swing.GroupLayout(JpLogo);
-        JpLogo.setLayout(JpLogoLayout);
-        JpLogoLayout.setHorizontalGroup(
-            JpLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 116, Short.MAX_VALUE)
-        );
-        JpLogoLayout.setVerticalGroup(
-            JpLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 72, Short.MAX_VALUE)
-        );
-
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("SISTEMA DE MANTENIMIENTO DE VEHÍCULOS");
@@ -104,14 +89,16 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Y VENTA DE PRODUCTOS");
 
+        jLabel3.setIcon(new ImageIcon(resizedImage));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(JpLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(14, 14, 14)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
@@ -122,11 +109,11 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2))
-                    .addComponent(JpLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel2)))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -452,7 +439,6 @@ JpFondo.repaint();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane JpFondo;
-    private javax.swing.JPanel JpLogo;
     private javax.swing.JButton btnAcercaDe;
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnInicio;
@@ -464,33 +450,9 @@ JpFondo.repaint();
     private javax.swing.JButton btnVentas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel pnlMenu;
     // End of variables declaration//GEN-END:variables
-}
-
-
-class FondoPanel extends JPanel {
-
-    private Image imagen;
-
-    public void paint(Graphics g) {
-        imagen = new ImageIcon(getClass().getResource("/Recursos/fondo.jpg")).getImage();
-        g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-        setOpaque(false);
-        super.paint(g);
-    }
-}
-
-class FondoLogo extends JPanel {
-
-    private Image imagen;
-
-    public void paint(Graphics g) {
-        imagen = new ImageIcon(getClass().getResource("/Recursos/logo.png")).getImage();
-        g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-        setOpaque(false);
-        super.paint(g);
-    }
 }
