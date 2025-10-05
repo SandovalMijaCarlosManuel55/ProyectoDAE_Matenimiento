@@ -121,8 +121,8 @@ public class clsCliente {
     return -1;
     }
     
-    public void registrarCliente(int id, String tipoCliente, Date fechaRegistro, String distrito )throws Exception{
-    strSQL = "insert into cliente values("+id+",'"+tipoCliente+"','"+fechaRegistro+"',"+buscarIdDistrito(distrito)+")";
+    public void registrarCliente(int id, String tipoCliente, Date fechaRegistro, String distrito, int representate )throws Exception{
+    strSQL = "insert into cliente values("+id+",'"+tipoCliente+"','"+fechaRegistro+"',"+buscarIdDistrito(distrito)+","+representate+")";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -140,5 +140,18 @@ public class clsCliente {
     
     }
     
+    
+    public void eliminarCliente (int id)throws Exception{
+    strSQL = "delete from cliente where idcliente= "+ id;
+        try {
+            objConectar.ejecutarBD(strSQL);
+        } catch (Exception e) {
+            throw new Exception();
+        }
+    
+    }
+    
+   public void darDeBajaCliente()throws Exception{
+   }
    
 }

@@ -29,7 +29,7 @@ public class clsTrabajador {
         return "";
     }
     
-    public Boolean validarVigencia(String user) throws Exception{
+    public Boolean validarVigencia(String user) throws Exception{ 
         strSQL = "select estado from trabajador where usuario = '" + user + "'";
         try{
             rs = objConectar.consultarBD(strSQL);
