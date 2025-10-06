@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 
 /**
  *
- * @author Mercurio5
+ * @author Julon
  */
 public class clsEmpresa {
     

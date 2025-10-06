@@ -401,7 +401,27 @@ JpFondo.repaint();
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
-     
+         close(JpFondo); 
+IfMantenimientoProducto obj = new IfMantenimientoProducto();
+// Obtener el tamaño del JDesktopPane
+int width = JpFondo.getWidth();
+int height = JpFondo.getHeight()+30;
+
+// Establecer el tamaño del JInternalFrame para que ocupe todo el espacio del JDesktopPane
+obj.setSize(width, height);
+obj.setLocation(0, -30); 
+obj.setResizable(false);
+obj.setClosable(false);
+obj.setMaximizable(false);
+obj.setIconifiable(false);
+
+obj.setVisible(true);
+ 
+// Agregar el JInternalFrame (obj) al JDesktopPane (JpFondo)
+JpFondo.add(obj);  // Aquí JpFondo es tu JDesktopPane
+// Asegúrate de que el JDesktopPane repinte correctamente
+JpFondo.revalidate();
+JpFondo.repaint();
     }//GEN-LAST:event_btnProductosActionPerformed
 
     private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
