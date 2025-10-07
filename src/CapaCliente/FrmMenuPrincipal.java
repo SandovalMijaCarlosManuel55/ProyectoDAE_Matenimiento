@@ -17,42 +17,86 @@ import javax.swing.SwingUtilities;
  *
  * @author Josselyn
  */
+
 public class FrmMenuPrincipal extends javax.swing.JFrame {
-
-      private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmMenuPrincipal.class.getName());
-    public FrmMenuPrincipal() {
-      
-    
-        //setExtendedState(MAXIMIZED_BOTH);
+private  IfMantenimientoProducto ifProducto ;
+private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmMenuPrincipal.class.getName());
+public FrmMenuPrincipal() {
+    //inicializadores
+     ifProducto = new IfMantenimientoProducto(this);
+     
+    initComponents();
+ ajustepanel();
+}
+//ajustar el panel
+private void ajustepanel(){
           SwingUtilities.invokeLater(() -> setExtendedState(JFrame.MAXIMIZED_BOTH));
-        initComponents();
-        pnlMenu.setLayout(new BoxLayout(pnlMenu, BoxLayout.Y_AXIS));
-       
-        //cambiar el tamaño exacto para que ocupe todo el panel de cada boton
-        btnInicio.add(Box.createGlue());
-        btnVehiculos.add(Box.createGlue());
-        btnServicios.add(Box.createGlue());
-        btnClientes.add(Box.createGlue());
-        btnProductos.add(Box.createGlue());
-        btnVentas.add(Box.createGlue());
-        btnTrabajadores.add(Box.createGlue());
-        btnReportes.add(Box.createGlue());
-        btnAcercaDe.add(Box.createGlue());
+   pnlMenu.setLayout(new BoxLayout(pnlMenu, BoxLayout.Y_AXIS));
 
-        pnlMenu.add(btnInicio);
-        pnlMenu.add(btnVehiculos);
-        pnlMenu.add(btnServicios);
-        pnlMenu.add(btnClientes);
-        pnlMenu.add(btnProductos);
-        pnlMenu.add(btnVentas); 
-        pnlMenu.add(btnTrabajadores); 
-        pnlMenu.add(btnReportes);
-        pnlMenu.add(btnAcercaDe);
-    }
+    //cambiar el tamaño exacto para que ocupe todo el panel de cada boton
+    btnInicio.add(Box.createGlue());
+    btnVehiculos.add(Box.createGlue());
+    btnServicios.add(Box.createGlue());
+    btnClientes.add(Box.createGlue());
+    btnProductos.add(Box.createGlue());
+    btnVentas.add(Box.createGlue());
+    btnTrabajadores.add(Box.createGlue());
+    btnReportes.add(Box.createGlue());
+    btnAcercaDe.add(Box.createGlue());
 
+    pnlMenu.add(btnInicio);
+    pnlMenu.add(btnVehiculos);
+    pnlMenu.add(btnServicios);
+    pnlMenu.add(btnClientes);
+    pnlMenu.add(btnProductos);
+    pnlMenu.add(btnVentas); 
+    pnlMenu.add(btnTrabajadores); 
+    pnlMenu.add(btnReportes);
+    pnlMenu.add(btnAcercaDe);
+
+}
+
+//get de los internal frame
+public JInternalFrame getIfProducto(){
+return ifProducto;
+}
+
+//iconos directamente
 ImageIcon imageIcon = new ImageIcon(getClass().getResource("/Recursos/logo.png"));
 Image resizedImage =  resizedImage = imageIcon.getImage().getScaledInstance(116,72 , Image.SCALE_SMOOTH);
-     
+
+public void close(JDesktopPane desktopPane){
+  // Obtener el primer (y único) internal frame en el DesktopPane
+  JInternalFrame internalFrame = desktopPane.getAllFrames().length > 0 ? desktopPane.getAllFrames()[0] : null;
+
+  // Si existe un internal frame, cerrarlo
+  if (internalFrame != null) {
+      internalFrame.dispose();
+  }};
+  
+public void abrirInternalFrame(JInternalFrame obj){
+// Obtener el tamaño del JDesktopPane
+int width = JpFondo.getWidth();
+int height = JpFondo.getHeight()+30;
+
+// Establecer el tamaño del JInternalFrame para que ocupe todo el espacio del JDesktopPane
+obj.setSize(width, height);
+obj.setLocation(0, -30); 
+obj.setResizable(false);
+obj.setClosable(false);
+obj.setMaximizable(false);
+obj.setIconifiable(false);
+
+obj.setVisible(true);
+ 
+// Agregar el JInternalFrame (obj) al JDesktopPane (JpFondo)
+JpFondo.add(obj);  // Aquí JpFondo es tu JDesktopPane
+// Asegúrate de que el JDesktopPane repinte correctamente
+JpFondo.revalidate();
+JpFondo.repaint();
+
+}
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -334,14 +378,7 @@ Image resizedImage =  resizedImage = imageIcon.getImage().getScaledInstance(116,
     }// </editor-fold>//GEN-END:initComponents
 //cerrar los internalframeAbiertos
     
-    private void close(JDesktopPane desktopPane){
-    // Obtener el primer (y único) internal frame en el DesktopPane
-    JInternalFrame internalFrame = desktopPane.getAllFrames().length > 0 ? desktopPane.getAllFrames()[0] : null;
-
-    // Si existe un internal frame, cerrarlo
-    if (internalFrame != null) {
-        internalFrame.dispose();
-    }};
+  
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnReportesActionPerformed
@@ -351,105 +388,30 @@ Image resizedImage =  resizedImage = imageIcon.getImage().getScaledInstance(116,
     }//GEN-LAST:event_btnVehiculosActionPerformed
 
     private void btnServiciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiciosActionPerformed
-
-IFMantenimientoServicios obj = new IFMantenimientoServicios();
-   close(JpFondo); 
-// Obtener el tamaño del JDesktopPane
-int width = JpFondo.getWidth();
-int height = JpFondo.getHeight()+30;
-
-// Establecer el tamaño del JInternalFrame para que ocupe todo el espacio del JDesktopPane
-obj.setSize(width, height);
-obj.setLocation(0, -30); 
-obj.setResizable(false);
-obj.setClosable(false);
-obj.setMaximizable(false);
-obj.setIconifiable(false);
-
-obj.setVisible(true);
- 
-// Agregar el JInternalFrame (obj) al JDesktopPane (JpFondo)
-JpFondo.add(obj);  // Aquí JpFondo es tu JDesktopPane
-// Asegúrate de que el JDesktopPane repinte correctamente
-JpFondo.revalidate();
-JpFondo.repaint();
- 
+     close(JpFondo);
+     IFMantenimientoServicios ifServicios = new IFMantenimientoServicios();
+     abrirInternalFrame(ifServicios);
     }//GEN-LAST:event_btnServiciosActionPerformed
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
-          close(JpFondo); 
-IfMantenimientoCliente obj = new IfMantenimientoCliente();
-// Obtener el tamaño del JDesktopPane
-int width = JpFondo.getWidth();
-int height = JpFondo.getHeight()+30;
-
-// Establecer el tamaño del JInternalFrame para que ocupe todo el espacio del JDesktopPane
-obj.setSize(width, height);
-obj.setLocation(0, -30); 
-obj.setResizable(false);
-obj.setClosable(false);
-obj.setMaximizable(false);
-obj.setIconifiable(false);
-
-obj.setVisible(true);
- 
-// Agregar el JInternalFrame (obj) al JDesktopPane (JpFondo)
-JpFondo.add(obj);  // Aquí JpFondo es tu JDesktopPane
-// Asegúrate de que el JDesktopPane repinte correctamente
-JpFondo.revalidate();
-JpFondo.repaint();
+    close(JpFondo);
+    IfMantenimientoCliente ifCliente = new IfMantenimientoCliente();
+    abrirInternalFrame(ifCliente);
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
-         close(JpFondo); 
-IfMantenimientoProducto obj = new IfMantenimientoProducto();
-// Obtener el tamaño del JDesktopPane
-int width = JpFondo.getWidth();
-int height = JpFondo.getHeight()+30;
-
-// Establecer el tamaño del JInternalFrame para que ocupe todo el espacio del JDesktopPane
-obj.setSize(width, height);
-obj.setLocation(0, -30); 
-obj.setResizable(false);
-obj.setClosable(false);
-obj.setMaximizable(false);
-obj.setIconifiable(false);
-
-obj.setVisible(true);
- 
-// Agregar el JInternalFrame (obj) al JDesktopPane (JpFondo)
-JpFondo.add(obj);  // Aquí JpFondo es tu JDesktopPane
-// Asegúrate de que el JDesktopPane repinte correctamente
-JpFondo.revalidate();
-JpFondo.repaint();
+    close(JpFondo); 
+    abrirInternalFrame(ifProducto);
     }//GEN-LAST:event_btnProductosActionPerformed
 
     private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
-
+    close(JpFondo); 
     }//GEN-LAST:event_btnVentasActionPerformed
 
     private void btnTrabajadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrabajadoresActionPerformed
     close(JpFondo); 
-IfMantenimientoTrabajador obj = new IfMantenimientoTrabajador();
-// Obtener el tamaño del JDesktopPane
-int width = JpFondo.getWidth();
-int height = JpFondo.getHeight()+30;
-
-// Establecer el tamaño del JInternalFrame para que ocupe todo el espacio del JDesktopPane
-obj.setSize(width, height);
-obj.setLocation(0, -30); 
-obj.setResizable(false);
-obj.setClosable(false);
-obj.setMaximizable(false);
-obj.setIconifiable(false);
-
-obj.setVisible(true);
- 
-// Agregar el JInternalFrame (obj) al JDesktopPane (JpFondo)
-JpFondo.add(obj);  // Aquí JpFondo es tu JDesktopPane
-// Asegúrate de que el JDesktopPane repinte correctamente
-JpFondo.revalidate();
-JpFondo.repaint();
+    IfMantenimientoTrabajador ifTrabajadores = new IfMantenimientoTrabajador();
+    abrirInternalFrame(ifTrabajadores);
     }//GEN-LAST:event_btnTrabajadoresActionPerformed
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed

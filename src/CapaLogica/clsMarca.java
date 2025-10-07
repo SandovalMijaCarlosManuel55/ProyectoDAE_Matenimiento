@@ -51,7 +51,7 @@ public class clsMarca {
 
     // Listar todas las marcas
     public ResultSet listarMarca() throws Exception {
-        strSQL = "SELECT * FROM marca";
+        strSQL = "SELECT * FROM marca_producto";
         try {
             rs = objConectar.consultarBD(strSQL);
             return rs;
@@ -63,7 +63,7 @@ public class clsMarca {
 
     // Buscar marca por ID
     public ResultSet buscarXid(int id) throws Exception {
-        strSQL = "SELECT * FROM marca WHERE idmarcaproducto = " + id;
+        strSQL = "SELECT * FROM marca_producto WHERE idmarcaproducto = " + id;
         try {
             rs = objConectar.consultarBD(strSQL);
         } catch (Exception e) {
@@ -71,10 +71,20 @@ public class clsMarca {
         }
         return rs;
     }
-
+    
+    public ResultSet buscaridxNombre(String nombre)throws Exception{
+    strSQL = "Select idmarcaproducto from marca_producto where nommarcaproducto ilike '%"+nombre+"%'" ;
+        try {
+            rs = objConectar.consultarBD(strSQL);
+            if(rs.next())return rs;
+        } catch (Exception e) {
+        throw new Exception("Error al buscar idMarca por en nombre");
+        }
+    return null;
+    }
     // Registrar nueva marca
     public void registrarMarca(int id, String nombre) throws Exception {
-        strSQL = "INSERT INTO marca (idmarcaproducto, nommarcaproducto) VALUES (" + id + ", '" + nombre + "')";
+        strSQL = "INSERT INTO marca_producto (idmarcaproducto, nommarcaproducto) VALUES (" + id + ", '" + nombre + "')";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -84,7 +94,7 @@ public class clsMarca {
 
     // Modificar marca existente
     public void modificarMarca(int id, String nombre) throws Exception {
-        strSQL = "UPDATE marca SET nommarcaproducto = '" + nombre + "' WHERE idmarcaproducto = " + id;
+        strSQL = "UPDATE marca_producto SET nommarcaproducto = '" + nombre + "' WHERE idmarcaproducto = " + id;
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -94,7 +104,7 @@ public class clsMarca {
 
     // Eliminar marca por ID
     public void eliminarMarca(int id) {
-        strSQL = "DELETE FROM marca WHERE idmarcaproducto = " + id;
+        strSQL = "DELETE FROM marca_producto WHERE idmarcaproducto = " + id;
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -104,7 +114,7 @@ public class clsMarca {
 
     // Generar nuevo código de marca (ID autoincremental)
     public Integer generarCodigoMarca() throws Exception {
-        strSQL = "SELECT COALESCE(MAX(idmarcaproducto), 0) + 1 AS codigo FROM marca";
+        strSQL = "SELECT COALESCE(MAX(idmarcaproducto), 0) + 1 AS codigo FROM marca_producto";
         try {
             rs = objConectar.consultarBD(strSQL);
             while (rs.next()) {

@@ -83,15 +83,7 @@ public class clsTipoProducto {
         this.sent = sent;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
 //******************************************************************************    
     
     clsJDBC objConectar = new clsJDBC();
@@ -102,7 +94,7 @@ public class clsTipoProducto {
 
     // Listar todos los tipos de producto
     public ResultSet listarTipoProducto() throws Exception {
-        strSQL = "SELECT * FROM tipoproducto";
+        strSQL = "SELECT * FROM tipo_producto";
         try {
             rs = objConectar.consultarBD(strSQL);
             return rs;
@@ -114,7 +106,7 @@ public class clsTipoProducto {
 
     // Buscar tipo de producto por ID
     public ResultSet buscarXid(int id) throws Exception {
-        strSQL = "SELECT * FROM tipoproducto WHERE idtipoproducto = " + id;
+        strSQL = "SELECT * FROM tipo_producto WHERE idtipoproducto = " + id;
         try {
             rs = objConectar.consultarBD(strSQL);
         } catch (Exception e) {
@@ -122,10 +114,21 @@ public class clsTipoProducto {
         }
         return rs;
     }
-
+    
+    public ResultSet buscarIdxNombre(String nombre)throws Exception{
+    strSQL = "Select idTipoProducto from tipo_producto where nomTipoProducto ilike '%"+nombre+"%'";
+        try {
+            rs = objConectar.consultarBD(strSQL);
+            if(rs.next())return rs;
+        } catch (Exception e) {
+        throw new Exception("Error al buscar nombre por id");
+        }
+    return null;
+    }
+    
     // Registrar nuevo tipo de producto
     public void registrarTipoProducto(int id, String nombre) throws Exception {
-        strSQL = "INSERT INTO tipoproducto (idtipoproducto, nomtipoproducto) VALUES (" + id + ", '" + nombre + "')";
+        strSQL = "INSERT INTO tipo_producto (idtipoproducto, nomtipoproducto) VALUES (" + id + ", '" + nombre + "')";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -135,7 +138,7 @@ public class clsTipoProducto {
 
     // Modificar tipo de producto
     public void modificarTipoProducto(int id, String nombre) throws Exception {
-        strSQL = "UPDATE tipoproducto SET nomtipoproducto = '" + nombre + "' WHERE idtipoproducto = " + id;
+        strSQL = "UPDATE tipo_producto SET nomtipoproducto = '" + nombre + "' WHERE idtipoproducto = " + id;
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -145,7 +148,7 @@ public class clsTipoProducto {
 
     // Eliminar tipo de producto por ID
     public void eliminarTipoProducto(int id) {
-        strSQL = "DELETE FROM tipoproducto WHERE idtipoproducto = " + id;
+        strSQL = "DELETE FROM tipo_producto WHERE idtipoproducto = " + id;
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -155,7 +158,7 @@ public class clsTipoProducto {
 
     // Generar nuevo ID para tipo de producto
     public Integer generarCodigoTipoProducto() throws Exception {
-        strSQL = "SELECT COALESCE(MAX(idtipoproducto), 0) + 1 AS codigo FROM tipoproducto";
+        strSQL = "SELECT COALESCE(MAX(idtipoproducto), 0) + 1 AS codigo FROM tipo_producto";
         try {
             rs = objConectar.consultarBD(strSQL);
             while (rs.next()) {

@@ -128,20 +128,56 @@ public clsProducto(){};
     }
 
     // Buscar producto por ID
+    //Estructura: idproducto,nomproducto,stock,vigencia,nommarcaproducto,nommarcaproducto
     public ResultSet buscarXid(int id) throws Exception {
-        strSQL = "SELECT * FROM producto WHERE idproducto = " + id;
+        strSQL = "select " +
+                "pr.idproducto, " +
+                "pr.nomproducto, " +
+                "pr.stock, " +
+                "pr.vigencia, " +
+                "pm.nommarcaproducto, " +
+                "tp.nomtipoproducto " +
+                "from producto pr  " +
+                "inner join marca_producto pm on pm.idmarcaproducto = pr.idmarcaproducto " +
+                "inner join tipo_producto tp on tp.idtipoproducto = pr.idtipoproducto " +
+                "where idproducto = " + id;
         try {
             rs = objConectar.consultarBD(strSQL);
+            if(rs.next()) return rs;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-        return rs;
+        return null;
+    }
+    
+    public ResultSet buscarIdNombre(String dato)throws Exception{
+         String datoS ="*";int datoI= 0;
+        if (this.EsEntero(dato)) {datoI =Integer.parseInt(dato);}else{ datoS = dato;}
+
+        strSQL="select " +
+            " pr.idproducto, " +
+            " pr.nomproducto, " +
+            " pr.stock, " +
+            " pr.vigencia, " +
+            " pm.nommarcaproducto, " +
+            " tp.nomtipoproducto " +
+            " from producto pr " +
+            " inner join marca_producto pm on pm.idmarcaproducto = pr.idmarcaproducto " +
+            " inner join tipo_producto tp on tp.idtipoproducto = pr.idtipoproducto " +
+            " where pr.idproducto = "+datoI+"  or pr.nomproducto ilike '%"+datoS+"%'  " +
+            " order by 1 ";
+        try {
+            rs = objConectar.consultarBD(strSQL);
+            return rs;
+        } catch (Exception e) {
+           throw new Exception("Error al buscar por Nombre o id"); 
+        }
     }
 
     // Registrar nuevo producto
-    public void registrarProducto(int id, String nombre, int stock, boolean estado) throws Exception {
-        strSQL = "INSERT INTO producto (idproducto, nomproducto, stock, estado) VALUES (" 
-                 + id + ", '" + nombre + "', " + stock + ", " + estado + ")";
+    public void registrarProducto(int id, String nombre, int stock, boolean estado,int idtipoProducto, int idmarcaproducto) throws Exception {
+        strSQL = "INSERT INTO producto VALUES (" 
+                 + id + ", '" + nombre + "', " + stock + ", " + estado +","+idtipoProducto+","+idmarcaproducto+ ")";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -183,4 +219,17 @@ public clsProducto(){};
         }
         return 0;
     }
+    
+    
+    public boolean EsEntero(String a){
+            try {
+                Integer.parseInt(a);
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+    
+    }
 }
+    
+    

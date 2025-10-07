@@ -17,12 +17,14 @@ import javax.swing.table.DefaultTableModel;
 public class IfMantenimientoProducto extends javax.swing.JInternalFrame {
 
 clsProducto objProducto  = new clsProducto();
+private FrmMenuPrincipal frmP;
     
-    public IfMantenimientoProducto() {
+    public IfMantenimientoProducto(FrmMenuPrincipal frmP) {
         initComponents();
-        listar();
+        this.frmP =frmP;
+        listar("");
     }
-public void listar(){
+public void listar(String dato){
 ResultSet rs=null;
 Vector vc;
 DefaultTableModel mdl = new DefaultTableModel();
@@ -34,7 +36,7 @@ mdl.addColumn("Tipo Producto");
 mdl.addColumn("Marca");
 //p.idproducto,p.nomproducto,p.stock,p.vigencia,tp.nomtipoproducto,mp.nommarcaproducto
     try {
-        rs =objProducto.listarProducto();
+        rs =objProducto.buscarIdNombre(dato);
        
         while(rs.next()){
              vc = new Vector();
@@ -53,10 +55,6 @@ mdl.addColumn("Marca");
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Error al listar \n"+e.getMessage());
     }
-    
-
-
-
 }
     
     @SuppressWarnings("unchecked")
@@ -69,7 +67,7 @@ mdl.addColumn("Marca");
         jComboBox1 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
         btnGestionarPersona = new javax.swing.JButton();
-        btnGestionarPersona1 = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProducto = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -93,13 +91,13 @@ mdl.addColumn("Marca");
             }
         });
 
-        btnGestionarPersona1.setBackground(new java.awt.Color(51, 51, 255));
-        btnGestionarPersona1.setForeground(new java.awt.Color(255, 255, 255));
-        btnGestionarPersona1.setText("Buscar");
-        btnGestionarPersona1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnGestionarPersona1.addActionListener(new java.awt.event.ActionListener() {
+        btnBuscar.setBackground(new java.awt.Color(51, 51, 255));
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setText("Buscar");
+        btnBuscar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGestionarPersona1ActionPerformed(evt);
+                btnBuscarActionPerformed(evt);
             }
         });
 
@@ -140,7 +138,7 @@ mdl.addColumn("Marca");
                     .addGroup(pnlProductoLayout.createSequentialGroup()
                         .addComponent(txtbuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnGestionarPersona1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34)
@@ -167,7 +165,7 @@ mdl.addColumn("Marca");
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGestionarPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGestionarPersona1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(23, Short.MAX_VALUE))
@@ -188,17 +186,20 @@ mdl.addColumn("Marca");
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGestionarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarPersonaActionPerformed
+jdGestionProducto obj = new jdGestionProducto(frmP);
+obj.setLocationRelativeTo(frmP);
+obj.setVisible(true);
 
     }//GEN-LAST:event_btnGestionarPersonaActionPerformed
 
-    private void btnGestionarPersona1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarPersona1ActionPerformed
-     
-    }//GEN-LAST:event_btnGestionarPersona1ActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+  listar(txtbuscador.getText());     
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnGestionarPersona;
-    private javax.swing.JButton btnGestionarPersona1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;

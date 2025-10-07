@@ -18,7 +18,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new JdInicioSesion(parent, true).setVisible(true);
+        new JdInicioSesion(parent, true).setVisible(true); 
     }
-    
+           
 }
