@@ -11,26 +11,9 @@ import java.sql.ResultSet;
 
 /**
  *
- * 
- * 
  * @author Josselyn
  */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*lllllll*/
 
 public class clsTrabajador {
 
