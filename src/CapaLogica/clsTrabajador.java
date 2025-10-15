@@ -11,8 +11,12 @@ import java.sql.ResultSet;
 
 /**
  *
- * @author Usuario
+ * 
+ * 
+ * @author Josselyn
  */
+
+
 public class clsTrabajador {
 
     private int idTrabajador;
