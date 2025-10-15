@@ -13,11 +13,12 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-/* github */
-
-
 /**
  *
+ * 
+ * 1
+ * 
+ * 
  * @author Josselyn
  */
 public class JdInicioSesion extends javax.swing.JDialog {
