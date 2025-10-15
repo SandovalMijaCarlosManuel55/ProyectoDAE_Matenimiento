@@ -17,6 +17,21 @@ import java.sql.ResultSet;
  */
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*lllllll*/
+
 public class clsTrabajador {
 
     private int idTrabajador;
