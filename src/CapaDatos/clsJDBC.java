@@ -24,8 +24,8 @@ public class clsJDBC {
     public clsJDBC() {
         this.driver = "org.postgresql.Driver";
         this.url = "jdbc:postgresql://localhost:5432/BD_DAE_SistemaMantenimientoVehiculos";
-        this.user = "postgres";
-        this.password = "Josselyn";
+        this.user = "UsuarioDAE";
+        this.password = "daepass";
         this.con = null;
     }
 

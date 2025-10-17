@@ -285,7 +285,7 @@ public class JdInicioSesion extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 }
 
-class FondoLogo extends JPanel {
+class FondoLogo2 extends JPanel {
 
     private Image imagen;
 

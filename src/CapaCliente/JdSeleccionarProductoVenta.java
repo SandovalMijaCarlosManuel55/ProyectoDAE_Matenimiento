@@ -4,7 +4,7 @@
  */
 package CapaCliente;
 
-import CapaLogica.clsProducto;
+import CapaLogica.clsTipoProducto;
 import CapaLogica.clsVenta;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class JdSeleccionarProductoVenta extends javax.swing.JDialog {
 
-    clsProducto objProducto = new clsProducto();
+    clsTipoProducto objTipoProducto = new clsTipoProducto();
     
     public JdSeleccionarProductoVenta(java.awt.Frame parent, boolean modal) throws SQLException {
         super(parent, modal);
@@ -25,7 +25,7 @@ public class JdSeleccionarProductoVenta extends javax.swing.JDialog {
 
     private void listarTipoProducto() throws SQLException{
         try{
-            ResultSet rs = objProducto.listarTipoProducto();
+            ResultSet rs = objTipoProducto.listarTipoProducto();
             while (rs.next()){
                 cboTipoProducto.addItem(rs.getString("tipoproducto"));
             }

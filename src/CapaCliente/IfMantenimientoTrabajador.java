@@ -42,7 +42,7 @@ public class IfMantenimientoTrabajador extends javax.swing.JInternalFrame {
         modelo.addColumn("Correo");
         modelo.addColumn("Estado");
         try {
-            rsTrabajador = objTrabajador.listarMarcas();
+            rsTrabajador = objTrabajador.listarTrabajadores();
             while (rsTrabajador.next()) {
                 if (rsTrabajador.getString("estado").equals("t")) {
                     estado = "Activo";
