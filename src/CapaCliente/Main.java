@@ -17,8 +17,10 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        new JdInicioSesion(parent, true).setVisible(true); 
+    public static void main(String[] args) throws Exception {
+        //new JdInicioSesion(parent, true).setVisible(true);
+        //new FrmMenuPrincipal().setVisible(true);
+        new JdVentas(parent, true).setVisible(true);
     }
-           
+    
 }

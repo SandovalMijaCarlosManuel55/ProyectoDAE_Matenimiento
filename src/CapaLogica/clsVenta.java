@@ -11,25 +11,24 @@ import java.sql.ResultSet;
  *
  * @author Josselyn
  */
-public class clsProducto {
+public class clsVenta {
     
     clsJDBC objConectar = new clsJDBC();
-    String strSQL;
     ResultSet rs = null;
+    String strSQL;
     
-    public ResultSet listarTipoProducto() throws Exception{
-        strSQL = """
-                    select tipoproducto from tipo_producto
-                 """;
+    public Integer generarCodigoVenta() throws Exception{
+        strSQL = "select coalesce(max(iddetalleventa),0)+1 as codigo from detalle_venta";
         try{
             rs = objConectar.consultarBD(strSQL);
-            return rs;
+            while (rs.next()) {                
+                return rs.getInt("codigo");
+            }
         }
-        catch(Exception e){
-            throw new Exception("Error al listar productos --> " + e.getMessage());
+        catch (Exception e){
+            throw new Exception("Error al generar código --> " + e.getMessage());
         }
+        return 0;
     }
-    
-    
     
 }

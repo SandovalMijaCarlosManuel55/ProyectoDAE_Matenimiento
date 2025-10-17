@@ -3,21 +3,85 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package CapaLogica;
-
 import CapaDatos.clsJDBC;
-import java.sql.ResultSet;
-import java.sql.ResultSet;
 import java.sql.ResultSet;
 
 /**
  *
  * @author Josselyn
  */
-
-
 public class clsTrabajador {
-
-    private int idTrabajador;
+    
+    clsJDBC objConectar = new clsJDBC();
+    String strSQL;
+    ResultSet rs = null;
+    
+    public String login(String user, String contra) throws Exception{
+        strSQL = "select nomtrabajador || ' ' || apepaterno || ' ' || apematerno as nombrescompletos from trabajador where usuario = '" + user + "' and contrasena = '" + contra + "'";
+        try{
+            rs = objConectar.consultarBD(strSQL);
+            while(rs.next()){
+                return rs.getString("nombrescompletos");
+            }
+        }
+        catch (Exception e){
+            throw new Exception("Error al iniciar sesión. -->" + e.getMessage());
+        }
+        return "";
+    }
+    
+    public Boolean validarVigencia(String user) throws Exception{
+        strSQL = "select estado from trabajador where usuario = '" + user + "'";
+        try{
+            rs = objConectar.consultarBD(strSQL);
+            while (rs.next()) {                
+                return rs.getBoolean("estado");
+            }
+        }
+        catch (Exception e){
+            throw new Exception("Error al validar usuario. --> " + e.getMessage());
+        }
+        return false;
+    }
+    
+    public String preguntaRecuperarContra(String user) throws Exception{
+        strSQL = "Select pregunta from trabajador where usuario = '" + user + "'";
+        try{
+            rs = objConectar.consultarBD(strSQL);
+            while (rs.next()) {                
+                return rs.getString("pregunta");
+            }
+        }
+        catch (Exception e){
+            throw new Exception("Error al mostrar pregunta. --> " +e.getMessage());
+        }
+        return "";
+    }
+    
+    public String respuestaRecuperarContra(String user) throws Exception{
+        strSQL = "Select respuesta from trabajador where usuario = '" + user + "'";
+        try{
+            rs = objConectar.consultarBD(strSQL);
+            while (rs.next()) {                
+                return rs.getString("respuesta");
+            }
+        }
+        catch (Exception e){
+            throw new Exception("Error al cargar respuesta. --> " +e.getMessage());
+        }
+        return "";
+    }
+    
+    public void nuevaContraseña(String nvaContra, String user) throws Exception{
+        strSQL = "update trabajador set contrasena = '" + nvaContra + "' where usuario = '" + user + "'";
+        try{
+            objConectar.ejecutarBD(strSQL);
+        }catch(Exception ex){
+            throw new Exception("Error al guardar nueva contraseña" + ex.getMessage());
+        }
+    }
+    
+        private int idTrabajador;
     private String nombre;
     private String apePat;
     private String apeMat;
@@ -26,10 +90,6 @@ public class clsTrabajador {
     private boolean sexo;
     private String correo;
     private String estado;
-
-    String strSQL;
-    ResultSet rs = null;
-    clsJDBC objConectar = new clsJDBC();
 
     public int getIdTrabajador() {
         return idTrabajador;
@@ -103,7 +163,7 @@ public class clsTrabajador {
         this.estado = estado;
     }
 
-    public ResultSet listarMarcas() throws Exception {
+    public ResultSet listarTrabajadores() throws Exception {
         strSQL = "select * from trabajador";
         try {
             rs = objConectar.consultarBD(strSQL);
@@ -112,8 +172,8 @@ public class clsTrabajador {
             throw new Exception("Error al listar trabajadores -> " + ex.getMessage());
         }
     }
-
-    public ResultSet buscarTrabajador(Integer cod) throws Exception {
+    
+    public ResultSet buscarTrabajador (Integer cod) throws Exception {
         strSQL = "Select * from trabajador where idtrabajador=" + cod;
         try {
             rs = objConectar.consultarBD(strSQL);
@@ -122,34 +182,6 @@ public class clsTrabajador {
             throw new Exception("Error al buscar el trabajador");
         }
     }
-
-    public void registrar(int cod, String nombre, String apepaterno, String apematerno,
-            String telefono, String dni, String sexo, String correo, Boolean estado,
-            String usuario, String contrasena, int distrito, int tipotrabajador,
-            String pregunta, String respuesta) throws Exception {
-
-        String strSQL = "INSERT INTO trabajador VALUES ("
-                + cod + ", '"
-                + nombre + "', '"
-                + apepaterno + "', '"
-                + apematerno + "', '"
-                + telefono + "', '"
-                + dni + "', '"
-                + sexo + "', '"
-                + correo + "', "
-                + estado + ", '"
-                + usuario + "', '"
-                + contrasena + "', "
-                + distrito + ", "
-                + tipotrabajador + ", '"
-                + pregunta + "', '"
-                + respuesta + "')";
-
-        try {
-            objConectar.ejecutarBD(strSQL);
-        } catch (Exception e) {
-            throw new Exception("Error al registrar el trabajador -> " + e.getMessage());
-        }
-    }
-
+    
+    
 }

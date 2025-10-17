@@ -5,6 +5,7 @@
 package CapaCliente;
 
 import CapaLogica.clsServicio;
+import javax.swing.JPanel;
 
 /**
  *
@@ -12,6 +13,7 @@ import CapaLogica.clsServicio;
  */
 public class JdGestionarServicio extends javax.swing.JDialog {
     private clsServicio servicioCreado = null;
+    public JdMantenimientoServicios objcls = new JdMantenimientoServicios(null,true);
     
     public JdGestionarServicio(java.awt.Frame parent, boolean modal, String titulo) {
         super(parent, modal);

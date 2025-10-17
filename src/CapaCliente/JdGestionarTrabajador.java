@@ -169,6 +169,9 @@ public class JdGestionarTrabajador extends javax.swing.JDialog {
                             .addComponent(txtDistrito, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(58, 58, 58)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addComponent(jLabel18)
+                                .addGap(113, 113, 113))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(txtRespuesta, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtTelefono, javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,12 +188,10 @@ public class JdGestionarTrabajador extends javax.swing.JDialog {
                                         .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING))
                                     .addGap(0, 162, Short.MAX_VALUE)))
                             .addGroup(panelLayout.createSequentialGroup()
-                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel18)
-                                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(txtTipoTrabajador, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.LEADING)))
-                                .addContainerGap())))))
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtTipoTrabajador, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(156, 156, 156))))))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -296,7 +297,7 @@ public class JdGestionarTrabajador extends javax.swing.JDialog {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        try {
+        /*try {
             clsTrabajador obj = new clsTrabajador();
 
             obj.registrar(
@@ -322,7 +323,7 @@ public class JdGestionarTrabajador extends javax.swing.JDialog {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        }
+        }*/
 
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
