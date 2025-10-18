@@ -19,7 +19,7 @@ public class clsServicio {
     public ResultSet listarServicio() throws Exception {
         strSQL = "select S.*,"
                 + "COALESCE(T.precioactual, 00.00) as precioactual, " 
-                + "COALESCE(T.duracion, 00.00) as duracion, " 
+                + "COALESCE(T.tiempoestimado, 00.00) as duracion, " 
                 + "COALESCE(Tipo.TipoVehiculo, 'No asignado') as tipovehiculo, "
                 + "Tipo.idtipovehiculo "
                 + "From Servicio S " + 
