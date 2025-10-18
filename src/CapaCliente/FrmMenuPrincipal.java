@@ -343,7 +343,7 @@ return ifProducto;
     }//GEN-LAST:event_btnVehiculosActionPerformed
 
     private void btnServiciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiciosActionPerformed
-        JdMantenimientoServicios objServicio = new JdMantenimientoServicios(this, false);
+        JdMantenimientoServicio objServicio = new JdMantenimientoServicio(this, false);
         objServicio.setVisible(true);
     }//GEN-LAST:event_btnServiciosActionPerformed
 

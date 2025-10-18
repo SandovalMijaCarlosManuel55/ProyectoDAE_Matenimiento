@@ -16,6 +16,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -394,12 +398,21 @@ public class JdMatenimientoCliente extends javax.swing.JDialog {
         dialog.setVisible(true);
 
         clsServicio actualizado = dialog.getServicioCreado();
+        
         if (actualizado != null) {
-            // Actualizar etiquetas
-            lblCategoria.setText("Categoría: " + actualizado.getCategoria());
-            lblDescripcion.setText("<html>" + actualizado.getDescripcion() + "</html>");
-            lblPrecio.setText("Precio: " + actualizado.getPrecio());
-            lblDuracion.setText("Duración: " + actualizado.getDuracion());
+            try {
+                ResultSet rsSevicio = null;
+                try {
+                    rsSevicio = actualizado.listarServicio();
+                } catch (Exception ex) {
+                    Logger.getLogger(JdMatenimientoCliente.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                lblCategoria.setText("Categoría: " + rsSevicio.getString("servicio"));
+                lblPrecio.setText("Precio: " + rsSevicio.getFloat("precioactual"));
+                lblDuracion.setText("Duración: " + rsSevicio.getFloat("duracion"));
+            } catch (SQLException ex) {
+                Logger.getLogger(JdMatenimientoCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     });
 

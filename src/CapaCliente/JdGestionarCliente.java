@@ -13,7 +13,7 @@ import javax.swing.JPanel;
  */
 public class JdGestionarCliente extends javax.swing.JDialog {
     private clsServicio servicioCreado = null;
-    public JdMantenimientoServicios objcls = new JdMantenimientoServicios(null,true);
+    public JdMantenimientoServicio objcls = new JdMantenimientoServicio(null,true);
     
     public JdGestionarCliente(java.awt.Frame parent, boolean modal, String titulo) {
         super(parent, modal);
