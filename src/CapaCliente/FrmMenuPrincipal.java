@@ -18,13 +18,11 @@ import javax.swing.JPanel;
  * @author Josselyn
  */
 public class FrmMenuPrincipal extends javax.swing.JFrame {
-private  IfMantenimientoProducto ifProducto ;
     FondoPanel fondo = new FondoPanel();
     FondoLogo logo = new FondoLogo();
     
     public FrmMenuPrincipal() {
             //inicializadores
-     ifProducto = new IfMantenimientoProducto(this);
         this.setContentPane(fondo);
         this.setContentPane(logo);
         setExtendedState(MAXIMIZED_BOTH);
@@ -40,10 +38,6 @@ private  IfMantenimientoProducto ifProducto ;
         btnInicio.setMargin(new Insets(0, 50, 0, 0));
     }
 
-  //get de los internal frame
-public JInternalFrame getIfProducto(){
-return ifProducto;
-}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

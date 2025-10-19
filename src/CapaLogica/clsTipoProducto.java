@@ -16,73 +16,7 @@ import java.sql.ResultSet;
 public class clsTipoProducto {
 
     private int idTipoProducto;
-    private  String nomTipoProducto;
-    
-    public clsTipoProducto(){}
-
-    public int getIdTipoProducto() {
-        return idTipoProducto;
-    }
-
-    public void setIdTipoProducto(int idTipoProducto) {
-        this.idTipoProducto = idTipoProducto;
-    }
-
-    public String getNomTipoProducto() {
-        return nomTipoProducto;
-    }
-
-    public void setNomTipoProducto(String nomTipoProducto) {
-        this.nomTipoProducto = nomTipoProducto;
-    }
-
-    public clsJDBC getObjConectar() {
-        return objConectar;
-    }
-
-    public void setObjConectar(clsJDBC objConectar) {
-        this.objConectar = objConectar;
-    }
-
-    public String getStrSQL() {
-        return strSQL;
-    }
-
-    public void setStrSQL(String strSQL) {
-        this.strSQL = strSQL;
-    }
-
-    public ResultSet getRs() {
-        return rs;
-    }
-
-    public void setRs(ResultSet rs) {
-        this.rs = rs;
-    }
-
-    public Connection getCon() {
-        return con;
-    }
-
-    public void setCon(Connection con) {
-        this.con = con;
-    }
-
-    public Statement getSent() {
-        return sent;
-    }
-
-    public void setSent(Statement sent) {
-        this.sent = sent;
-    }
-
-    public clsTipoProducto(int idTipoProducto, String nomTipoProducto, String strSQL, Statement sent) {
-        this.idTipoProducto = idTipoProducto;
-        this.nomTipoProducto = nomTipoProducto;
-        this.strSQL = strSQL;
-        this.sent = sent;
-    }
-    
+    private  String tipoProducto;
 
 //******************************************************************************    
     
@@ -94,7 +28,7 @@ public class clsTipoProducto {
 
     // Listar todos los tipos de producto
     public ResultSet listarTipoProducto() throws Exception {
-        strSQL = "SELECT * FROM tipo_producto";
+        strSQL = "SELECT * FROM tipo_producto order by 1 desc";
         try {
             rs = objConectar.consultarBD(strSQL);
             return rs;
@@ -109,14 +43,15 @@ public class clsTipoProducto {
         strSQL = "SELECT * FROM tipo_producto WHERE idtipoproducto = " + id;
         try {
             rs = objConectar.consultarBD(strSQL);
+            if(rs.next()) return rs;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+         throw new Exception("Error al buscar x id"+e.getMessage());
         }
         return rs;
     }
     
     public ResultSet buscarIdxNombre(String nombre)throws Exception{
-    strSQL = "Select idTipoProducto from tipo_producto where nomTipoProducto ilike '%"+nombre+"%'";
+    strSQL = "Select idTipoProducto from tipo_producto where TipoProducto ilike '%"+nombre+"%'";
         try {
             rs = objConectar.consultarBD(strSQL);
             if(rs.next())return rs;
@@ -127,8 +62,8 @@ public class clsTipoProducto {
     }
     
     // Registrar nuevo tipo de producto
-    public void registrarTipoProducto(int id, String nombre) throws Exception {
-        strSQL = "INSERT INTO tipo_producto (idtipoproducto, nomtipoproducto) VALUES (" + id + ", '" + nombre + "')";
+    public void registrarTipoProducto(int id, String nombre) throws Exception  {
+        strSQL = "INSERT INTO tipo_producto (idtipoproducto, tipoproducto) VALUES (" + id + ", '" + nombre + "')";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -138,7 +73,7 @@ public class clsTipoProducto {
 
     // Modificar tipo de producto
     public void modificarTipoProducto(int id, String nombre) throws Exception {
-        strSQL = "UPDATE tipo_producto SET nomtipoproducto = '" + nombre + "' WHERE idtipoproducto = " + id;
+        strSQL = "UPDATE tipo_producto SET tipoproducto = '" + nombre + "' WHERE idtipoproducto = " + id;
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -169,4 +104,31 @@ public class clsTipoProducto {
         }
         return 0;
     }
+    /*********************************************************************/
+        
+    public clsTipoProducto(){}
+
+    public int getIdTipoProducto() {
+        return idTipoProducto;
+    }
+
+    public void setIdTipoProducto(int idTipoProducto) {
+        this.idTipoProducto = idTipoProducto;
+    }
+
+    public String getTipoProducto() {
+        return tipoProducto;
+    }
+
+    public void setTipoProducto(String tipoProducto) {
+        this.tipoProducto = tipoProducto;
+    }
+    
+    public clsTipoProducto(int idTipoProducto, String tipoProducto) {
+        this.idTipoProducto = idTipoProducto;
+        this.tipoProducto = tipoProducto;
+        
+    }
+    
+
 }

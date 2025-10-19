@@ -2,18 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/AWTForms/Dialog.java to edit this template
  */
-package capaNegocio;
+package CapaCliente;
 
 /**
  *
  * @author Mercurio5
  */
-public class jdGestionTipoDeProducto extends java.awt.Dialog {
+public class JdGestionarTipoDeProducto extends java.awt.Dialog {
 
     /**
      * Creates new form jdGestionTipoDeProducto
      */
-    public jdGestionTipoDeProducto(java.awt.Frame parent, boolean modal) {
+    public JdGestionarTipoDeProducto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -33,19 +33,19 @@ public class jdGestionTipoDeProducto extends java.awt.Dialog {
         txtNombre = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton7 = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         jCheckBox1 = new javax.swing.JCheckBox();
         jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        btnNuevo = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnDarBaja = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
 
         setTitle("Mantenimiento del Tipo de Producto");
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -66,8 +66,8 @@ public class jdGestionTipoDeProducto extends java.awt.Dialog {
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         jLabel2.setText("Nombre:");
 
-        jButton7.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jButton7.setText("buscar");
+        btnBuscar.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnBuscar.setText("buscar");
 
         jCheckBox1.setText("(Vigente)");
 
@@ -93,7 +93,7 @@ public class jdGestionTipoDeProducto extends java.awt.Dialog {
                             .addComponent(txtIdTipoProducto)
                             .addComponent(txtNombre))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton7)))
+                        .addComponent(btnBuscar)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -105,7 +105,7 @@ public class jdGestionTipoDeProducto extends java.awt.Dialog {
                     .addComponent(txtIdTipoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
                         .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -161,23 +161,23 @@ public class jdGestionTipoDeProducto extends java.awt.Dialog {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jButton1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jButton1.setText("Nuevo");
+        btnNuevo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnNuevo.setText("Nuevo");
 
-        jButton2.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jButton2.setText("Modificar");
+        btnModificar.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnModificar.setText("Modificar");
 
-        jButton3.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jButton3.setText("Eliminar");
+        btnEliminar.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnEliminar.setText("Eliminar");
 
-        jButton4.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jButton4.setText("Dar de Baja");
+        btnDarBaja.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnDarBaja.setText("Dar de Baja");
 
-        jButton5.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jButton5.setText("Salir");
+        btnSalir.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnSalir.setText("Salir");
 
-        jButton6.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jButton6.setText("Limpiar");
+        btnLimpiar.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnLimpiar.setText("Limpiar");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -188,14 +188,14 @@ public class jdGestionTipoDeProducto extends java.awt.Dialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(jButton5))
-                    .addComponent(jButton6)
-                    .addComponent(jButton1))
+                        .addComponent(btnSalir))
+                    .addComponent(btnLimpiar)
+                    .addComponent(btnNuevo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDarBaja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20))
         );
         jPanel2Layout.setVerticalGroup(
@@ -203,16 +203,16 @@ public class jdGestionTipoDeProducto extends java.awt.Dialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(9, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(btnNuevo)
+                    .addComponent(btnModificar))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton4)
-                    .addComponent(jButton6))
+                    .addComponent(btnDarBaja)
+                    .addComponent(btnLimpiar))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton3))
+                    .addComponent(btnSalir)
+                    .addComponent(btnEliminar))
                 .addGap(21, 21, 21))
         );
 
@@ -266,13 +266,13 @@ public class jdGestionTipoDeProducto extends java.awt.Dialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnDarBaja;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnModificar;
+    private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

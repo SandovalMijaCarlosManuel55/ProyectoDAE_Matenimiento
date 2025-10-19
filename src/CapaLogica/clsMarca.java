@@ -20,27 +20,6 @@ public class clsMarca {
   
    public clsMarca(){} 
 
-    public int getIdMarca() {
-        return idMarca;
-    }
-
-    public void setIdMarca(int idMarca) {
-        this.idMarca = idMarca;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public clsMarca(int idMarca, String nombre) {
-        this.idMarca = idMarca; 
-        this.nombre = nombre;
-    }
-   
     
     //********************************************************************
        clsJDBC objConectar = new clsJDBC();
@@ -51,7 +30,7 @@ public class clsMarca {
 
     // Listar todas las marcas
     public ResultSet listarMarca() throws Exception {
-        strSQL = "SELECT * FROM marca_producto";
+        strSQL = "SELECT * FROM marca_producto order by 1 asc";
         try {
             rs = objConectar.consultarBD(strSQL);
             return rs;
@@ -66,6 +45,7 @@ public class clsMarca {
         strSQL = "SELECT * FROM marca_producto WHERE idmarcaproducto = " + id;
         try {
             rs = objConectar.consultarBD(strSQL);
+            if(rs.next())return rs;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -73,7 +53,7 @@ public class clsMarca {
     }
     
     public ResultSet buscaridxNombre(String nombre)throws Exception{
-    strSQL = "Select idmarcaproducto from marca_producto where nommarcaproducto ilike '%"+nombre+"%'" ;
+    strSQL = "Select idmarcaproducto from marca_producto where marcaproducto ilike '%"+nombre+"%'" ;
         try {
             rs = objConectar.consultarBD(strSQL);
             if(rs.next())return rs;
@@ -84,7 +64,7 @@ public class clsMarca {
     }
     // Registrar nueva marca
     public void registrarMarca(int id, String nombre) throws Exception {
-        strSQL = "INSERT INTO marca_producto (idmarcaproducto, nommarcaproducto) VALUES (" + id + ", '" + nombre + "')";
+        strSQL = "INSERT INTO marca_producto (idmarcaproducto, marcaproducto) VALUES (" + id + ", '" + nombre + "')";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -94,7 +74,7 @@ public class clsMarca {
 
     // Modificar marca existente
     public void modificarMarca(int id, String nombre) throws Exception {
-        strSQL = "UPDATE marca_producto SET nommarcaproducto = '" + nombre + "' WHERE idmarcaproducto = " + id;
+        strSQL = "UPDATE marca_producto SET marcaproducto = '" + nombre + "' WHERE idmarcaproducto = " + id;
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -125,5 +105,27 @@ public class clsMarca {
         }
         return 0;
     }
-  
+  /***********************************************************************************/
+    
+    public int getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(int idMarca) {
+        this.idMarca = idMarca;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public clsMarca(int idMarca, String nombre) {
+        this.idMarca = idMarca; 
+        this.nombre = nombre;
+    }
+   
 }
