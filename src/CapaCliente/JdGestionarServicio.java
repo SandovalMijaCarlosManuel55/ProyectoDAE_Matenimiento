@@ -246,12 +246,17 @@ public class JdGestionarServicio extends javax.swing.JDialog {
             Float precio = Float.parseFloat(txtPrecio.getText());
             Integer idTipoVehiculo = objTipoVehiculo.obtenerCodigoTipoVehiculo(cboTipoVehiculo.getSelectedItem().toString());
             
-            if(nuevo == true){
+            if (cboTipoVehiculo.getSelectedItem().toString().equalsIgnoreCase("Todos")) {
+                JOptionPane.showMessageDialog(this, "No puede registrar un servicio para todos los tipos de vehiculos");
+            } else{
+                if(nuevo == true){
                 objServicio.registrar(id, nombre, precio, tiempoEstimado, idTipoVehiculo);
-            }else{
-                objServicio.modificar(id, nombre, precio, tiempoEstimado, idTipoVehiculo);
+                }else{
+                    objServicio.modificar(id, nombre, precio, tiempoEstimado, idTipoVehiculo);
+                }
+                this.dispose(); 
             }
-            this.dispose();
+            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar datos: " +ex.getMessage());
         }

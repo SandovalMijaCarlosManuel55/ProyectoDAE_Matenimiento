@@ -9,7 +9,6 @@ import CapaLogica.clsTipoVehiculo;
 import java.awt.Color;
 import java.awt.Component;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
 
 
 /**
@@ -389,7 +387,11 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
                     Logger.getLogger(JdMantenimientoServicio.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else if (column == 6) {
-                eliminarServicio(row);
+                try {
+                    eliminarServicio(row);
+                } catch (Exception ex) {
+                    Logger.getLogger(JdMantenimientoServicio.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
         isPushed = false;
@@ -423,8 +425,16 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
         
     }
 
-    private void eliminarServicio(int row) {
-        
+    private void eliminarServicio(int row) throws Exception {
+        try {
+         int idServicio = (int) tblServicios.getValueAt(row, 0);
+         String tipoVehiculo = (String) tblServicios.getModel().getValueAt(row, 4);
+         int idTipoVehiculo = objTipoVehiculo.obtenerCodigoTipoVehiculo(tipoVehiculo);
+         objServicio.eliminarServicio(idServicio,idTipoVehiculo);
+         listarServicios();
+        } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Error al Eliminar"+e);
+        }
     }
     }
  

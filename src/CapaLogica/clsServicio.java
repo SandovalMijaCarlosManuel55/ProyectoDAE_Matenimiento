@@ -61,7 +61,7 @@ public class clsServicio {
     public void modificar(int idservicio, String nombre, Float precio, Integer tiempoEstimado, int idTipoVehiculo) throws Exception {        
         strSQL = "update Servicio set servicio = '" + nombre + "' where idServicio=" + idservicio +";"
                + "update Tarifario set precioactual = " 
-               + precio + ", duracion = " + tiempoEstimado 
+               + precio + ", tiempoestimado = " + tiempoEstimado 
                + " where idServicio=" + idservicio +" and idTipoVehiculo = " + idTipoVehiculo +";";
         try {
             objConectar.ejecutarBD(strSQL);
@@ -71,7 +71,7 @@ public class clsServicio {
     }
 
     public ResultSet buscarServicioPorCodigo(Integer cod) throws Exception {
-        strSQL = "select S.*,T.PrecioActual,Tipo.TipoVehiculo,T.duracion From Servicio S " + 
+        strSQL = "select S.*,T.PrecioActual,Tipo.TipoVehiculo,T.tiempoestimado From Servicio S " + 
                  "Inner Join Tarifario T on S.idServicio = T.idServicio " + 
                  "Inner Join Tipo_Vehiculo Tipo on T.idTipoVehiculo = Tipo.idTipoVehiculo " +
                 "Where S.idServicio ="+ cod;
@@ -84,7 +84,7 @@ public class clsServicio {
     }
     
     public ResultSet buscarServicioPorTipo(String tipo) throws Exception {
-        strSQL = "select S.*,T.PrecioActual,Tipo.TipoVehiculo,T.duracion From Servicio S " + 
+        strSQL = "select S.*,T.PrecioActual,Tipo.TipoVehiculo,T.tiempoestimado From Servicio S " + 
                  "Inner Join Tarifario T on S.idServicio = T.idServicio " + 
                  "Inner Join Tipo_Vehiculo Tipo on T.idTipoVehiculo = Tipo.idTipoVehiculo " +
                  "Where Tipo.TipoVehiculo ='"+ tipo+"'";
@@ -97,7 +97,7 @@ public class clsServicio {
     }
     
     public ResultSet buscarServicioPorTipoYCodigo(String tipo, Integer cod) throws Exception {
-        strSQL = "select S.*,T.PrecioActual,Tipo.TipoVehiculo,T.duracion From Servicio S " + 
+        strSQL = "select S.*,T.PrecioActual,Tipo.TipoVehiculo,T.tiempoestimado From Servicio S " + 
                  "Inner Join Tarifario T on S.idServicio = T.idServicio " + 
                  "Inner Join Tipo_Vehiculo Tipo on T.idTipoVehiculo = Tipo.idTipoVehiculo " +
                  "Where Tipo.TipoVehiculo ='"+ tipo + "' and S.idServicio = "+cod;
@@ -109,8 +109,9 @@ public class clsServicio {
         }
     }
 
-    public void eliminarServicio(Integer cod) throws Exception {
-        strSQL = "delete from Servicio where idServicio=" + cod;
+    public void eliminarServicio(Integer cod, Integer codTipo) throws Exception {
+        strSQL = "delete from Tarifario where idServicio=" + cod + " and idTipoVehiculo = " + codTipo + ";" +
+                 "delete from Servicio where idServicio = " + cod  + ";";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception ex) {
@@ -130,7 +131,7 @@ public class clsServicio {
             columna = "T.precioactual";
             break;
         case "Tiempo Estimado":
-            columna = "T.duracion";
+            columna = "T.tiempoestimado";
             break;
         case "Tipo de Vehículo":
             columna = "Tipo.TipoVehiculo";
@@ -138,7 +139,7 @@ public class clsServicio {
         }       
         strSQL = "select S.*,"
                 + "COALESCE(T.precioactual, 00.00) as precioactual, " 
-                + "COALESCE(T.duracion, 00.00) as duracion, " 
+                + "COALESCE(T.tiempoestimado, 00.00) as duracion, " 
                 + "COALESCE(Tipo.TipoVehiculo, 'No asignado') as tipovehiculo "
                 + "From Servicio S " + 
                  "Left Join Tarifario T on S.idServicio = T.idServicio " + 
