@@ -272,5 +272,69 @@ public class clsProducto {
     public void setSent(Statement sent) {
         this.sent = sent;
     }
+    
+    /*---------------- VENTAS -------------------*/
+    
+    // Listar los tipos de producto
+    public ResultSet listarTipoProducto() throws Exception{
+        strSQL = "select tipoproducto from tipo_producto";
+        try{
+            rs = objConectar.consultarBD(strSQL);
+            return rs;
+        }
+        catch(Exception e){
+            throw new Exception("Error al listar productos --> " + e.getMessage());
+        }
+    }
+    
+    // Listar los productos por un tipo espécifico de producto
+    public ResultSet listarProductosPorTipoProducto(String producto) throws Exception{
+        strSQL = "select p.idproducto, p.producto, tp.tipoproducto, mp.marcaproducto, p.precioactual, p.stock " +
+                 "from producto p inner join tipo_producto tp on p.idtipoproducto = tp.idtipoproducto " +
+                 "inner join marca_producto mp on p.idmarcaproducto = mp.idmarcaproducto where tp.tipoproducto = '" + producto + "' " + 
+                 "order by p.idproducto";
+        
+        try{
+            rs = objConectar.consultarBD(strSQL);
+            return rs;
+        }
+        catch (Exception e){
+            throw new Exception("Error al listar los productos según el tipo de producto -> " + e.getMessage());
+        }
+    }
+    
+    // Listar todos los producros según su tipo de producto
+    public ResultSet listarProductosGeneralesPorTipoProducto() throws Exception{
+        strSQL = "select p.idproducto, p.producto, tp.tipoproducto, mp.marcaproducto, p.precioactual, p.stock " +
+                 "from producto p inner join tipo_producto tp on p.idtipoproducto = tp.idtipoproducto " +
+                 "inner join marca_producto mp on p.idmarcaproducto = mp.idmarcaproducto order by p.idproducto";
+        
+        try{
+            rs = objConectar.consultarBD(strSQL);
+            return rs;
+        }
+        catch (Exception e){
+            throw new Exception("Error al listar los productos generales según el tipo de producto -> " + e.getMessage());
+        }
+    }
+    
+    
+    // Disminuir stock cuando se selecciona un producto y aumentar stock cuando se elimina un producto
+    public void Aumentar_DisminuirStock(int cantidad, int codProducto, String valor) throws Exception{
+        if (valor.equalsIgnoreCase("AUMENTAR")) {
+            strSQL = "Update producto set stock = stock + " + cantidad + " where idproducto = " + codProducto;
+        }
+        else if (valor.equalsIgnoreCase("DISMINUIR")){
+            strSQL = "Update producto set stock = stock - " + cantidad + " where idproducto = " + codProducto;
+        }
+        
+        try{
+            objConectar.ejecutarBD(strSQL);
+        }
+        catch (Exception e){
+            throw new Exception("Error al aumentar o disminuir stock -> " + e.getMessage());
+        }
+    }
+    
 
 }
