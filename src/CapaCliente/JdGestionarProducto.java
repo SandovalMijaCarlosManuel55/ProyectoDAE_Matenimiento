@@ -8,7 +8,6 @@ import CapaLogica.clsMarca;
 import CapaLogica.clsProducto;
 import CapaLogica.clsTipoProducto;
 import java.sql.ResultSet;
-import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
@@ -21,7 +20,6 @@ public class JdGestionarProducto extends javax.swing.JDialog {
 
     private FrmMenuPrincipal frmP;
     private JdMantenimientoProducto padre;
-//private IfMantenimientoProducto ifProducto = new IfMantenimientoProducto(frmP);
     clsProducto objProducto = new clsProducto();
     clsMarca objMarca = new clsMarca();
     clsTipoProducto objTipoProducto = new clsTipoProducto();
@@ -188,6 +186,11 @@ public class JdGestionarProducto extends javax.swing.JDialog {
         });
 
         btnMarca.setText("...");
+        btnMarca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMarcaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -528,6 +531,12 @@ this.dispose();
     private void btnTipoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTipoProductoActionPerformed
        
     }//GEN-LAST:event_btnTipoProductoActionPerformed
+
+    private void btnMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcaActionPerformed
+       JdGestionarMarca obj = new JdGestionarMarca(frmP,true,this);
+       obj.setVisible(true);
+       
+    }//GEN-LAST:event_btnMarcaActionPerformed
 
     /**
      * @param args the command line arguments

@@ -68,7 +68,7 @@ public class clsMarca {
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+        throw new Exception("Error al Registrar Marca"+e.getMessage());
         }
     }
 
