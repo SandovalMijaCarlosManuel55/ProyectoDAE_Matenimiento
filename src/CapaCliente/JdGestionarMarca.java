@@ -23,6 +23,7 @@ public class JdGestionarMarca extends javax.swing.JDialog {
         super(parent, modal);
         this.jd = jd;
         initComponents();
+        lista();
     }
 
     public void lista() {
@@ -74,6 +75,11 @@ public class JdGestionarMarca extends javax.swing.JDialog {
         btnLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel3.setText("Mantenimiento de Marca");
@@ -149,6 +155,11 @@ public class JdGestionarMarca extends javax.swing.JDialog {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblMarca.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMarcaMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tblMarca);
@@ -352,6 +363,7 @@ public class JdGestionarMarca extends javax.swing.JDialog {
         String nombre = txtNombre.getText();
         try {
             objMarca.modificarMarca(id, nombre);
+            JOptionPane.showMessageDialog(this,"MARCA MODIFICADA CORRECTAMENTE");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al modificar "+ e.getMessage());
         }
@@ -372,10 +384,33 @@ public class JdGestionarMarca extends javax.swing.JDialog {
         }
         try {
             objMarca.eliminarMarca(Integer.parseInt(txtIdMarca.getText()));
+            lista();
+            JOptionPane.showMessageDialog(this, "LA MARCA HA SIDO ELIMINADA");
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,"Error al eliminar "+e.getMessage());
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void tblMarcaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMarcaMouseClicked
+        
+        int row=  tblMarca.rowAtPoint(evt.getPoint());
+       if (row < 0 && row > tblMarca.getRowCount()){
+       return;
+       }
+        int id= Integer.parseInt(tblMarca.getValueAt(row,0).toString());
+       txtIdMarca.setText(String.valueOf(id));
+        try {
+         rs=  objMarca.buscarXid(id);
+         txtNombre.setText(rs.getString("marcaproducto"));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,"Error al buscar la marca indicada");
+        }
+      
+    }//GEN-LAST:event_tblMarcaMouseClicked
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        jd.listarcbo();
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments

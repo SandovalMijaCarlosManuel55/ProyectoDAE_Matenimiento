@@ -529,7 +529,9 @@ this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void btnTipoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTipoProductoActionPerformed
-       
+JdGestionarTipoDeProducto obj = new JdGestionarTipoDeProducto(frmP,true,this);
+obj.setVisible(true);
+
     }//GEN-LAST:event_btnTipoProductoActionPerformed
 
     private void btnMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcaActionPerformed
