@@ -13,62 +13,16 @@ import java.util.Date;
  * @author Julon
  */
 public class clsCliente {
-    private int idCliente;
-    private String tipoCliente;
-    private Date fechaRegistro;
-    private int idDistrito;
-    private int idRepresentante;
-    
-    public clsCliente(){}
+private int idcliente;
+private String tipocliente;
+private Date fecharegistro;
+private String direccion;
+private String correo;
+private String telefono;
+private int idtipodocumento;
+private int iddistrito;
+private int idrepresentate;
 
-    public clsCliente(int idCliente, String tipoCliente, Date fechaRegistro, int idDistrito, int idRepresentante) {
-        this.idCliente = idCliente;
-        this.tipoCliente = tipoCliente;
-        this.fechaRegistro = fechaRegistro;
-        this.idDistrito = idDistrito;
-        this.idRepresentante = idRepresentante;
-    }
-
-    public int getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
-    }
-
-    public String getTipoCliente() {
-        return tipoCliente;
-    }
-
-    public void setTipoCliente(String tipoCliente) {
-        this.tipoCliente = tipoCliente;
-    }
-
-    public Date getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public void setFechaRegistro(Date fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
-
-    public int getIdDistrito() {
-        return idDistrito;
-    }
-
-    public void setIdDistrito(int idDistrito) {
-        this.idDistrito = idDistrito;
-    }
-
-    public int getIdRepresentante() {
-        return idRepresentante;
-    }
-
-    public void setIdRepresentante(int idRepresentante) {
-        this.idRepresentante = idRepresentante;
-    }
-    
     //***********************************************************
     
     String strSQL;
@@ -76,12 +30,12 @@ public class clsCliente {
     clsJDBC objConectar = new clsJDBC();
     
     public ResultSet listarClientes()throws Exception{
-       strSQL ="Select *Select cl.idcliente,cl.tipocliente,cl.fecharegistro,di.nomdistrito from cliente cl inner join distrito di on di.iddistrito = cl.iddistrito order by 1";
+       strSQL ="select cl.idcliente,tp.tipodocumento from cliente cl inner join tipo_documento tp on tp.idtipodocumento = cl.idtipodocumento";
         try {
             rs = objConectar.consultarBD(strSQL);
             return rs;
         } catch (Exception e) {
-        throw new Exception("Error al listar Clliente");
+        throw new Exception("Error al listar Cliente");
         }
 
     }
@@ -131,7 +85,7 @@ public class clsCliente {
     }
     
     public void modificarCliente(int id,String distrito)throws Exception{
-    strSQL="update cliente set idDistrito="+buscarIdDistrito(distrito)+" where idcliente="+id+";";
+    strSQL="update cliente set iddistrito="+buscarIdDistrito(distrito)+" where idcliente="+id+";";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -139,8 +93,7 @@ public class clsCliente {
         }
     
     }
-    
-    
+
     public void eliminarCliente (int id)throws Exception{
     strSQL = "delete from cliente where idcliente= "+ id;
         try {
@@ -167,4 +120,93 @@ public class clsCliente {
             throw new Exception("Error al listar clientes --> " + e.getMessage());
         }
     }
+           //***********************************************************
+
+    public clsCliente() {
+    }
+
+    public clsCliente(int idcliente, String tipocliente, Date fecharegistro, String direccion, String correo, String telefono, int idtipodocumento, int iddistrito, int idrepresentate) {
+        this.idcliente = idcliente;
+        this.tipocliente = tipocliente;
+        this.fecharegistro = fecharegistro;
+        this.direccion = direccion;
+        this.correo = correo;
+        this.telefono = telefono;
+        this.idtipodocumento = idtipodocumento;
+        this.iddistrito = iddistrito;
+        this.idrepresentate = idrepresentate;
+    }
+
+    public int getIdcliente() {
+        return idcliente;
+    }
+
+    public void setIdcliente(int idcliente) {
+        this.idcliente = idcliente;
+    }
+
+    public String getTipocliente() {
+        return tipocliente;
+    }
+
+    public void setTipocliente(String tipocliente) {
+        this.tipocliente = tipocliente;
+    }
+
+    public Date getFecharegistro() {
+        return fecharegistro;
+    }
+
+    public void setFecharegistro(Date fecharegistro) {
+        this.fecharegistro = fecharegistro;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public int getIdtipodocumento() {
+        return idtipodocumento;
+    }
+
+    public void setIdtipodocumento(int idtipodocumento) {
+        this.idtipodocumento = idtipodocumento;
+    }
+
+    public int getIddistrito() {
+        return iddistrito;
+    }
+
+    public void setIddistrito(int iddistrito) {
+        this.iddistrito = iddistrito;
+    }
+
+    public int getIdrepresentate() {
+        return idrepresentate;
+    }
+
+    public void setIdrepresentate(int idrepresentate) {
+        this.idrepresentate = idrepresentate;
+    }
+       
 }
