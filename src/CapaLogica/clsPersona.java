@@ -45,21 +45,23 @@ idcliente|nombres|tipodocumento|numerodoc|direccion|correo|telefono|sexo|fechare
 
     }
 
-    public void generarIdPersona() throws Exception {
+    public int generarIdPersona() throws Exception {
+        strSQL = "select coalesce(max(idpersona)+1,1) as cant from persona";
         try {
-            setIdCliente(objCliente.generarCodigoCliente());
+            rs = objConectar.consultarBD(strSQL);
+            if (rs.next()) {
+                return rs.getInt("cant");
+            }
         } catch (Exception e) {
             throw new Exception("Error al generar id Persona");
         }
+        return 0;
     }
 
     public ResultSet buscarPersona(String numeroDocumento) throws Exception {
-        strSQL = "Select cl.idcliente, pe.apepaterno||' '||pe.apematerno||' '||pe.nombre as nombres,"
-                + " pe.tipodocumento,pe.numerodoc,pe.direccion,pe.correo,pe.telefono,pe.sexo,cl.fecharegistro,"
-                + " dis.nomdistrito from persona pe"
-                + " inner join cliente cl on cl.idcliente = pe.idcliente"
-                + " inner join distrito dis on dis.iddistrito = cl.iddistrito"
-                + " where pe.numerodoc= '" + numeroDocumento + "'";
+        strSQL = "select pe.idcliente,pe.persona,pe.sexo,cl.direccion,cl.correo from persona pe "
+                + "inner join cliente cl on cl.idcliente = pe.idcliente "
+                + "where persona ilike '%" + numeroDocumento + "%'";
         try {
             rs = objConectar.consultarBD(strSQL);
             if (rs.next()) {
