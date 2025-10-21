@@ -31,11 +31,8 @@ public class clsPersona extends clsCliente {
 idcliente|nombres|tipodocumento|numerodoc|direccion|correo|telefono|sexo|fecharegistro|nomdistrito
      */
     public ResultSet listarPersona() throws Exception {
-        strSQL = "Select cl.idcliente, pe.apepaterno||' '||pe.apematerno||' '||pe.nombre as nombres,"
-                + " pe.tipodocumento,pe.numerodoc,pe.direccion,pe.correo,pe.telefono,pe.sexo,cl.fecharegistro,"
-                + " dis.nomdistrito from persona pe"
-                + " inner join cliente cl on cl.idcliente = pe.idcliente"
-                + " inner join distrito dis on dis.iddistrito = cl.iddistrito";
+        strSQL = "select pe.idcliente,pe.idpersona,pe.persona,pe.sexo,cl.direccion,cl.correo from persona pe " +
+" inner join cliente cl on cl.idcliente = pe.idcliente ";
         try {
             rs = objConectar.consultarBD(strSQL);
             return rs;
