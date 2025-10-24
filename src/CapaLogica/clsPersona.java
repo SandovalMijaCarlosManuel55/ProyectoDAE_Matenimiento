@@ -26,6 +26,7 @@ public class clsPersona extends clsCliente {
     ResultSet rs = null;
     clsJDBC objConectar = new clsJDBC();
     clsCliente objCliente = new clsCliente();
+    String[] strSQLGrupo;
 
     /*listar persona
 idcliente|nombres|tipodocumento|numerodoc|direccion|correo|telefono|sexo|fecharegistro|nomdistrito
@@ -73,39 +74,24 @@ idcliente|nombres|tipodocumento|numerodoc|direccion|correo|telefono|sexo|fechare
 
     public void registrarPersona(
             int cliente,
+            int persona,
             String nombre,
-            String apepaterno,
-            String apematerno,
-            String tipodocumento,
-            String numerodoc,
             String direccion,
             String correo,
             String telefono,
             String sexo,
-            Date fechaRegistro,
-            String distrito
+            String fechaRegistro,
+            int distrito,
+            String fechaNacimiento
     ) throws Exception {
-        try {
-            objCliente.registrarCliente(cliente, "NATURAL", fechaRegistro, distrito, cliente);
-        } catch (Exception e) {
-            throw new Exception("Error al registrarcliente");
-        }
-        strSQL = "insert into persona values("
-                + cliente + " ,"
-                + nombre + " ,"
-                + apepaterno + " ,"
-                + apematerno + ","
-                + tipodocumento + ","
-                + numerodoc + ","
-                + direccion + ","
-                + correo + ", "
-                + telefono + ","
-                + sexo + ")";
+        strSQLGrupo = new String[2];
+        strSQLGrupo[0] = "insert into cliente values("+cliente+",'PERSONA','"+fechaRegistro+"','"+direccion+"','"+correo+"',"+telefono+",1,"+distrito+", null)";
+       strSQLGrupo[1]="insert into persona values("+persona+",'"+nombre+"','"+sexo+"','"+fechaNacimiento+"',"+cliente+")";
 
         try {
-            objConectar.ejecutarBD(strSQL);
+            objConectar.ejecutarBDTransacciones(strSQLGrupo);
         } catch (Exception e) {
-            throw new Exception("error al registrar cliente");
+            throw new Exception("error al registrar cliente -Persona" +e.getMessage());
         }
     }
 

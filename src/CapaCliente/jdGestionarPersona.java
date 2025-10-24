@@ -7,7 +7,16 @@ package CapaCliente;
 import java.sql.ResultSet;
 import CapaLogica.clsPersona;
 import CapaLogica.clsUbicacion;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimerTask;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,14 +28,17 @@ public class jdGestionarPersona extends javax.swing.JDialog {
     ResultSet rs = null;
     clsPersona objPersona = new clsPersona();
     clsUbicacion objUbicacion = new clsUbicacion();
+    private boolean cargar_datos = false, cargar_datos2 = false;
 
     public jdGestionarPersona(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         listar();
-       limpiar();
+        limpiar();
         cargarDepartamento();
-       
+        mostrarFechaCorta();
+        idCliente();
+  timer.start();
     }
 
     /*
@@ -87,18 +99,17 @@ string departamento+
 
         txtIdCliente.setText("");
         txtNombre.setText("");
-        cboTipoDocumento.setSelectedIndex(-1);
-        txtNroDocumento.setText("");
+        txtDni.setText("");
         txtDireccion.setText("");
         cboDepartamento.setSelectedIndex(-1);
         cboProvincia.setSelectedIndex(-1);
         cboDistrito.setSelectedIndex(-1);
-        txtfechaNacimiento.setText("");
+        dchFechaNacimiento.setDate(new Date());
         txtCorreo.setText("");
         txtTelefono.setText("");
         bgSexo.clearSelection();
-        listar();
-       cboProvincia.setEnabled(false);
+
+        cboProvincia.setEnabled(false);
         cboDistrito.setEnabled(false);
         cboProvincia.setSelectedIndex(-1);
         cboDistrito.setSelectedIndex(-1);
@@ -108,31 +119,39 @@ string departamento+
     public void cargarDepartamento() {
         try {
             rs = objUbicacion.listarDepartamento();
+            cboDepartamento.removeAllItems();
             while (rs.next()) {
                 cboDepartamento.addItem(rs.getString("departamento"));
             }
+            cargar_datos = true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al cargar Departamentos" + e.getMessage());
         }
+        cboProvincia.setEnabled(false);
+        cboDistrito.setEnabled(false);
 
     }
 
-    public void cargarProvincia() {
+    public void cargarProvincia(String departamento) {
         try {
-            int idDepartamento = objUbicacion.buscarIDxDepartamento(String.valueOf(cboDepartamento.getSelectedItem()));
+            int idDepartamento = objUbicacion.buscarIDxDepartamento(departamento);
             rs = objUbicacion.listarProvincia(idDepartamento);
+            cboProvincia.removeAllItems();
             while (rs.next()) {
                 cboProvincia.addItem(rs.getString("provincia"));
             }
+            cargar_datos2 = true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al provincia" + e.getMessage());
         }
+        cboDistrito.setEnabled(true);
     }
 
-    public void cargarDistrito() {
+    public void cargarDistrito(String Provincia) {
         try {
-            int idProvincia = objUbicacion.buscarIdXProvincia(String.valueOf(cboProvincia.getSelectedItem()));
+            int idProvincia = objUbicacion.buscarIdXProvincia(Provincia);
             rs = objUbicacion.listarDistrito(idProvincia);
+            cboDistrito.removeAllItems();
             while (rs.next()) {
                 cboDistrito.addItem(rs.getString("distrito"));
             }
@@ -141,23 +160,30 @@ string departamento+
         }
     }
 
+    public void idCliente(){
+        try {
+    txtIdCliente.setText(String.valueOf(objPersona.generarIdPersona()));        
+        } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    
+    
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         bgSexo = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        lblTitulo = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        txtNroDocumento = new javax.swing.JTextField();
-        btnGuardar = new javax.swing.JButton();
+        txtDni = new javax.swing.JTextField();
+        btnNuevo = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         txtNombre = new javax.swing.JTextField();
-        cboTipoDocumento = new javax.swing.JComboBox<>();
         txtDireccion = new javax.swing.JTextField();
         txtCorreo = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -175,51 +201,55 @@ string departamento+
         cboDepartamento = new javax.swing.JComboBox<>();
         jLabel13 = new javax.swing.JLabel();
         cboDistrito = new javax.swing.JComboBox<>();
-        txtfechaNacimiento = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
+        dchFechaNacimiento = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPersona = new javax.swing.JTable();
+        lblTitulo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        lblTitulo.setText("Registrar Nuevo Cliente");
-
         jLabel3.setText("N° Documento:");
 
-        jLabel5.setText("Tipo Documento:");
+        jLabel5.setText("DNI:");
 
         jLabel6.setText("Nombre");
 
         jLabel7.setText("Fecha");
 
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevo.setText("Nuevo");
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
+                btnNuevoActionPerformed(evt);
             }
         });
 
         jLabel4.setText("Dirección:");
 
         btnCancelar.setText("Cancelar");
-
-        cboTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DNI", "Carnet de Extranjeria" }));
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         jLabel10.setText("Correo:");
 
         jLabel11.setText("Telefono:");
 
+        bgSexo.add(rbnM);
         rbnM.setText("M");
 
+        bgSexo.add(rbnF);
         rbnF.setText("F");
 
         jLabel12.setText("Sexo:");
 
         jLabel1.setText("Id Cliente:");
 
-        cboProvincia.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cboProvinciaMouseClicked(evt);
+        cboProvincia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboProvinciaActionPerformed(evt);
             }
         });
 
@@ -228,9 +258,9 @@ string departamento+
         jLabel9.setText("Departamento:");
 
         cboDepartamento.setToolTipText("");
-        cboDepartamento.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cboDepartamentoMouseClicked(evt);
+        cboDepartamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboDepartamentoActionPerformed(evt);
             }
         });
 
@@ -239,6 +269,8 @@ string departamento+
         cboDistrito.setToolTipText("");
 
         jLabel14.setText("Fecha de nacimiento:");
+
+        dchFechaNacimiento.setDateFormatString("dd-MM-yyyy");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -251,7 +283,7 @@ string departamento+
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -269,16 +301,14 @@ string departamento+
                                                 .addGap(71, 71, 71))
                                             .addComponent(cboDistrito, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jLabel5)
-                                            .addComponent(cboTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(29, 29, 29)
+                                        .addGap(17, 17, 17)
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtNroDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblTitulo)
-                                .addGap(162, 162, 162)
+                                .addGap(321, 321, 321)
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtFechaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -303,9 +333,9 @@ string departamento+
                                         .addComponent(cboDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(jPanel1Layout.createSequentialGroup()
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(txtfechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jLabel14))
-                                            .addGap(18, 18, 18)
+                                                .addComponent(jLabel14)
+                                                .addComponent(dchFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(53, 53, 53)
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -330,23 +360,16 @@ string departamento+
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTitulo)
                     .addComponent(jLabel1)
                     .addComponent(txtIdCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtFechaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFechaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cboTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -374,7 +397,7 @@ string departamento+
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jLabel14)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txtfechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(dchFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -391,11 +414,13 @@ string departamento+
                         .addGap(5, 5, 5)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnCancelar)
-                            .addComponent(btnGuardar)))
+                            .addComponent(btnNuevo)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNroDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -412,6 +437,9 @@ string departamento+
         ));
         jScrollPane1.setViewportView(tblPersona);
 
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblTitulo.setText("Registrar Nuevo Cliente");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -421,11 +449,15 @@ string departamento+
                 .addContainerGap()
                 .addComponent(jScrollPane1)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lblTitulo)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
+                .addComponent(lblTitulo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -435,33 +467,135 @@ string departamento+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void mostrarFechaCorta() {
+        LocalDate fecha = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy", new Locale("es", "ES"));
+        txtFechaRegistro.setText(fecha.format(formato));
+    }
 
-    }//GEN-LAST:event_btnGuardarActionPerformed
+         Timer timer = new Timer(60000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarFechaCorta();
+            }
+        });
+    public static String formatearFecha(Date fecha) {
+        if (fecha == null) {
+            return null; // o puedes devolver "" si prefieres
+        }
 
-    private void cboProvinciaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cboProvinciaMouseClicked
-        if (cboProvincia.getSelectedIndex() != -1) {
+        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+        return formato.format(fecha);
+    }
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        int idCliente = -1, idPersona = -1, idDistrito = -1;
+        String nombre = "", direccion = "", correo = "", telefono = "", sexo = "";
+        String fechaRegistro = txtFechaRegistro.getText();
+        String fechaNacimiento = formatearFecha(dchFechaNacimiento.getDate());
+
+        try {
+            // Validar campos obligatorios
+            if (txtNombre.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El nombre es obligatorio");
+                txtNombre.requestFocus();
+                return;
+            }
+
+            if (txtDni.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El número de documento es obligatorio");
+                txtDni.requestFocus();
+                return;
+            }
+
+            if (!rbnM.isSelected() && !rbnF.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar el sexo");
+                return;
+            }
+
+            if (cboDistrito.getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar un distrito");
+                return;
+            }
+
+            // Obtener valores del formulario
+            nombre = txtNombre.getText().trim();
+            idPersona = Integer.parseInt(txtDni.getText().trim());
+            direccion = txtDireccion.getText().trim();
+            correo = txtCorreo.getText().trim();
+            telefono = txtTelefono.getText().trim();
+
+            // Obtener sexo seleccionado
+            if (rbnM.isSelected()) {
+                sexo = "M";
+            } else if (rbnF.isSelected()) {
+                sexo = "F";
+            }
+
+            // Obtener ID del distrito seleccionado
+            String distrito = String.valueOf(cboDistrito.getSelectedItem());
+            idDistrito = objUbicacion.buscarIdxDistrito(distrito);
+
+            // Generar código de cliente
+            idCliente = objPersona.generarCodigoCliente();
+
+            // Registrar persona/cliente
+            objPersona.registrarPersona(idCliente, idPersona, nombre, direccion, correo, telefono, sexo, fechaRegistro, idDistrito, fechaNacimiento);
+
+            JOptionPane.showMessageDialog(this, "CLIENTE REGISTRADO CORRECTAMENTE ");
+
+            // Limpiar formulario y actualizar tabla
+            limpiar();
+            listar();
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Error: El documento debe ser numérico\n" + e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al registrar cliente:\n" + e.getMessage());
+        }
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void cboProvinciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboProvinciaActionPerformed
+        if (cargar_datos2 && cboProvincia.getSelectedIndex() != -1) {
+            String provincia = String.valueOf(cboProvincia.getSelectedItem());
             cboDistrito.setEnabled(true);
-            cargarDistrito();
+            cargarDistrito(provincia);
         }
-    }//GEN-LAST:event_cboProvinciaMouseClicked
+    }//GEN-LAST:event_cboProvinciaActionPerformed
 
-    private void cboDepartamentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cboDepartamentoMouseClicked
-             if (cboDepartamento.getSelectedIndex() != -1) {
-            cboProvincia.setEnabled(true);
-            cargarProvincia();
+    private void cboDepartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboDepartamentoActionPerformed
+        if (!cargar_datos) {
+            return; // evita ejecutar antes de que se carguen datos
         }
-    }//GEN-LAST:event_cboDepartamentoMouseClicked
+        if (cboDepartamento.getSelectedIndex() != -1) {
+            // Obtener el departamento seleccionado
+            String departamento = String.valueOf(cboDepartamento.getSelectedItem());
+
+            // Limpiar combos dependientes
+            cboProvincia.removeAllItems();
+            cboDistrito.removeAllItems();
+            cboProvincia.setEnabled(false);
+            cboDistrito.setEnabled(false);
+            cargar_datos2 = false; // reiniciar bandera
+
+            // Cargar provincias del departamento seleccionado
+            cargarProvincia(departamento);
+            cboProvincia.setEnabled(true);
+        }
+    }//GEN-LAST:event_cboDepartamentoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgSexo;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnNuevo;
     private javax.swing.JComboBox<String> cboDepartamento;
     private javax.swing.JComboBox<String> cboDistrito;
     private javax.swing.JComboBox<String> cboProvincia;
-    private javax.swing.JComboBox<String> cboTipoDocumento;
+    private com.toedter.calendar.JDateChooser dchFechaNacimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -483,11 +617,10 @@ string departamento+
     private javax.swing.JTable tblPersona;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextField txtDni;
     private javax.swing.JTextField txtFechaRegistro;
     private javax.swing.JTextField txtIdCliente;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtNroDocumento;
     private javax.swing.JTextField txtTelefono;
-    private javax.swing.JTextField txtfechaNacimiento;
     // End of variables declaration//GEN-END:variables
 }

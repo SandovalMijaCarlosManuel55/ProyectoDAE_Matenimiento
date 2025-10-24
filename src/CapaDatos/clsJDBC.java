@@ -15,12 +15,11 @@ import java.sql.Statement;
  * @author Josselyn
  */
 public class clsJDBC {
-    
+
     private String driver, url, user, password;
     private Connection con;
     private Statement sent = null;
 
-   
     public clsJDBC() {
         this.driver = "org.postgresql.Driver";
         this.url = "jdbc:postgresql://localhost:5432/BD_DAE_SistemaMantenimientoVehiculos";
@@ -34,7 +33,7 @@ public class clsJDBC {
             Class.forName(driver);
             con = DriverManager.getConnection(url, user, password);
         } catch (ClassNotFoundException | SQLException ex) {
-            throw new Exception("Error al conectar a la BD! " +ex.getMessage());
+            throw new Exception("Error al conectar a la BD! " + ex.getMessage());
         }
     }
 
@@ -42,11 +41,11 @@ public class clsJDBC {
         try {
             con.close();
         } catch (SQLException ex) {
-            throw new Exception("Error al desconectar de la BD! " +ex.getMessage());
+            throw new Exception("Error al desconectar de la BD! " + ex.getMessage());
         }
     }
-    
-     public ResultSet consultarBD(String strSQL) throws Exception {
+
+    public ResultSet consultarBD(String strSQL) throws Exception {
         ResultSet rs = null;
         try {
             conectar();
@@ -54,26 +53,52 @@ public class clsJDBC {
             rs = sent.executeQuery(strSQL);
             return rs;
         } catch (Exception e) {
-            throw new Exception("Error al ejecutar consulta ->" +e.getMessage());
+            throw new Exception("Error al ejecutar consulta ->" + e.getMessage());
         } finally {
             if (con != null) {
                 desconectar();
             }
         }
     }
-     
-    public void ejecutarBD(String strSQL) throws Exception{
-        try{
+
+    public void ejecutarBD(String strSQL) throws Exception {
+        try {
             conectar();
             sent = con.createStatement();
             sent.execute(strSQL);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             throw new Exception("Error al ejecutar BD -> " + ex.getMessage());
-        } finally{
+        } finally {
             if (con != null) {
                 desconectar();
             }
         }
-    } 
-    
+    }
+
+    public Connection getCon() {
+        return con;
+    }
+
+    public void ejecutarBDTransacciones(String[] str) throws Exception {
+
+        if (str.length < 1 ) {
+            return;
+        }
+        try {
+            conectar();
+            con.setAutoCommit(false);
+            sent = con.createStatement();
+            for (int i = 0; i < str.length; i++) {
+                sent.executeUpdate(str[i]);
+            }
+            con.commit();
+        } catch (Exception e) {
+            con.rollback();
+            throw new Exception("Error al ejecutar Transaccion " + e.getMessage());
+        } finally {
+            if (con != null) {
+                desconectar();
+            }
+        }
+    }
 }
