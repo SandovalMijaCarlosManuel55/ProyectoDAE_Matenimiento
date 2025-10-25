@@ -6,72 +6,25 @@ package CapaLogica;
 
 import CapaDatos.clsJDBC;
 import java.sql.ResultSet;
+import java.util.Date;
 
 /**
  *
  * @author Julon
  */
-public class clsEmpresa {
+public class clsEmpresa extends clsCliente{
     
-    private int idcliente;
+    private int idempresa;
     private String razonsocia;
-    private String ruc;
-    private String correo;
-    private String telefono;
     
     public clsEmpresa(){}
 
-    public clsEmpresa(int idcliente, String razonsocia, String ruc, String correo, String telefono) {
-        this.idcliente = idcliente;
-        this.razonsocia = razonsocia;
-        this.ruc = ruc;
-        this.correo = correo;
-        this.telefono = telefono;
-    }
 
-    public int getIdcliente() {
-        return idcliente;
-    }
-
-    public void setIdcliente(int idcliente) {
-        this.idcliente = idcliente;
-    }
-
-    public String getRazonsocia() {
-        return razonsocia;
-    }
-
-    public void setRazonsocia(String razonsocia) {
-        this.razonsocia = razonsocia;
-    }
-
-    public String getRuc() {
-        return ruc;
-    }
-
-    public void setRuc(String ruc) {
-        this.ruc = ruc;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
  //******************************************************
     String rstSQL="";
     ResultSet rs =null;
     clsJDBC objConectar = new clsJDBC();
+    String [] strSQLGrupo;
     
     public ResultSet listarEmpresa()throws Exception{
     rstSQL ="Select * from empresa order by 1 ";
@@ -85,7 +38,7 @@ public class clsEmpresa {
     }
 
     public ResultSet bucarEmpresaRUC(String ruc)throws Exception{
-    rstSQL ="Select * from empresa where ruc='"+ruc+"'";
+    rstSQL ="Select * from empresa where idempresa='"+ruc+"'";
      try {
          rs =objConectar.consultarBD(rstSQL);
         if(rs.next())return rs;
@@ -95,11 +48,74 @@ public class clsEmpresa {
      return null;
     }
 
-    public void RegistrarEmpresa()throws Exception{}
+    public void RegistrarEmpresa(
+    int idcliente,
+    String direccion,
+    String correo,
+    String telefono,
+    int idDistrito,
+    int idrepresentante,
+    String idempresa,
+    String razon
+    )throws Exception{
+    strSQLGrupo =new String[2];
+    strSQLGrupo[0] = "insert into cliente values("+idcliente+",'EMPRESA',current_date,'"+
+            direccion+"','"+correo+"','"+telefono+"',2,"+idDistrito+","+idrepresentante+");";
+    strSQLGrupo[1]="insert into empresa values("+idempresa+","+razon+","+idcliente+")";
+        try {
+            objConectar.ejecutarBDTransacciones(strSQLGrupo);
+        } catch (Exception e) {
+            throw new Exception("Error al Registrar Empresa");
+        }
+    }
     
-    public void ModificarEmpresa()throws Exception{}
+    public void ModificarEmpresa(
+        int idcliente,
+    String direccion,
+    String correo,
+    String telefono,
+    int idDistrito,
+    int idrepresentante,
+    String idempresa,
+    String razon
+    )throws Exception{
+        strSQLGrupo =new String[2];
+    strSQLGrupo[0] ="update cliente set "+
+            " direccion = '"+direccion+"',"+
+            " correo = '"+correo+"',"+
+            " telefono = '"+telefono+"',"+
+            " iddistrito ="+idDistrito+","+
+            " idrepresentante ="+idrepresentante+
+            " where idcliente = "+idcliente+";";
+    strSQLGrupo[1]=" update  empresa set "+
+            " razon = '"+razon+"',"+
+            " where insert into empresa values("+idempresa+","+razon+","+idcliente+")";
+    }
     
     public void eliminar(int idEmpresa)throws Exception{}
+     //******************************************************
+
+    public clsEmpresa(int idempresa, String razonsocia, int idcliente, String tipocliente, Date fecharegistro, String direccion, String correo, String telefono, int idtipodocumento, int iddistrito, int idrepresentate) {
+        super(idcliente, tipocliente, fecharegistro, direccion, correo, telefono, idtipodocumento, iddistrito, idrepresentate);
+        this.idempresa = idempresa;
+        this.razonsocia = razonsocia;
+    }
+
+    public int getIdempresa() {
+        return idempresa;
+    }
+
+    public void setIdempresa(int idempresa) {
+        this.idempresa = idempresa;
+    }
+
+    public String getRazonsocia() {
+        return razonsocia;
+    }
+
+    public void setRazonsocia(String razonsocia) {
+        this.razonsocia = razonsocia;
+    }
     
 }
 
