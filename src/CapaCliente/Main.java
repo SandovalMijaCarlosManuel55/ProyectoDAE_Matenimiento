@@ -21,8 +21,8 @@ public class Main {
         //new JdInicioSesion(parent, true).setVisible(true);
         //new FrmMenuPrincipal().setVisible(true);
         //new JdVentas(parent, true).setVisible(true);
-        //new JdMantenimientoProducto(parent,true).setVisible(true);
-        new JdMatenimientoCliente(parent,true).setVisible(true);
+        new JdMantenimientoServicio(parent,true).setVisible(true);
+        //new JdMatenimientoCliente(parent,true).setVisible(true);
     }
     
 }

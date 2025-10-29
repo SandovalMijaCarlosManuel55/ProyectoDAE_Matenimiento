@@ -245,7 +245,6 @@ public class JdGestionarServicio extends javax.swing.JDialog {
             Integer tiempoEstimado = Integer.parseInt(txtDuracion.getText());
             Float precio = Float.parseFloat(txtPrecio.getText());
             Integer idTipoVehiculo = objTipoVehiculo.obtenerCodigoTipoVehiculo(cboTipoVehiculo.getSelectedItem().toString());
-            
             if (cboTipoVehiculo.getSelectedItem().toString().equalsIgnoreCase("Todos")) {
                 JOptionPane.showMessageDialog(this, "No puede registrar un servicio para todos los tipos de vehiculos");
             } else{

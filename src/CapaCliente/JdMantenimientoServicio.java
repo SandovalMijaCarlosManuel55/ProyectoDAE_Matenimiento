@@ -6,20 +6,11 @@ package CapaCliente;
 
 import CapaLogica.clsServicio;
 import CapaLogica.clsTipoVehiculo;
-import java.awt.Color;
-import java.awt.Component;
 import java.sql.ResultSet;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 
 
 /**
@@ -55,19 +46,24 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
         cboOrdenar = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
+        jLabel1.setFont(new java.awt.Font("Verdana", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Gestionar Servicios");
 
+        jLabel2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Busar por código o tipo de vehículo:");
 
-        btnNuevo.setBackground(new java.awt.Color(51, 51, 255));
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/anadir.png"))); // NOI18N
+        btnNuevo.setBackground(new java.awt.Color(31, 41, 55));
+        btnNuevo.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnNuevo.setForeground(new java.awt.Color(255, 255, 255));
         btnNuevo.setText("Nuevo Servicio");
         btnNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -75,13 +71,16 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
             }
         });
 
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/buscar.png"))); // NOI18N
+        txtBuscarServicios.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
             }
         });
 
+        tblServicios.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tblServicios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -95,14 +94,41 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tblServicios);
 
+        cboTipoVehiculo.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+
+        cboOrdenar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         cboOrdenar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Código", "Nombre", "Precio", "Tiempo Estimado", "Tipo de Vehículo" }));
 
+        jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Ordenar por:");
 
+        jButton3.setBackground(new java.awt.Color(31, 41, 55));
+        jButton3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Listar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setBackground(new java.awt.Color(31, 41, 55));
+        jButton1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Eliminar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setBackground(new java.awt.Color(31, 41, 55));
+        jButton2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("Editar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -111,12 +137,12 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jLabel1))
+                        .addComponent(jLabel1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel2)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -126,13 +152,15 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 757, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cboOrdenar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(26, 26, 26))
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,13 +171,13 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
                     .addComponent(cboTipoVehiculo)
                     .addComponent(txtBuscarServicios)
-                    .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -158,8 +186,12 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cboOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(116, 116, 116))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -215,6 +247,7 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
                     registro.add(2, rsServicio.getString("precioActual"));
                     registro.add(3, rsServicio.getString("duracion"));
                     registro.add(4, rsServicio.getString("tipoVehiculo"));
+                    registro.add(5, rsServicio.getBoolean("estado"));
                     modelo.addRow(registro);
                     encontrado = true;
                 }
@@ -244,12 +277,75 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
                     registro.add(2, rs.getString("precioActual"));
                     registro.add(3, rs.getString("duracion"));
                     registro.add(4, rs.getString("tipoVehiculo"));
+                    registro.add(5, rs.getBoolean("estado"));
                     modelo.addRow(registro);
                 }} catch (Exception ex){ 
                 JOptionPane.showMessageDialog(this, ex.getMessage());
             }
             tblServicios.setModel(modelo);
+            tblServicios.setRowHeight(22);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int selectedRow = tblServicios.getSelectedRow();
+    
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para editar.");
+            return;
+        }
+
+        try {
+            // Convertir la fila seleccionada al modelo (por si hay ordenamiento/filtro)
+            int modelRow = tblServicios.convertRowIndexToModel(selectedRow);
+            DefaultTableModel modelo = (DefaultTableModel) tblServicios.getModel();
+
+            int idServicio = (int) modelo.getValueAt(modelRow, 0);
+            String tipoVehiculo = (String) modelo.getValueAt(modelRow, 4);
+            int idTipoVehiculo = objTipoVehiculo.obtenerCodigoTipoVehiculo(tipoVehiculo);
+
+            JdGestionarServicio obj = new JdGestionarServicio(null, true, idServicio, idTipoVehiculo);
+            obj.setVisible(true);
+
+            // Refrescar la tabla después de editar
+            listarServicios();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al modificar datos: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int selectedRow = tblServicios.getSelectedRow();
+    
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "¿Está seguro de que desea eliminar este servicio?", 
+            "Confirmar eliminación", 
+            JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            int modelRow = tblServicios.convertRowIndexToModel(selectedRow);
+            DefaultTableModel modelo = (DefaultTableModel) tblServicios.getModel();
+
+            int idServicio = (int) modelo.getValueAt(modelRow, 0);
+
+            objServicio.eliminarServicio(idServicio);
+            listarServicios(); // Refrescar
+
+            JOptionPane.showMessageDialog(this, "Servicio eliminado correctamente.");
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void listarServicios() {
         ResultSet rs = null;
@@ -261,8 +357,7 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
         modelo.addColumn("Precio");
         modelo.addColumn("Tiempo Estimado");
         modelo.addColumn("Tipo de Vehiculo");
-        modelo.addColumn("Modificar"); 
-        modelo.addColumn("Eliminar");
+        modelo.addColumn("Estado");
         try {
             rs = objServicio.listarServicio();
             while (rs.next()) {
@@ -272,9 +367,11 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
                 registro.add(2, rs.getString("precioActual"));
                 registro.add(3, rs.getString("duracion"));
                 registro.add(4, rs.getString("tipoVehiculo"));
+                registro.add(5, rs.getBoolean("estado"));
                 modelo.addRow(registro);
             }
             tblServicios.setModel(modelo);
+            tblServicios.setRowHeight(22);
 
             // Configurar ancho de columnas
             tblServicios.getColumnModel().getColumn(0).setPreferredWidth(80);
@@ -282,18 +379,7 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
             tblServicios.getColumnModel().getColumn(2).setPreferredWidth(100);
             tblServicios.getColumnModel().getColumn(3).setPreferredWidth(120);
             tblServicios.getColumnModel().getColumn(4).setPreferredWidth(120);
-            tblServicios.getColumnModel().getColumn(5).setPreferredWidth(80); 
-            tblServicios.getColumnModel().getColumn(6).setPreferredWidth(80);
-
-            // Asignar renderizador y editor a las columnas de botones
-            ButtonRenderer renderer = new ButtonRenderer();
-            ButtonEditor editor = new ButtonEditor(new JCheckBox());
-
-            tblServicios.getColumnModel().getColumn(5).setCellRenderer(renderer);
-            tblServicios.getColumnModel().getColumn(5).setCellEditor(editor);
-            tblServicios.getColumnModel().getColumn(6).setCellRenderer(renderer);
-            tblServicios.getColumnModel().getColumn(6).setCellEditor(editor);
-
+            tblServicios.getColumnModel().getColumn(5).setPreferredWidth(80);
             tblServicios.setDefaultEditor(Object.class, null);
             
         } catch (Exception ex) {
@@ -316,136 +402,14 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
         cboTipoVehiculo.setModel(modeloTV);
     }
     
-    class ButtonRenderer extends JButton implements TableCellRenderer {
-
-    public ButtonRenderer() {
-        setOpaque(true);
-        setBorderPainted(false);
-        setFocusPainted(false);
-        setContentAreaFilled(false);
-    }
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column) {
-        
-        if (column == 5) { // Columna "Modificar"
-            setText("✏️");
-            setBackground(Color.WHITE);
-            setForeground(Color.BLUE);
-        } else if (column == 6) { // Columna "Eliminar"
-            setText("🗑️");
-            setBackground(Color.WHITE);
-            setForeground(Color.RED);
-        }
-        
-        return this;
-    }
-}
-    
-    class ButtonEditor extends DefaultCellEditor {
-
-    protected JButton button;
-    private String label;
-    private boolean isPushed;
-    private int row;
-    private int column;
-
-    public ButtonEditor(JCheckBox checkBox) {
-        super(checkBox);
-        button = new JButton();
-        button.setOpaque(true);
-        button.addActionListener(e -> fireEditingStopped());
-    }
-
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value,
-            boolean isSelected, int row, int column) {
-        
-        this.row = row;
-        this.column = column;
-        
-        if (column == 5) {
-            button.setText("✏️");
-            button.setForeground(Color.BLUE);
-        } else if (column == 6) {
-            button.setText("🗑️");
-            button.setForeground(Color.RED);
-        }
-        
-        isPushed = true;
-        return button;
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-        if (isPushed) {
-            if (column == 5) {
-                try {
-                    modificarServicio(row);
-                } catch (Exception ex) {
-                    Logger.getLogger(JdMantenimientoServicio.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else if (column == 6) {
-                try {
-                    eliminarServicio(row);
-                } catch (Exception ex) {
-                    Logger.getLogger(JdMantenimientoServicio.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        isPushed = false;
-        return label;
-    }
-
-    @Override
-    public boolean stopCellEditing() {
-        isPushed = false;
-        return super.stopCellEditing();
-    }
-
-    @Override
-    protected void fireEditingStopped() {
-        super.fireEditingStopped();
-    }
-    
-    public void modificarServicio(int row) throws Exception {
-        try{
-            DefaultTableModel modelo = (DefaultTableModel) tblServicios.getModel();
-            int idServicio = (int) tblServicios.getValueAt(row, 0);
-            String tipoVehiculo = (String) tblServicios.getModel().getValueAt(row, 4);
-            int idTipoVehiculo = objTipoVehiculo.obtenerCodigoTipoVehiculo(tipoVehiculo);
-            JdGestionarServicio obj = new JdGestionarServicio(null, true,idServicio, idTipoVehiculo);
-            obj.setVisible(true);  
-            modelo.setRowCount(0);
-            listarServicios();
-        } catch (Exception ex){
-            JOptionPane.showMessageDialog(null, "Error al modificar datos: " +ex.getMessage());
-        }
-        
-    }
-
-    private void eliminarServicio(int row) throws Exception {
-        try {
-         int idServicio = (int) tblServicios.getValueAt(row, 0);
-         String tipoVehiculo = (String) tblServicios.getModel().getValueAt(row, 4);
-         int idTipoVehiculo = objTipoVehiculo.obtenerCodigoTipoVehiculo(tipoVehiculo);
-         objServicio.eliminarServicio(idServicio,idTipoVehiculo);
-         listarServicios();
-        } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Error al Eliminar"+e);
-        }
-    }
-    }
- 
-
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JComboBox<String> cboOrdenar;
     private javax.swing.JComboBox<String> cboTipoVehiculo;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
