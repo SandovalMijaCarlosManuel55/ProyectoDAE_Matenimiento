@@ -25,8 +25,7 @@ public class clsProducto {
     private int idTipoProducto;
 
     public clsProducto() {
-    }
-    ;
+    };
 
     clsJDBC objConectar = new clsJDBC();
     String strSQL;

@@ -13,34 +13,34 @@ import java.util.Date;
  * @author Julon
  */
 public class clsCliente {
-private int idcliente;
-private String tipocliente;
-private Date fecharegistro;
-private String direccion;
-private String correo;
-private String telefono;
-private int idtipodocumento;
-private int iddistrito;
-private int idrepresentate;
+
+    private int idcliente;
+    private String tipocliente;
+    private Date fecharegistro;
+    private String direccion;
+    private String correo;
+    private String telefono;
+    private int idtipodocumento;
+    private int iddistrito;
+    private int idrepresentate;
 
     //***********************************************************
-    
     String strSQL;
     ResultSet rs = null;
     clsJDBC objConectar = new clsJDBC();
-    
-    public ResultSet listarClientes()throws Exception{
-       strSQL ="select cl.idcliente,tp.tipodocumento from cliente cl inner join tipo_documento tp on tp.idtipodocumento = cl.idtipodocumento";
+
+    public ResultSet listarClientes() throws Exception {
+        strSQL = "select cl.idcliente,tp.tipodocumento from cliente cl inner join tipo_documento tp on tp.idtipodocumento = cl.idtipodocumento";
         try {
             rs = objConectar.consultarBD(strSQL);
             return rs;
         } catch (Exception e) {
-        throw new Exception("Error al listar Cliente");
+            throw new Exception("Error al listar Cliente");
         }
 
     }
-    
-        public Integer generarCodigoCliente() throws Exception {
+
+    public Integer generarCodigoCliente() throws Exception {
         strSQL = "SELECT COALESCE (max(idcliente),0)+1 as codigo from CLIENTE";
         try {
             rs = objConectar.consultarBD(strSQL);
@@ -52,61 +52,66 @@ private int idrepresentate;
         }
         return 0;
     }
-        
-    public ResultSet buscar(int idcliente)throws Exception {
-    strSQL = "Select * from cliente where idcliente= "+idcliente;
-        try {
-            rs=objConectar.consultarBD(strSQL);
-            if(rs.next())return rs;
-        } catch (Exception e) {
-       throw new Exception("Error al buscar"+e.getMessage());
-        }
-    return null;
-    }
-    
-    public int buscarIdDistrito(String nombre)throws Exception{
-    strSQL ="select iddistrito from distrito where nomdistrito ilike '%"+nombre+"%'";
+
+    public ResultSet buscar(int idcliente) throws Exception {
+        strSQL = "Select * from cliente where idcliente= " + idcliente;
         try {
             rs = objConectar.consultarBD(strSQL);
-            if(rs.next()) return rs.getInt("iddistrito");
+            if (rs.next()) {
+                return rs;
+            }
         } catch (Exception e) {
-        throw new Exception("Error al buscar distrito");
+            throw new Exception("Error al buscar" + e.getMessage());
         }
-    return -1;
+        return null;
     }
-    
-    public void registrarCliente(int id, String tipoCliente, Date fechaRegistro, String distrito, int representate )throws Exception{
-    strSQL = "insert into cliente values("+id+",'"+tipoCliente+"','"+fechaRegistro+"',"+buscarIdDistrito(distrito)+","+representate+")";
+
+    public int buscarIdDistrito(String nombre) throws Exception {
+        strSQL = "select iddistrito from distrito where nomdistrito ilike '%" + nombre + "%'";
+        try {
+            rs = objConectar.consultarBD(strSQL);
+            if (rs.next()) {
+                return rs.getInt("iddistrito");
+            }
+        } catch (Exception e) {
+            throw new Exception("Error al buscar distrito");
+        }
+        return -1;
+    }
+
+    public void registrarCliente(int id, String tipoCliente, Date fechaRegistro, String distrito, int representate) throws Exception {
+        strSQL = "insert into cliente values(" + id + ",'" + tipoCliente + "','" + fechaRegistro + "'," + buscarIdDistrito(distrito) + "," + representate + ")";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
             throw new Exception("Error al registrar Cliente");
         }
     }
-    
-    public void modificarCliente(int id,String distrito)throws Exception{
-    strSQL="update cliente set iddistrito="+buscarIdDistrito(distrito)+" where idcliente="+id+";";
+
+    public void modificarCliente(int id, String distrito) throws Exception {
+        strSQL = "update cliente set iddistrito=" + buscarIdDistrito(distrito) + " where idcliente=" + id + ";";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
             throw new Exception("Error al modificar al cliente");
         }
-    
+
     }
 
-    public void eliminarCliente (int id)throws Exception{
-    strSQL = "delete from cliente where idcliente= "+ id;
+    public void eliminarCliente(int id) throws Exception {
+        strSQL = "delete from cliente where idcliente= " + id;
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
             throw new Exception();
         }
-    
+
     }
-    
-   public void darDeBajaCliente()throws Exception{
-   }
-       public ResultSet listarNombreClientes() throws Exception{
+
+    public void darDeBajaCliente() throws Exception {
+    }
+
+    public ResultSet listarNombreClientes() throws Exception{
         strSQL = """
                     select p.persona as cliente from cliente c inner join persona p on p.idcliente = c.idcliente
                     union all
@@ -121,7 +126,7 @@ private int idrepresentate;
         }
     }
            //***********************************************************
-
+    
     public clsCliente() {
     }
 
@@ -140,14 +145,14 @@ private int idrepresentate;
     public int getIdcliente() {
         return idcliente;
     }
-
+    
     public void setIdcliente(int idcliente) {
         this.idcliente = idcliente;
     }
 
     public String getTipocliente() {
         return tipocliente;
-    }
+}
 
     public void setTipocliente(String tipocliente) {
         this.tipocliente = tipocliente;

@@ -81,7 +81,7 @@ public class clsJDBC {
 
     public void ejecutarBDTransacciones(String[] str) throws Exception {
 
-        if (str.length < 1 ) {
+        if (str.length < 1) {
             return;
         }
         try {
