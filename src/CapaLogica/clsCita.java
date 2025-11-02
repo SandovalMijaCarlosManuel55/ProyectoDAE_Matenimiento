@@ -52,7 +52,7 @@ public class clsCita {
         return 0;
     }
 
-    public void registrar(int idcita, Date fecha, String hora,String estado, String comentario, Date fechaRecojo, Integer idVehiculo, Integer idTrabajador) throws Exception {
+    public void registrar(int idcita, String fecha, String hora,String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador) throws Exception {
         strSQL = "insert into Cita values (" + idcita + ", " + fecha + ", " + hora + ", '" +estado + "', '" +  comentario + "', " +
                                                fechaRecojo + ", " + idVehiculo + ", " + idTrabajador +"); ";
         try {
@@ -62,7 +62,7 @@ public class clsCita {
         }
     }
     
-    public void modificar(int idcita, Date fecha, String hora,String estado, String comentario, Date fechaRecojo, Integer idVehiculo, Integer idTrabajador) throws Exception {        
+    public void modificar(int idcita, String fecha, String hora,String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador) throws Exception {        
         strSQL = "update Cita set fecha = " + fecha + ", hora = " + hora + ", estado = ' " + estado + "', comentario = ' "+ comentario + 
                  "', fechaRecojo = " + fechaRecojo + ", idVehiculo = " + idVehiculo + ", idTrabajador =  "+ idTrabajador +
                  " where idcita=" + idcita +";";

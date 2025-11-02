@@ -4,15 +4,16 @@
  */
 package CapaCliente;
 
-import CapaLogica.clsProducto;
 import CapaLogica.clsServicio;
 import CapaLogica.clsTipoVehiculo;
 import java.awt.Frame;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -22,35 +23,37 @@ public class JdSeleccionarServicio extends javax.swing.JDialog {
 
     clsTipoVehiculo objTipoVehiculo = new clsTipoVehiculo();
     clsServicio objServicio = new clsServicio();
-    private DefaultTableModel modelo;
+        
     private JdGestionarCitas citas;
 
-    public JdSeleccionarServicio(Frame padre, JdVentas ventas) throws SQLException {
-        super(padre, true);
+    public JdSeleccionarServicio(Frame parent, JdGestionarCitas citas) throws SQLException {
+        super(parent, true);
         this.citas = citas;
         initComponents();
         listarTipoVehiculos();
-        listarServicioPorTipoVehiculo();
+        listarServicio();
         cboTipoVehiculo.setSelectedIndex(-1);
     }
 
     private void listarTipoVehiculos() throws SQLException {
+        ResultSet rs = null;
+        DefaultComboBoxModel modeloTV = new DefaultComboBoxModel();
+        modeloTV.addElement("Todos");
         try {
-            ResultSet rs = objTipoVehiculo.listarTipoVehiculo();
+            rs = objTipoVehiculo.listarTipoVehiculo();
             while (rs.next()) {
-                cboTipoVehiculo.addItem(rs.getString("tipovehiculo"));
+                modeloTV.addElement(rs.getString("tipoVehiculo"));
             }
-            rs.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al listar tipos de vehiculo", "Sitema", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al listar tipoVehiculos"+ e.getMessage());
         }
+        cboTipoVehiculo.setModel(modeloTV);
     }
 
-    private void listarServicioPorTipoVehiculo() {
+    private void listarServicio() {
+        DefaultTableModel modelo = new DefaultTableModel();
         ResultSet rsServicioTipo = null;
-        Vector registro;
-
-        modelo = new DefaultTableModel();
+        Vector registro;     
         modelo.addColumn("Código");
         modelo.addColumn("Nombre");
         modelo.addColumn("Precio");
@@ -59,7 +62,7 @@ public class JdSeleccionarServicio extends javax.swing.JDialog {
         modelo.addColumn("Estado");
 
         try {
-            rsServicioTipo = objServicio.buscarServicioPorTipo(cboTipoVehiculo.getSelectedItem().toString());
+            rsServicioTipo = objServicio.listarServicio();
 
             while (rsServicioTipo.next()) {
                 registro = new Vector();
@@ -88,6 +91,7 @@ public class JdSeleccionarServicio extends javax.swing.JDialog {
 
     private void Seleccion() {
         int fila = tblServicios.getSelectedRow();
+        DefaultTableModel modelo = (DefaultTableModel) tblServicios.getModel();
         if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione un servicio de la tabla.", "Sistema", JOptionPane.WARNING_MESSAGE);
             return;
@@ -102,7 +106,7 @@ public class JdSeleccionarServicio extends javax.swing.JDialog {
             boolean estado = Boolean.parseBoolean(modelo.getValueAt(fila, 5).toString());
             
             citas.agregarServicio(codigo, nombre, precio,duracion , tipo, estado);
-            listarServicioPorTipoVehiculo();
+            listarServicio();
             int opcion = JOptionPane.showConfirmDialog(this, "Servicio añadido con éxito, ¿Desea agregar otro servicio?", "Sistema", JOptionPane.YES_NO_OPTION);
             if (opcion == JOptionPane.NO_OPTION) {
                 dispose();
@@ -140,7 +144,7 @@ public class JdSeleccionarServicio extends javax.swing.JDialog {
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(31, 41, 55));
-        jLabel5.setText("Tipo de Producto:");
+        jLabel5.setText("Tipo de Vehiculo:");
 
         jPanel2.setBackground(new java.awt.Color(31, 41, 55));
 
@@ -252,32 +256,30 @@ public class JdSeleccionarServicio extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-
-        ResultSet rsProductosTipo = null;
+        ResultSet rsServicio = null;
         Vector registro;
-
-        modelo = new DefaultTableModel();
-        modelo.addColumn("Código");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Precio");
-        modelo.addColumn("Tiempo Estimado");
-        modelo.addColumn("Tipo de Vehiculo");
-        modelo.addColumn("Estado");
-
+        String tipoSeleccionado = (String) cboTipoVehiculo.getSelectedItem();
+        DefaultTableModel modelo = (DefaultTableModel) tblServicios.getModel();
         try {
+            modelo.setRowCount(0);
+            
+            
             if (cboTipoVehiculo.getSelectedIndex() == -1) {
                 JOptionPane.showMessageDialog(this, "Sistema", "Debe seleccionar un tipo de vehiculo", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                rsProductosTipo = objServicio.buscarServicioPorTipo(cboTipoVehiculo.getSelectedItem().toString());
-
-                while (rsProductosTipo.next()) {
+                if (tipoSeleccionado.equals("Todos")) {
+                    rsServicio = objServicio.listarServicio();
+                } else{
+                    rsServicio = objServicio.buscarServicioPorTipo(cboTipoVehiculo.getSelectedItem().toString());
+                }
+                while (rsServicio.next()) {
                     registro = new Vector();
-                    registro.add(0, rsProductosTipo.getInt("idServicio"));
-                    registro.add(1, rsProductosTipo.getString("servicio"));
-                    registro.add(2, rsProductosTipo.getFloat("precioActual"));
-                    registro.add(3, rsProductosTipo.getString("duracion"));
-                    registro.add(4, rsProductosTipo.getString("tipoVehiculo"));
-                    registro.add(5, rsProductosTipo.getBoolean("estado"));
+                    registro.add(0, rsServicio.getInt("idServicio"));
+                    registro.add(1, rsServicio.getString("servicio"));
+                    registro.add(2, rsServicio.getFloat("precioActual"));
+                    registro.add(3, rsServicio.getString("duracion"));
+                    registro.add(4, rsServicio.getString("tipoVehiculo"));
+                    registro.add(5, rsServicio.getBoolean("estado"));
                     modelo.addRow(registro);
                 }
                 tblServicios.setModel(modelo);

@@ -6,8 +6,7 @@ package CapaCliente;
 
 import CapaLogica.clsCita;
 import CapaLogica.clsCliente;
-import CapaLogica.clsVenta;
-import java.awt.Frame;
+import CapaLogica.clsVehiculo;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +14,7 @@ import java.util.Locale;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -30,7 +30,9 @@ import javax.swing.table.TableModel;
 public class JdGestionarCitas extends javax.swing.JDialog {
 
     clsCliente objCliente = new clsCliente();
+    clsVehiculo objVehiculo = new clsVehiculo();
     clsCita objCita = new clsCita();
+    Boolean nuevo;
     private DefaultTableModel modelo;
 
     public JdGestionarCitas(java.awt.Frame parent, boolean modal) throws Exception {
@@ -41,13 +43,14 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         mostrarFechaCorta();
         hora();
         limpiarDatos();
+        cboVehiculo.setEnabled(false);
+        columnasTabla();
     }
 
     private void limpiarDatos() {
         cboClientes.setSelectedIndex(-1);
         cboTipoComprobante.setSelectedIndex(-1);
         txtComentario.setText("");
-        lblVehiculo.setText("");
         txtFecha.setText("");
     }
 
@@ -85,11 +88,6 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         }
     }
     
-    public void agregarServicio(int codigo, String nombre, float precio, int duracion, String tipo, boolean estado) {
-        modelo.addRow(new Object[]{codigo, nombre, precio, duracion, tipo, estado});
-        actualizarTotal();
-    }
-    
     private void columnasTabla() {
         modelo = new DefaultTableModel();
         modelo.addColumn("Código");
@@ -108,19 +106,26 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         tblDetalle.getColumnModel().getColumn(5).setPreferredWidth(80);
         tblDetalle.setRowHeight(22);
     }
+    
+    public void agregarServicio(int codigo, String nombre, float precio, int duracion, String tipo, boolean estado) {
+        modelo.addRow(new Object[]{codigo, nombre, precio, duracion, tipo, estado});
+        actualizarTotal();
+    }
 
     private double calcularTotal() {
         double total = 0.0;
         for (int i = 0; i < modelo.getRowCount(); i++) {
-            double subtotal = Double.parseDouble(modelo.getValueAt(i, 5).toString());
-            total += subtotal;
+            Object valorPrecio = modelo.getValueAt(i, 2);
+            if (valorPrecio != null) {
+                total += Double.parseDouble(valorPrecio.toString());
+            }
         }
         return total;
     }
 
     private void actualizarTotal() {
         double total = calcularTotal();
-        lbltotal.setText(String.format("S/. %.2f", total));
+        lblTotal.setText(String.format("S/. %.2f", total));
     }
 
     private void Eliminar() {
@@ -171,9 +176,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         cboClientes = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        lblVehiculo = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtFecha = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         lblFechaCorta = new javax.swing.JLabel();
         lblHora = new javax.swing.JLabel();
@@ -190,6 +193,9 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         lbltotal = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        cboVehiculo = new javax.swing.JComboBox<>();
+        txtFecha = new javax.swing.JTextField();
+        lblTotal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -220,6 +226,11 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         jLabel2.setText("CLIENTE:");
 
         cboClientes.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
+        cboClientes.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboClientesItemStateChanged(evt);
+            }
+        });
         cboClientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cboClientesMouseClicked(evt);
@@ -230,24 +241,9 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         jLabel3.setForeground(new java.awt.Color(31, 41, 55));
         jLabel3.setText("VEHICULO:");
 
-        lblVehiculo.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
-        lblVehiculo.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
-        lblVehiculo.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                lblVehiculoAncestorAdded(evt);
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
-
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(31, 41, 55));
         jLabel5.setText("FECHA DE RECOJO:");
-
-        txtFecha.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
-        txtFecha.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
         jLabel7.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(31, 41, 55));
@@ -306,7 +302,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         jButton2.setBackground(new java.awt.Color(31, 41, 55));
         jButton2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Generar Comprobante");
+        jButton2.setText("Generar Cita");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -334,10 +330,22 @@ public class JdGestionarCitas extends javax.swing.JDialog {
             }
         });
 
+        cboVehiculo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboVehiculoItemStateChanged(evt);
+            }
+        });
+
+        lblTotal.setText("...");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(819, Short.MAX_VALUE)
+                .addComponent(lbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(91, 91, 91))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -350,7 +358,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(cboClientes, 0, 270, Short.MAX_VALUE)
-                                    .addComponent(lblVehiculo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(cboVehiculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addGap(18, 18, 18)
@@ -368,7 +376,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(txtFecha))))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGap(484, 484, 484)
@@ -389,16 +397,15 @@ public class JdGestionarCitas extends javax.swing.JDialog {
                         .addGap(348, 348, 348)
                         .addComponent(jButton1)
                         .addGap(60, 60, 60)
-                        .addComponent(jButton3)))
-                .addContainerGap(52, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(406, 406, 406)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(91, 91, 91))
+                        .addComponent(jButton3))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(406, 406, 406)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(87, 87, 87)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -420,24 +427,24 @@ public class JdGestionarCitas extends javax.swing.JDialog {
                         .addComponent(cboClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cboVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cboTipoComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(65, 65, 65)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(txtComentario, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cboTipoComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(65, 65, 65)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(txtComentario, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -447,12 +454,11 @@ public class JdGestionarCitas extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(lblTotal)))
+                    .addComponent(lbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29))
         );
 
@@ -474,34 +480,79 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         
     }//GEN-LAST:event_cboClientesMouseClicked
 
-    private void lblVehiculoAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_lblVehiculoAncestorAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblVehiculoAncestorAdded
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       /*JdSeleccionarServicio objSeleccionar = null;
         try {
-            objSeleccionar = new JdSeleccionarServicio(parent, this);
+            JdSeleccionarServicio objSeleccionar =  new JdSeleccionarServicio(null, this);
+            objSeleccionar.setVisible(true);
         } catch (SQLException ex) {
-            Logger.getLogger(JdVentas.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JdGestionarCitas.class.getName()).log(Level.SEVERE, null, ex);
         }
-        objSeleccionar.setVisible(true); */
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        try {
+            Integer id = objCita.generarCodigoCita();
+            String fecha = lblFechaCorta.getText();
+            String hora = lblHora.getText();
+            String estado = "pendiente";
+            String comentario = txtComentario.getText();
+            String fechaRecojo = txtFecha.getText();
+            String valor = cboVehiculo.getSelectedItem().toString();
+            String placaVehiculo = valor.substring(Math.max(0, valor.length() - 6));
+            ResultSet rsVehiculo = objVehiculo.buscarVehiculoPorPlaca(placaVehiculo); 
+            Integer idVehiculo = rsVehiculo.getInt("idvehiculo");
+            Integer idTrabajador = 1;
+            
+                if(nuevo == true){
+                objCita.registrar(id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador);
+                }else{
+                    objCita.modificar(id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador);
+                }
+                this.dispose(); 
+            
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al guardar datos: " +ex.getMessage());
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
         Eliminar();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    
+    
+    private void cboVehiculoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboVehiculoItemStateChanged
+        
+    }//GEN-LAST:event_cboVehiculoItemStateChanged
+
+    private void cboClientesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboClientesItemStateChanged
+        if (cboClientes.getSelectedItem() != null) {
+        cboVehiculo.setEnabled(true);  
+        try {
+            cboVehiculo.removeAllItems();
+            String nombre = cboClientes.getSelectedItem().toString();
+            int id = objCliente.buscarIdCliente(nombre);
+            ResultSet rs = objVehiculo.buscarVehiculoPorPersona(id);
+            while (rs.next()) {
+                String cliente = rs.getString("modelovehiculo") + " - " + rs.getString("placa");
+                cboVehiculo.addItem(cliente);
+            }
+            rs.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar vehiculos -> " + e.getMessage(), "Sistema", JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        cboVehiculo.setEnabled(false); 
+    }
+    }//GEN-LAST:event_cboClientesItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cboClientes;
     private javax.swing.JComboBox<String> cboTipoComprobante;
+    private javax.swing.JComboBox<String> cboVehiculo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -521,10 +572,10 @@ public class JdGestionarCitas extends javax.swing.JDialog {
     private javax.swing.JLabel lblFecha;
     private javax.swing.JLabel lblFechaCorta;
     private javax.swing.JLabel lblHora;
-    private javax.swing.JLabel lblVehiculo;
+    private javax.swing.JLabel lblTotal;
     private javax.swing.JLabel lbltotal;
     private javax.swing.JTable tblDetalle;
     private javax.swing.JTextField txtComentario;
-    private javax.swing.JLabel txtFecha;
+    private javax.swing.JTextField txtFecha;
     // End of variables declaration//GEN-END:variables
 }

@@ -78,6 +78,29 @@ public class clsCliente {
         }
         return -1;
     }
+    
+    public int buscarIdCliente(String nombre) throws Exception {
+        strSQL = "SELECT E.idcliente FROM CLIENTE C" +
+                 " INNER JOIN EMPRESA E ON E.IDCLIENTE = C.IDCLIENTE \n" +
+                 " WHERE E.RAZONSOCIAL = '" + nombre + "';";
+        String strSQL1 = "SELECT P.idcliente FROM CLIENTE C" +
+                 " INNER JOIN PERSONA P ON P.IDCLIENTE = C.IDCLIENTE \n" +
+                 " WHERE P.persona = '" + nombre + "';";
+        try {
+            rs = objConectar.consultarBD(strSQL);
+            if (rs.next()) {
+                return rs.getInt("idcliente");
+            }
+            
+            rs = objConectar.consultarBD(strSQL1);
+            if (rs.next()) {
+                return rs.getInt("idcliente");
+            }
+        } catch (Exception e) {
+            throw new Exception("Error al buscar cliente" + e.getMessage());
+        }
+        return -1;
+    }
 
     public void registrarCliente(int id, String tipoCliente, Date fechaRegistro, String distrito, int representate) throws Exception {
         strSQL = "insert into cliente values(" + id + ",'" + tipoCliente + "','" + fechaRegistro + "'," + buscarIdDistrito(distrito) + "," + representate + ")";
