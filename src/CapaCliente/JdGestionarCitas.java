@@ -4,6 +4,7 @@
  */
 package CapaCliente;
 
+import static CapaCliente.JdVentas.extraerColumnas;
 import CapaLogica.clsCita;
 import CapaLogica.clsCliente;
 import CapaLogica.clsVehiculo;
@@ -32,10 +33,10 @@ public class JdGestionarCitas extends javax.swing.JDialog {
     clsCliente objCliente = new clsCliente();
     clsVehiculo objVehiculo = new clsVehiculo();
     clsCita objCita = new clsCita();
-    Boolean nuevo;
+    Boolean nuevo = true;
     private DefaultTableModel modelo;
 
-    public JdGestionarCitas(java.awt.Frame parent, boolean modal) throws Exception {
+    public JdGestionarCitas(java.awt.Frame parent, boolean modal, boolean nuevo1) throws Exception {
         super(parent, modal);
         initComponents();
         mostrarFechaLarga();
@@ -43,6 +44,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         mostrarFechaCorta();
         hora();
         limpiarDatos();
+        nuevo = nuevo1;
         cboVehiculo.setEnabled(false);
         columnasTabla();
     }
@@ -492,24 +494,41 @@ public class JdGestionarCitas extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             Integer id = objCita.generarCodigoCita();
+            String cliente = cboClientes.getSelectedItem().toString();
+            String tipoComprobante = cboTipoComprobante.getSelectedItem().toString();
             String fecha = lblFechaCorta.getText();
             String hora = lblHora.getText();
             String estado = "pendiente";
             String comentario = txtComentario.getText();
             String fechaRecojo = txtFecha.getText();
             String valor = cboVehiculo.getSelectedItem().toString();
-            String placaVehiculo = valor.substring(Math.max(0, valor.length() - 6));
+            String placaVehiculo = valor.substring(Math.max(0, valor.length() - 7));
+            Integer idVehiculo = 0;
             ResultSet rsVehiculo = objVehiculo.buscarVehiculoPorPlaca(placaVehiculo); 
-            Integer idVehiculo = rsVehiculo.getInt("idvehiculo");
-            Integer idTrabajador = 1;
-            
-                if(nuevo == true){
-                objCita.registrar(id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador);
-                }else{
-                    objCita.modificar(id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador);
+            while(rsVehiculo.next()){
+                    idVehiculo = rsVehiculo.getInt("idvehiculo");
                 }
-                this.dispose(); 
-            
+            Integer idTrabajador = 1;
+            int filas = tblDetalle.getRowCount();
+                
+            if (txtFecha.equals("") || cboClientes.getSelectedItem().toString().equals("")) {
+                JOptionPane.showMessageDialog(this, "Debe llenar todos los campos obligatorios");
+            }else{
+                if (tblDetalle.getRowCount() < 1) {
+                    JOptionPane.showMessageDialog(this, "Seleccione almenos un servicio");
+                }else{
+                    if(nuevo == true){
+                        objCita.registrar(filas, id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador);
+                        }else{
+                            objCita.modificar(id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador);
+                        }
+                        int[] columnasAPasar = {1,2, 3};
+                        Object[][] datosFiltrados = extraerColumnas(this.tblDetalle, columnasAPasar);
+                        String[] encabezados = {"Servicio", "Precio", "Tipo de Vehiculo"};
+                        JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha, id, tipoComprobante, true, cboVehiculo.getSelectedItem().toString());
+                        dialogDestino.setVisible(true);
+                }
+            }
             
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar datos: " +ex.getMessage());

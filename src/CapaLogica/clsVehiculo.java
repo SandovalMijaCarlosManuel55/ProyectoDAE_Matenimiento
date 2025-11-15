@@ -33,7 +33,7 @@ public class clsVehiculo {
     public ResultSet buscarVehiculoPorPlaca(String placa) throws Exception {
         strSQL = "SELECT * " +
                  "FROM VEHICULO  " +
-                 "Where placa ="+ placa;
+                 "Where placa = '"+ placa+"';";
         try {
             rs = objConectar.consultarBD(strSQL);
             return rs;

@@ -466,7 +466,7 @@ public class JdVentas extends javax.swing.JDialog {
             int[] columnasAPasar = {4, 1, 3, 5};
             Object[][] datosFiltrados = extraerColumnas(this.tblDetalle, columnasAPasar);
             String[] encabezados = {"Código", "Detalle", "Precio Unitario", "Valor de Venta"};
-            JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha, cod, tipoComprobante);
+            JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha, cod, tipoComprobante, false,"");
             dialogDestino.setVisible(true);
         }
 

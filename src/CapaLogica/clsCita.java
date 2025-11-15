@@ -52,9 +52,9 @@ public class clsCita {
         return 0;
     }
 
-    public void registrar(int idcita, String fecha, String hora,String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador) throws Exception {
-        strSQL = "insert into Cita values (" + idcita + ", " + fecha + ", " + hora + ", '" +estado + "', '" +  comentario + "', " +
-                                               fechaRecojo + ", " + idVehiculo + ", " + idTrabajador +"); ";
+    public void registrar(int cantidad,int idcita, String fecha, String hora,String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador) throws Exception {
+        strSQL = "insert into Cita values (" + idcita + ", '" + fecha + "', '" + hora + "', '" +estado + "', '" +  comentario + "', '" +
+                                               fechaRecojo + "', " + idVehiculo + ", " + idTrabajador +"); ";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {

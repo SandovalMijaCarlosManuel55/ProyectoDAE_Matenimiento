@@ -95,6 +95,11 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
         jButton2.setText("Buscar");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Realizado", "En Proceso", "Pendientes" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Buscar Por Código (ID):");
 
@@ -376,12 +381,16 @@ private JButton crearBoton(String texto, Color colorFondo) {
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            JdGestionarCitas objJd = new JdGestionarCitas(null, true);
+            JdGestionarCitas objJd = new JdGestionarCitas(null, true,true);
             objJd.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(JdMantenimientoCitas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
    
 
