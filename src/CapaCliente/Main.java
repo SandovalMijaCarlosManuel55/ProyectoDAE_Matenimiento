@@ -22,7 +22,7 @@ public class Main {
         //new FrmMenuPrincipal().setVisible(true);
         //new JdVentas(parent, true).setVisible(true);
         //new JdGestionarCitas(parent,true,true).setVisible(true);
-        new JdMantenimientoTrabajador(parent,true).setVisible(true);
+        new JdMantenimientoServicio(parent,true).setVisible(true);
     }
     
 }

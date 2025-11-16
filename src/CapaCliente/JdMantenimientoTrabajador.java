@@ -5,6 +5,7 @@
 package CapaCliente;
 
 import CapaLogica.clsTrabajador;
+import CapaLogica.clsUbigeo;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JOptionPane;
@@ -21,6 +22,7 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
     private DefaultTableModel modelo;
     clsTrabajador objTrabajador = new clsTrabajador();
     FrmMenuPrincipal mnuPrincipal = new FrmMenuPrincipal();
+    clsUbigeo objUbigeo = new clsUbigeo();
     
     public JdMantenimientoTrabajador(java.awt.Frame parent, boolean modal) {
         initComponents();
@@ -32,7 +34,7 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
         Vector registro;
         String estado = "";
         String sexo = "";
-
+        String distrito ="";
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("Código");
         modelo.addColumn("Nombre");
@@ -41,6 +43,7 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
         modelo.addColumn("Sexo");
         modelo.addColumn("Correo");
         modelo.addColumn("Estado");
+        modelo.addColumn("Distrito");
         try {
             rsTrabajador = objTrabajador.listarTrabajadores();
             while (rsTrabajador.next()) {
@@ -55,7 +58,10 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
                 } else {
                     sexo = "Femenino";
                 }
-                
+                ResultSet rsDistrito = objUbigeo.ubigeo(rsTrabajador.getInt("iddistrito"));
+                while(rsDistrito.next()){
+                    distrito = rsDistrito.getString("distrito");
+                }
                 registro = new Vector();
                 registro.add(0, rsTrabajador.getInt("idtrabajador"));
                 registro.add(1, rsTrabajador.getString("trabajador"));
@@ -64,6 +70,7 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
                 registro.add(4, sexo);
                 registro.add(5, rsTrabajador.getString("correo"));
                 registro.add(6, estado);
+                registro.add(7, distrito);
                 modelo.addRow(registro);
             }
             tblTrabajadores.setModel(modelo);
@@ -247,6 +254,8 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
         JdGestionarTrabajador obj = new JdGestionarTrabajador( mnuPrincipal, false);
         obj.setLocationRelativeTo( mnuPrincipal);
         obj.setVisible(true);
+        
+        listaTrabajadores();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void tblTrabajadoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTrabajadoresMouseClicked
@@ -255,6 +264,7 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
         JdGestionarTrabajador obj = new JdGestionarTrabajador( mnuPrincipal, false,idTrabajador);
         obj.setLocationRelativeTo( mnuPrincipal);
         obj.setVisible(true);
+        
     }//GEN-LAST:event_tblTrabajadoresMouseClicked
 
 

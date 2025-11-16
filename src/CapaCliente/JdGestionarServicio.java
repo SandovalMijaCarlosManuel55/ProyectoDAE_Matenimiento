@@ -7,8 +7,6 @@ package CapaCliente;
 import CapaLogica.clsServicio;
 import CapaLogica.clsTipoVehiculo;
 import java.sql.ResultSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 

@@ -79,7 +79,7 @@ public class clsTrabajador {
     }
 
     public ResultSet listarTrabajadores() throws Exception {
-        strSQL = "select * from trabajador";
+        strSQL = "select * from trabajador order by idtrabajador";
         try {
             rs = objConectar.consultarBD(strSQL);
             return rs;
@@ -223,69 +223,4 @@ public class clsTrabajador {
             throw new Exception("Error al obtener el siguiente ID -> " + e.getMessage());
         }
     }
-    
-    public int buscarIdDistrito(String Distrito, String Provincia, String Departamento) throws Exception{
-        try{
-            String sql = "SELECT D.*, p.provincia,dep.* FROM distrito d\n" +
-                        " inner join provincia p on d.idprovincia = p.idprovincia\n" +
-                        " inner join departamento dep on p.iddepartamento = dep.iddepartamento\n" +
-                        " where D.distrito = '" + Distrito + "' and p.provincia = '"+Provincia +
-                        "' and dep.departamento = '"+Departamento+"';";
-            ResultSet rs = objConectar.consultarBD(sql);
-            if (!rs.next()) {
-               return rs.getInt("iddistrito"); 
-            }
-               
-        }catch (Exception e) {
-            throw new Exception("Error al obtener el id del distrito -> " + e.getMessage());
-        }
-        return 0;
-    }
-    
-
-    public ResultSet ubigeo(int idDistrito) throws Exception{
-        try{
-            String sql = "SELECT D.*, p.provincia,dep.* FROM distrito d\n" +
-                        " inner join provincia p on d.idprovincia = p.idprovincia\n" +
-                        " inner join departamento dep on p.iddepartamento = dep.iddepartamento\n" +
-                        " where iddistrito = " + idDistrito;
-            ResultSet rs = objConectar.consultarBD(sql);
-               return rs;
-        }catch (Exception e) {
-            throw new Exception("Error al obtener el ubigeo -> " + e.getMessage());
-        } 
-    }
-    
-    public ResultSet listarDistritos() throws Exception {
-        strSQL = "select * from distrito";
-        try {
-            rs = objConectar.consultarBD(strSQL);
-            return rs;
-        } catch (Exception ex) {
-            throw new Exception("Error al listar distrito -> " + ex.getMessage());
-        }
-    }
-    
-    public ResultSet listarDepartamentos() throws Exception {
-        strSQL = "select * from departamento";
-        try {
-            rs = objConectar.consultarBD(strSQL);
-            return rs;
-        } catch (Exception ex) {
-            throw new Exception("Error al listar departamento -> " + ex.getMessage());
-        }
-    }
-    
-    public ResultSet listarProvincias() throws Exception {
-        strSQL = "select * from provincia";
-        try {
-            rs = objConectar.consultarBD(strSQL);
-            return rs;
-        } catch (Exception ex) {
-            throw new Exception("Error al listar provincia -> " + ex.getMessage());
-        }
-    }
-    
-
-    
 }

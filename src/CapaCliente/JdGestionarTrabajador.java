@@ -6,6 +6,8 @@ package CapaCliente;
 
 import CapaLogica.clsTipoTrabajador;
 import CapaLogica.clsTrabajador;
+import CapaLogica.clsUbigeo;
+import java.awt.event.ItemEvent;
 import java.sql.ResultSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -22,6 +24,11 @@ public class JdGestionarTrabajador extends javax.swing.JDialog {
     private int idSeleccionado = -1;
     private clsTrabajador objTrabajador = new clsTrabajador();
     private clsTipoTrabajador objTipoTrabajador = new clsTipoTrabajador();
+    private clsUbigeo objUbigeo = new clsUbigeo();
+    private boolean cargandoProvincia = false;
+    private boolean cargandoDistrito = false;
+
+
 
     public JdGestionarTrabajador(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -73,15 +80,15 @@ public class JdGestionarTrabajador extends javax.swing.JDialog {
         DefaultComboBoxModel provincias = new DefaultComboBoxModel();
         DefaultComboBoxModel tipos = new DefaultComboBoxModel();
         try {
-            ResultSet rs1 = objTrabajador.listarDistritos();
+            ResultSet rs1 = objUbigeo.listarDistritos();
             while (rs1.next()) {
                 distritos.addElement(rs1.getString("distrito"));
             }
-            ResultSet rs2 = objTrabajador.listarDepartamentos();
+            ResultSet rs2 = objUbigeo.listarDepartamentos();
             while (rs2.next()) {
                 departamentos.addElement(rs2.getString("departamento"));
             }
-            ResultSet rs3 = objTrabajador.listarProvincias();
+            ResultSet rs3 = objUbigeo.listarProvincias();
             while (rs3.next()) {
                 provincias.addElement(rs3.getString("provincia"));
             }
@@ -116,7 +123,7 @@ public class JdGestionarTrabajador extends javax.swing.JDialog {
                 chkEstado.setSelected(rs.getBoolean("estado"));
                 int idDistrito = rs.getInt("iddistrito");
                 int idTipoTrabajador = rs.getInt("idtipotrabajador");
-                ResultSet ubigeo = objTrabajador.ubigeo(idDistrito);
+                ResultSet ubigeo = objUbigeo.ubigeo(idDistrito);
                 cboTipoTrabajador.getModel().setSelectedItem(objTipoTrabajador.buscarPorID(idTipoTrabajador));
                 if (ubigeo.next()) {
                     cboDistrito.getModel().setSelectedItem(ubigeo.getString("distrito"));
@@ -215,8 +222,10 @@ public class JdGestionarTrabajador extends javax.swing.JDialog {
 
         jLabel11.setText("DNI");
 
+        jLabel19.setForeground(new java.awt.Color(60, 63, 65));
         jLabel19.setText("Distrito");
 
+        jLabel3.setForeground(new java.awt.Color(60, 63, 65));
         jLabel3.setText("Departamento");
 
         cboDepartamento.addItemListener(new java.awt.event.ItemListener() {
@@ -225,6 +234,7 @@ public class JdGestionarTrabajador extends javax.swing.JDialog {
             }
         });
 
+        jLabel4.setForeground(new java.awt.Color(60, 63, 65));
         jLabel4.setText("Provincia");
 
         cboProvincia.addItemListener(new java.awt.event.ItemListener() {
@@ -494,7 +504,7 @@ public class JdGestionarTrabajador extends javax.swing.JDialog {
             String provincia = cboProvincia.getSelectedItem().toString();
             String departamento = cboDepartamento.getSelectedItem().toString();
             int idTipo = objTipoTrabajador.buscarPorNombre(tipoTrabajador);
-            int idDistrito = objTrabajador.buscarIdDistrito(distrito, provincia, departamento);
+            int idDistrito = objUbigeo.buscarIdDistrito(distrito, provincia, departamento);
 
             if (nombre.isEmpty() || telefono.isEmpty() || dni.isEmpty() || correo.isEmpty() || usuario.isEmpty()
                 || contrasena.isEmpty() || pregunta.isEmpty() || respuesta.isEmpty() ) {
@@ -564,23 +574,38 @@ public class JdGestionarTrabajador extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowClosed
 
     private void cboDepartamentoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboDepartamentoItemStateChanged
-       /*try {
+        if (evt.getStateChange() != ItemEvent.SELECTED) return;
+        try {
+            cargandoProvincia = true;
             cboProvincia.removeAllItems();
-            String nombre = cboDepartamento.getSelectedItem().toString();
-            int id = objTrabajador.(nombre);
-            ResultSet rs = objVehiculo.buscarVehiculoPorPersona(id);
+            cboDistrito.removeAllItems();
+            int id = objUbigeo.buscarDepartamento(cboDepartamento.getSelectedItem().toString());
+            ResultSet rs = objUbigeo.listarProvinciaPorDep(id);
             while (rs.next()) {
-                String cliente = rs.getString("modelovehiculo") + " - " + rs.getString("placa");
-                cboVehiculo.addItem(cliente);
+                String provincia = rs.getString("provincia");
+                cboProvincia.addItem(provincia);
             }
-            rs.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar vehiculos -> " + e.getMessage(), "Sistema", JOptionPane.ERROR_MESSAGE);
-        }*/
+            JOptionPane.showMessageDialog(this, "Error al cargar provincias -> " + e.getMessage(), "Sistema", JOptionPane.ERROR_MESSAGE);
+        }finally {
+        cargandoProvincia = false;
+    }
     }//GEN-LAST:event_cboDepartamentoItemStateChanged
 
     private void cboProvinciaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboProvinciaItemStateChanged
-        // TODO add your handling code here:
+        if (cargandoProvincia) return;
+        if (evt.getStateChange() != ItemEvent.SELECTED) return;
+        try {
+            cboDistrito.removeAllItems();
+            int id = objUbigeo.buscarProvincia(cboProvincia.getSelectedItem().toString());
+            ResultSet rs = objUbigeo.listarDistritosPorProv(id);
+            while (rs.next()) {
+                String distrito = rs.getString("distrito");
+                cboDistrito.addItem(distrito);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar distritos -> " + e.getMessage(), "Sistema", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_cboProvinciaItemStateChanged
 
     /**
