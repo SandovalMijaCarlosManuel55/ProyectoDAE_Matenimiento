@@ -143,19 +143,23 @@ public class JdGestionarProducto extends javax.swing.JDialog {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        pnlMain.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel3.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         jLabel3.setText("Mantenimiento de Producto");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel1.setText("id:");
 
-        jLabel2.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel2.setText("Nombre:");
 
-        btnBuscar.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnBuscar.setBackground(new java.awt.Color(31, 41, 55));
+        btnBuscar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar.setText("buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,21 +167,24 @@ public class JdGestionarProducto extends javax.swing.JDialog {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel5.setText("Stock:");
 
-        jLabel7.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel7.setText("Tipo de Producto:");
 
-        jLabel8.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel8.setText("Marca:");
 
-        chkVigencia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        chkVigencia.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         chkVigencia.setText("Vigencia");
 
-        jLabel6.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel6.setText("Precio:");
 
+        btnTipoProducto.setBackground(new java.awt.Color(31, 41, 55));
+        btnTipoProducto.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnTipoProducto.setForeground(new java.awt.Color(255, 255, 255));
         btnTipoProducto.setText("...");
         btnTipoProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -185,6 +192,9 @@ public class JdGestionarProducto extends javax.swing.JDialog {
             }
         });
 
+        btnMarca.setBackground(new java.awt.Color(31, 41, 55));
+        btnMarca.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnMarca.setForeground(new java.awt.Color(255, 255, 255));
         btnMarca.setText("...");
         btnMarca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -232,7 +242,7 @@ public class JdGestionarProducto extends javax.swing.JDialog {
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cboMarcaProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnMarca)))
                 .addContainerGap())
         );
@@ -267,7 +277,7 @@ public class JdGestionarProducto extends javax.swing.JDialog {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        tblProducto.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        tblProducto.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tblProducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -309,7 +319,9 @@ public class JdGestionarProducto extends javax.swing.JDialog {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        btnNuevo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnNuevo.setBackground(new java.awt.Color(31, 41, 55));
+        btnNuevo.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnNuevo.setForeground(new java.awt.Color(255, 255, 255));
         btnNuevo.setText("Nuevo");
         btnNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -317,10 +329,14 @@ public class JdGestionarProducto extends javax.swing.JDialog {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jButton2.setBackground(new java.awt.Color(31, 41, 55));
+        jButton2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Modificar");
 
-        jButton3.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jButton3.setBackground(new java.awt.Color(31, 41, 55));
+        jButton3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Eliminar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -328,10 +344,14 @@ public class JdGestionarProducto extends javax.swing.JDialog {
             }
         });
 
-        jButton4.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jButton4.setBackground(new java.awt.Color(31, 41, 55));
+        jButton4.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("Dar de Baja");
 
-        jButton5.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jButton5.setBackground(new java.awt.Color(31, 41, 55));
+        jButton5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(255, 255, 255));
         jButton5.setText("Salir");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -339,7 +359,9 @@ public class JdGestionarProducto extends javax.swing.JDialog {
             }
         });
 
-        jButton6.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jButton6.setBackground(new java.awt.Color(31, 41, 55));
+        jButton6.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setText("Limpiar");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -422,7 +444,7 @@ public class JdGestionarProducto extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 5, Short.MAX_VALUE))
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
         pack();

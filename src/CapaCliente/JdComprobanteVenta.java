@@ -30,7 +30,7 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
     int codigo;
     boolean servicio = false;
 
-    public JdComprobanteVenta(java.awt.Dialog parent, boolean modal, Object[][] datos, String[] columnas, String cliente, String fecha, int cod, String tipoComprobante, boolean servicio1, String vehiculo1){
+    public JdComprobanteVenta(java.awt.Dialog parent, boolean modal, Object[][] datos, String[] columnas, String cliente, String fecha, int cod, String tipoComprobante){//, boolean servicio1, String vehiculo1){
         super(parent, modal);
         initComponents();
         this.tabla = tblDatosComprobante;
@@ -41,8 +41,8 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         listarMedioPago();
         lblVehiculo.setVisible(false);
         lblVehiculo1.setVisible(false);
-        servicio = servicio1;
-        vehiculo = vehiculo1;
+        //servicio = servicio1;
+        //vehiculo = vehiculo1;
     }
 
     public static double sumarColumna(JTable tabla, int indiceColumna) {

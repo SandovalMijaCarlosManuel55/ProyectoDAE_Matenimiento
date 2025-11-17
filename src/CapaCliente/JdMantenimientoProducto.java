@@ -89,16 +89,21 @@ public class JdMantenimientoProducto extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        pnlProducto.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel3.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         jLabel3.setText("Mantenimiento de Producto");
 
-        txtbuscador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtbuscador.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
 
+        jComboBox1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jComboBox2.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        btnGestionarPersona.setBackground(new java.awt.Color(51, 51, 255));
+        btnGestionarPersona.setBackground(new java.awt.Color(31, 41, 55));
+        btnGestionarPersona.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btnGestionarPersona.setForeground(new java.awt.Color(255, 255, 255));
         btnGestionarPersona.setText("Agregar Producto");
         btnGestionarPersona.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -108,7 +113,8 @@ public class JdMantenimientoProducto extends javax.swing.JDialog {
             }
         });
 
-        btnBuscar.setBackground(new java.awt.Color(51, 51, 255));
+        btnBuscar.setBackground(new java.awt.Color(31, 41, 55));
+        btnBuscar.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar.setText("Buscar");
         btnBuscar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -118,7 +124,7 @@ public class JdMantenimientoProducto extends javax.swing.JDialog {
             }
         });
 
-        tblProducto.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        tblProducto.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tblProducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -198,7 +204,7 @@ public class JdMantenimientoProducto extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
         pack();
