@@ -59,7 +59,7 @@ public class clsServicio {
     }
     
     public void modificar(int idservicio, String nombre, Float precio, Integer tiempoEstimado, int idTipoVehiculo) throws Exception {        
-        strSQL = "update Servicio set servicio = '" + nombre + "', where idServicio=" + idservicio +";"
+        strSQL = "update Servicio set servicio = '" + nombre + "' where idServicio=" + idservicio +"; "
                + "update Tarifario set precioactual = " 
                + precio + ", tiempoestimado = " + tiempoEstimado 
                + " where idServicio=" + idservicio +" and idTipoVehiculo = " + idTipoVehiculo +";";
@@ -150,6 +150,21 @@ public class clsServicio {
             return rs;
         } catch (Exception ex) {
             throw new Exception("Error al ordernar la tabla" + ex.getMessage());
+        }
+    }
+    
+    public ResultSet listarServiciosPorCita(int idCita) throws Exception{
+        strSQL = "select S.*,tv.tipovehiculo, DC.precioventa,T.tiempoestimado From cita C " + 
+                 "Inner Join Detalle_cita DC on DC.idcita = C.idcita " + 
+                 "Inner Join Servicio S on S.idservicio = DC.idservicio " +
+                 "Inner Join Tarifario T on S.idServicio = T.idServicio " +
+                 "Inner Join tipo_vehiculo TV on T.idtipovehiculo = TV.idtipovehiculo " +
+                 "Where DC.idcita ="+ idCita + " and DC.idtipovehiculo = T.idtipovehiculo";
+        try {
+            rs = objConectar.consultarBD(strSQL);
+            return rs;
+        } catch (Exception ex) {
+            throw new Exception("Error al buscar servicio por codigo y tipo" + ex.getMessage());
         }
     }
 }

@@ -78,90 +78,8 @@ public class clsTrabajador {
         }
     }
 
-    private int idTrabajador;
-    private String nombre;
-    private String apePat;
-    private String apeMat;
-    private String telefono;
-    private String dni;
-    private boolean sexo;
-    private String correo;
-    private String estado;
-
-    public int getIdTrabajador() {
-        return idTrabajador;
-    }
-
-    public void setIdTrabajador(int idTrabajador) {
-        this.idTrabajador = idTrabajador;
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApePat() {
-        return apePat;
-    }
-
-    public void setApePat(String apePat) {
-        this.apePat = apePat;
-    }
-
-    public String getApeMat() {
-        return apeMat;
-    }
-
-    public void setApeMat(String apeMat) {
-        this.apeMat = apeMat;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public boolean isSexo() {
-        return sexo;
-    }
-
-    public void setSexo(boolean sexo) {
-        this.sexo = sexo;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
     public ResultSet listarTrabajadores() throws Exception {
-        strSQL = "select * from trabajador";
+        strSQL = "select * from trabajador order by idtrabajador";
         try {
             rs = objConectar.consultarBD(strSQL);
             return rs;
@@ -170,7 +88,7 @@ public class clsTrabajador {
         }
     }
 
-    public ResultSet buscarTrabajador(Integer cod) throws Exception {
+    public ResultSet buscarTrabajadorporID(Integer cod) throws Exception {
         strSQL = "Select * from trabajador where idtrabajador=" + cod;
         try {
             rs = objConectar.consultarBD(strSQL);
@@ -180,4 +98,129 @@ public class clsTrabajador {
         }
     }
 
+    public ResultSet buscarPorNombre(String nombre) throws Exception {
+        try {
+            objConectar.conectar();
+
+            String strSQL = "SELECT idtrabajador, trabajador, telefono, dni, sexo, correo, estado "
+                    + "FROM trabajador "
+                    + "WHERE trabajador ILIKE '%" + nombre + "%'";
+
+            rs = objConectar.consultarBD(strSQL);
+            return rs;
+
+        } catch (Exception e) {
+            throw new Exception("Error al buscar trabajador por nombre: " + e.getMessage());
+        }
+    }
+
+    public ResultSet ordenarPor(String columna) throws Exception {
+        try {
+            String campoOrden = "";
+
+            switch (columna) {
+                case "Código":
+                    campoOrden = "idtrabajador";
+                    break;
+                case "Nombre":
+                    campoOrden = "trabajador";
+                    break;
+                case "Sexo":
+                    campoOrden = "sexo";
+                    break;
+                case "Estado":
+                    campoOrden = "estado";
+                    break;
+                default:
+                    campoOrden = "idtrabajador";
+            }
+
+            String strSQL = "SELECT idtrabajador, trabajador, telefono, dni, sexo, correo, estado "
+                    + "FROM trabajador "
+                    + "ORDER BY " + campoOrden;
+
+            rs = objConectar.consultarBD(strSQL);
+            return rs;
+
+        } catch (Exception e) {
+            throw new Exception("Error al ordenar trabajadores: " + e.getMessage());
+        }
+    }
+
+    public boolean eliminarTrabajador(int id) {
+        try {
+            String sql = "UPDATE TRABAJADOR SET estado = false WHERE idtrabajador = " + id;
+            objConectar.ejecutarBD(sql);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void modificar(int idTrabajador, String trabajador, String telefono, String dni, String sexo,
+            String correo, String usuario, String contrasena, boolean estado,
+            String pregunta, String respuesta, int idTipoTrabajador, int idDistrito) throws Exception {
+        try {
+            strSQL = "UPDATE trabajador SET "
+                    + "trabajador = '" + trabajador + "', "
+                    + "telefono = '" + telefono + "', "
+                    + "dni = '" + dni + "', "
+                    + "sexo = '" + sexo + "', "
+                    + "correo = '" + correo + "', "
+                    + "usuario = '" + usuario + "', "
+                    + "\"contraseña\" = '" + contrasena + "', "
+                    + "estado = " + estado + ", "
+                    + "pregunta = '" + pregunta + "', "
+                    + "respuesta = '" + respuesta + "', "
+                    + "idtipotrabajador = " + idTipoTrabajador + ", "
+                    + "iddistrito = " + idDistrito + " "
+                    + "WHERE idtrabajador = " + idTrabajador;
+
+            objConectar.ejecutarBD(strSQL);
+        } catch (Exception e) {
+            throw new Exception("Error al modificar trabajador: " + e.getMessage());
+        }
+    }
+
+    public void registrar(int cod, String trabajador, String telefono, String dni, String sexo, String correo,
+            String usuario, String contrasena, Boolean estado, String pregunta, String respuesta, int distrito, int tipotrabajador
+    ) throws Exception {
+
+        String strSQL = "INSERT INTO trabajador ("
+                + "idtrabajador, trabajador, telefono, dni, sexo, correo, usuario, \"contraseña\", estado, "
+                + "pregunta, respuesta, idtipotrabajador, iddistrito) VALUES ("
+                + cod + ", '"
+                + trabajador + "', '"
+                + telefono + "', '"
+                + dni + "', '"
+                + sexo + "', '"
+                + correo + "', '"
+                + usuario + "', '"
+                + contrasena + "', "
+                + estado + ", '"
+                + pregunta + "', '"
+                + respuesta + "', "
+                + tipotrabajador + ", "
+                + distrito + ")";
+
+        try {
+            objConectar.ejecutarBD(strSQL);
+        } catch (Exception e) {
+            throw new Exception("Error al registrar el trabajador -> " + e.getMessage());
+        }
+    }
+
+    public int obtenerSiguienteID() throws Exception {
+        String sql = "SELECT COALESCE(MAX(idtrabajador), 0) + 1 AS siguiente_id FROM trabajador";
+        try {
+            ResultSet rs = objConectar.consultarBD(sql);
+            if (rs.next()) {
+                return rs.getInt("siguiente_id");
+            } else {
+                return 1; // si no hay registros aún
+            }
+        } catch (Exception e) {
+            throw new Exception("Error al obtener el siguiente ID -> " + e.getMessage());
+        }
+    }
 }

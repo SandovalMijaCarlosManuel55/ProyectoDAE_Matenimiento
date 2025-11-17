@@ -4,36 +4,63 @@
  */
 package CapaLogica;
 
+import CapaDatos.clsJDBC;
+import java.sql.ResultSet;
+
 /**
  *
  * @author Usuario
  */
 public class clsTipoTrabajador {
-
-    private int idTipoTrabajador;
-    private String nombre;
-
-    // Constructor
-    public clsTipoTrabajador(int idTipoTrabajador, String nombre) {
-        this.idTipoTrabajador = idTipoTrabajador;
-        this.nombre = nombre;
+    clsJDBC objConectar = new clsJDBC();
+    String strSQL;
+    ResultSet rs = null;
+    
+    public ResultSet listarTipoTrabajadores() throws Exception {
+        strSQL = "select * from tipo_trabajador";
+        try {
+            rs = objConectar.consultarBD(strSQL);
+            return rs;
+        } catch (Exception ex) {
+            throw new Exception("Error al listar tipo de trabajadores -> " + ex.getMessage());
+        }
     }
+    
+    public int buscarPorNombre(String nombre) throws Exception {
+        try {
+            objConectar.conectar();
 
-    // Getters y setters
-    public int getIdTipoTrabajador() {
-        return idTipoTrabajador;
+            String strSQL = "SELECT idtipotrabajador "
+                    + "FROM tipo_trabajador "
+                    + "WHERE tipotrabajador = '" + nombre +"';" ;
+
+            rs = objConectar.consultarBD(strSQL);
+            if (rs.next()) {
+                return rs.getInt("idtipotrabajador");
+            }
+            
+        } catch (Exception e) {
+            throw new Exception("Error al buscar tipo de trabajador por nombre: " + e.getMessage());
+        }
+        return 0;
     }
+    
+    public String buscarPorID(int id) throws Exception {
+        try {
+            objConectar.conectar();
 
-    public void setIdTipoTrabajador(int idTipoTrabajador) {
-        this.idTipoTrabajador = idTipoTrabajador;
+            String strSQL = "SELECT tipotrabajador "
+                    + "FROM tipo_trabajador "
+                    + "WHERE idtipotrabajador = " + id +";" ;
+
+            rs = objConectar.consultarBD(strSQL);
+            if (rs.next()) {
+                return rs.getString("tipotrabajador");
+            }       
+        } catch (Exception e) {
+            throw new Exception("Error al buscar tipo de trabajador por id: " + e.getMessage());
+        }
+        return "";
     }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
+    
 }

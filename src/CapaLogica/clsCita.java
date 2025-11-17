@@ -7,6 +7,7 @@ package CapaLogica;
 import CapaDatos.clsJDBC;
 import java.sql.ResultSet;
 import java.util.Date;
+import javax.swing.JTable;
 
 /**
  *
@@ -16,6 +17,7 @@ public class clsCita {
     clsJDBC objConectar = new clsJDBC();
     ResultSet rs = null;
     String strSQL;
+    clsTipoVehiculo objTV = new clsTipoVehiculo();
     
     public ResultSet listarCitas() throws Exception {
         strSQL = "SELECT C.*, DC.PRECIOVENTA,TV.TIPOVEHICULO, V.PLACA ,S.SERVICIO, T.TRABAJADOR," +
@@ -52,9 +54,18 @@ public class clsCita {
         return 0;
     }
 
-    public void registrar(int idcita, String fecha, String hora,String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador) throws Exception {
-        strSQL = "insert into Cita values (" + idcita + ", " + fecha + ", " + hora + ", '" +estado + "', '" +  comentario + "', " +
-                                               fechaRecojo + ", " + idVehiculo + ", " + idTrabajador +"); ";
+    public void registrar(int cantidad,int idcita, String fecha, String hora,String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador, JTable servicios) throws Exception {
+        strSQL = "insert into Cita values (" + idcita + ", '" + fecha + "', '" + hora + "', '" +estado + "', '" +  comentario + "', '" +
+                                               fechaRecojo + "', " + idVehiculo + ", " + idTrabajador +"); ";
+        
+        for (int i = 0; i < servicios.getRowCount(); i++) {
+            int id = objTV.obtenerCodigoTipoVehiculo(servicios.getValueAt(i, 4).toString());
+            
+            String strSQL1 = "insert into Detalle_Cita(precioventa,cantidad,idcita,idtipovehiculo,idservicio) values (" + servicios.getValueAt(i, 2) + "', " +
+                    1 + ", " + idcita + ", " + id + ", " + servicios.getValueAt(i, 0)+"); ";
+            objConectar.ejecutarBD(strSQL1);
+        }
+        
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -62,7 +73,7 @@ public class clsCita {
         }
     }
     
-    public void modificar(int idcita, String fecha, String hora,String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador) throws Exception {        
+    public void modificar(int idcita, String fecha, String hora,String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador, JTable servicios) throws Exception {        
         strSQL = "update Cita set fecha = " + fecha + ", hora = " + hora + ", estado = ' " + estado + "', comentario = ' "+ comentario + 
                  "', fechaRecojo = " + fechaRecojo + ", idVehiculo = " + idVehiculo + ", idTrabajador =  "+ idTrabajador +
                  " where idcita=" + idcita +";";
@@ -74,8 +85,8 @@ public class clsCita {
     }
 
     public ResultSet buscarCitaPorCodigo(Integer cod) throws Exception {
-        strSQL = "SELECT C.*, DC.PRECIOVENTA,TV.TIPOVEHICULO,S.SERVICIO, T.TRABAJADOR," +
-                 "COALESCE(P.PERSONA, E.RAZONSOCIAL) AS CLIENTE_NOMBRE " +
+        strSQL = "SELECT C.*, DC.PRECIOVENTA,TV.TIPOVEHICULO,S.SERVICIO, T.TRABAJADOR, V.placa, CV.tipocomprobante, " +
+                 "COALESCE(P.PERSONA, E.RAZONSOCIAL) AS CLIENTE_NOMBRE, COALESCE(P.idCliente,E.idCliente) as idcliente " +
                  "FROM CITA C " +
                  "LEFT JOIN DETALLE_CITA DC ON DC.IDCITA = C.IDCITA " +
                  "LEFT JOIN TIPO_VEHICULO TV ON TV.IDTIPOVEHICULO = DC.IDTIPOVEHICULO " +
@@ -84,6 +95,7 @@ public class clsCita {
                  "LEFT JOIN CLIENTE CL ON CL.IDCLIENTE = V.IDCLIENTE " +
                  "LEFT JOIN PERSONA P ON CL.IDCLIENTE = P.IDCLIENTE " +
                  "LEFT JOIN EMPRESA E ON CL.IDCLIENTE = E.IDCLIENTE " +
+                 "LEFT JOIN COMPROBANTE_VENTA CV ON C.IDCITA = CV.IDCITA " +
                  "LEFT JOIN TRABAJADOR T ON T.IDTRABAJADOR = C.IDTRABAJADOR " +
                  "Where C.idCita ="+ cod;
         try {
