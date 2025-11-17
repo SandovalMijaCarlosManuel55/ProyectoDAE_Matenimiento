@@ -19,10 +19,10 @@ public class Main {
      */
     public static void main(String[] args) throws Exception {
         //new JdInicioSesion(parent, true).setVisible(true);
-        //new FrmMenuPrincipal().setVisible(true);
+        new FrmMenuPrincipal().setVisible(true);
         //new JdVentas(parent, true).setVisible(true);
         //new JdGestionarCitas(parent,true,true).setVisible(true);
-        new JdMantenimientoServicio(parent,true).setVisible(true);
+        //new JdMantenimientoServicio(parent,true).setVisible(true);
     }
     
 }

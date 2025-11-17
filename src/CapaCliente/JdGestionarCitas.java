@@ -7,6 +7,7 @@ package CapaCliente;
 import static CapaCliente.JdVentas.extraerColumnas;
 import CapaLogica.clsCita;
 import CapaLogica.clsCliente;
+import CapaLogica.clsServicio;
 import CapaLogica.clsVehiculo;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.logging.Level;
@@ -26,17 +28,18 @@ import javax.swing.table.TableModel;
 
 /**
  *
- * @author Josselyn
+ * @author 
  */
 public class JdGestionarCitas extends javax.swing.JDialog {
 
     clsCliente objCliente = new clsCliente();
     clsVehiculo objVehiculo = new clsVehiculo();
     clsCita objCita = new clsCita();
+    clsServicio objServicio = new clsServicio();
     Boolean nuevo = true;
     private DefaultTableModel modelo;
 
-    public JdGestionarCitas(java.awt.Frame parent, boolean modal, boolean nuevo1) throws Exception {
+    public JdGestionarCitas(java.awt.Frame parent, boolean modal) throws Exception {
         super(parent, modal);
         initComponents();
         mostrarFechaLarga();
@@ -44,9 +47,19 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         mostrarFechaCorta();
         hora();
         limpiarDatos();
-        nuevo = nuevo1;
+        nuevo = true;
         cboVehiculo.setEnabled(false);
         columnasTabla();
+    }
+    
+    public JdGestionarCitas(java.awt.Frame parent, boolean modal, int idcita) throws Exception {
+        super(parent, modal);
+        initComponents();
+        limpiarDatos();
+        nuevo = false;
+        cboVehiculo.setEnabled(false);
+        columnasTabla();
+        cargarDatos(idcita);
     }
 
     private void limpiarDatos() {
@@ -88,6 +101,72 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al cargar clientes -> " + e.getMessage(), "Sistema", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private void cargarDatos(int idcita){
+        try{
+        listarClientes();
+
+        ResultSet rsCita = objCita.buscarCitaPorCodigo(idcita); 
+
+        if (rsCita.next()) {
+            // Recuperamos los datos de la cita
+            String nombreCliente = rsCita.getString("CLIENTE_NOMBRE"); // <- Asumiendo nombre de columna
+            String placaVehiculo = rsCita.getString("placa"); // <- Asumiendo nombre de columna
+            String tipoComprobante = rsCita.getString("tipocomprobante"); // <- Asumiendo nombre de columna
+            String comentario = rsCita.getString("comentario"); // <- Asumiendo nombre de columna
+            java.sql.Date fechaCita = rsCita.getDate("fecha"); // <- Asumiendo nombre de columna
+
+            cboClientes.setSelectedItem(nombreCliente);
+            cboTipoComprobante.setSelectedItem(tipoComprobante);
+            txtComentario.setText(comentario);
+
+            // Formatear y setear la fecha (si 'txtFecha' es un JTextField)
+            if (fechaCita != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                txtFecha.setText(sdf.format(fechaCita));
+            }
+            // Si txtFecha es un JDateChooser, usarías:
+            // jdcFecha.setDate(fechaCita);
+
+
+            // --- 2. Cargar Vehículos del Cliente ---
+            
+            // Debemos cargar los vehículos de ese cliente manualmente
+            cboVehiculo.setEnabled(true); // Lo activamos
+            cboVehiculo.removeAllItems(); // Limpiamos ítems por si acaso
+
+            ResultSet rsVehiculos = objVehiculo.buscarVehiculoPorPersona(rsCita.getInt("idcliente"));
+            
+            while (rsVehiculos.next()) {
+                cboVehiculo.addItem(rsVehiculos.getString("PLACA")); // <- Asumiendo nombre de columna
+            }
+            rsVehiculos.close();
+
+            cboVehiculo.setSelectedItem(placaVehiculo);
+        }
+        rsCita.close();
+
+        ResultSet rsServicios = objServicio.listarServiciosPorCita(idcita);
+
+        modelo.setRowCount(0); 
+
+        while (rsServicios.next()) {
+            int codigo = rsServicios.getInt("idservicio"); 
+            String nombre = rsServicios.getString("servicio"); 
+            float precio = rsServicios.getFloat("precioventa"); 
+            int duracion = rsServicios.getInt("tiempoestimado"); 
+            String tipo = rsServicios.getString("tipovehiculo"); 
+            boolean estado = rsServicios.getBoolean("estado"); 
+
+            agregarServicio(codigo, nombre, precio, duracion, tipo, estado);
+        }
+        rsServicios.close();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al cargar datos de la cita: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace(); // Muy útil para ver el error en consola
+    }
     }
     
     private void columnasTabla() {
@@ -518,9 +597,9 @@ public class JdGestionarCitas extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(this, "Seleccione almenos un servicio");
                 }else{
                     if(nuevo == true){
-                        objCita.registrar(filas, id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador);
+                        objCita.registrar(filas, id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador, tblDetalle);
                         }else{
-                            objCita.modificar(id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador);
+                            objCita.modificar(id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador, tblDetalle);
                         }
                         int[] columnasAPasar = {1,2, 3};
                         Object[][] datosFiltrados = extraerColumnas(this.tblDetalle, columnasAPasar);

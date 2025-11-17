@@ -139,11 +139,9 @@ public class JdSeleccionarServicio extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(31, 41, 55));
         jLabel1.setText("Seleccionar Servicios");
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(31, 41, 55));
         jLabel5.setText("Tipo de Vehiculo:");
 
         jPanel2.setBackground(new java.awt.Color(31, 41, 55));
@@ -237,7 +235,7 @@ public class JdSeleccionarServicio extends javax.swing.JDialog {
                 .addGap(21, 21, 21)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
-                .addComponent(btnSeleccionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSeleccionar, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
                 .addGap(37, 37, 37))
         );
 

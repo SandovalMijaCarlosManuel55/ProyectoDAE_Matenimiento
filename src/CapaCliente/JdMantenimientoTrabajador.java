@@ -82,6 +82,7 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
             tblTrabajadores.getColumnModel().getColumn(4).setPreferredWidth(50);
             tblTrabajadores.getColumnModel().getColumn(5).setPreferredWidth(150);
             tblTrabajadores.getColumnModel().getColumn(6).setPreferredWidth(50);
+            tblTrabajadores.setRowHeight(22);
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -103,23 +104,27 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        pnlPrincipal.setBackground(new java.awt.Color(223, 218, 214));
+        pnlPrincipal.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Gestión de trabajadores:");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setText("Gestión de trabajadores");
 
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/buscar.png"))); // NOI18N
+        btnBuscar.setBackground(new java.awt.Color(31, 41, 55));
+        btnBuscar.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Buscar por codigo");
 
-        btnNuevo.setBackground(new java.awt.Color(51, 51, 255));
+        btnNuevo.setBackground(new java.awt.Color(31, 41, 55));
+        btnNuevo.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btnNuevo.setForeground(new java.awt.Color(255, 255, 255));
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/anadir.png"))); // NOI18N
         btnNuevo.setText("   Nuevo trabajador");
         btnNuevo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnNuevo.setBorderPainted(false);
@@ -156,15 +161,15 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
                         .addGap(691, 691, 691))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPrincipalLayout.createSequentialGroup()
-                        .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPrincipalLayout.createSequentialGroup()
-                                .addComponent(txtBuscar)
+                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
+                        .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlPrincipalLayout.createSequentialGroup()
+                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(23, 23, 23)
-                                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addComponent(btnBuscar)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
         pnlPrincipalLayout.setVerticalGroup(
@@ -176,10 +181,10 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
                 .addComponent(jLabel2)
                 .addGap(8, 8, 8)
                 .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(txtBuscar)
-                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -208,6 +213,8 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
         ResultSet rsTrabajador = null;
         DefaultTableModel modelo = (DefaultTableModel) tblTrabajadores.getModel();
         String estado = "";
+        String sexo = "";
+        String distrito ="";
         Vector registro;
 
         try {
@@ -221,22 +228,31 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
                 modelo.setRowCount(0);
 
                 if (rsTrabajador.next()) {
-                    // Traducir estado
-                    if (rsTrabajador.getString("estado").equalsIgnoreCase("t")) {
-                        estado = "Activo";
+                    if (rsTrabajador.getString("estado").equals("t")) {
+                    estado = "Activo";
                     } else {
                         estado = "No activo";
                     }
 
+                    if (rsTrabajador.getString("sexo").equals("M")) {
+                        sexo = "Masculino";
+                    } else {
+                        sexo = "Femenino";
+                    }
+                    ResultSet rsDistrito = objUbigeo.ubigeo(rsTrabajador.getInt("iddistrito"));
+                    while(rsDistrito.next()){
+                        distrito = rsDistrito.getString("distrito");
+                    }
+
                     registro = new Vector();
                     registro.add(0, rsTrabajador.getInt("idtrabajador"));
-                    registro.add(1, rsTrabajador.getString("nombre"));
-                    registro.add(2, rsTrabajador.getString("apepaterno"));
-                    registro.add(3, rsTrabajador.getString("telefono"));
-                    registro.add(4, rsTrabajador.getString("dni"));
-                    registro.add(5, rsTrabajador.getString("sexo"));
-                    registro.add(6, rsTrabajador.getString("correo"));
-                    registro.add(7, estado);
+                    registro.add(1, rsTrabajador.getString("trabajador"));
+                    registro.add(2, rsTrabajador.getString("telefono"));
+                    registro.add(3, rsTrabajador.getString("dni"));
+                    registro.add(4, sexo);
+                    registro.add(5, rsTrabajador.getString("correo"));
+                    registro.add(6, estado);
+                    registro.add(7, distrito);
 
                     modelo.addRow(registro);
                 } else {

@@ -58,17 +58,16 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Verdana", 1, 24)); // NOI18N
         jLabel1.setText("Gestión de Citas");
 
         jLabel2.setBackground(new java.awt.Color(51, 51, 51));
-        jLabel2.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel2.setText("Administra las citas");
 
-        jButton1.setBackground(new java.awt.Color(51, 51, 255));
+        jButton1.setBackground(new java.awt.Color(31, 41, 55));
+        jButton1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/anadir.png"))); // NOI18N
         jButton1.setText("Nueva Cita");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -76,7 +75,10 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
             }
         });
 
+        txtBuscarServicio.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         txtBuscarServicio.setText("...");
+
+        panelServicios.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout panelServiciosLayout = new javax.swing.GroupLayout(panelServicios);
         panelServicios.setLayout(panelServiciosLayout);
@@ -91,9 +93,12 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
 
         jScrollPanel.setViewportView(panelServicios);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/buscar.png"))); // NOI18N
+        jButton2.setBackground(new java.awt.Color(31, 41, 55));
+        jButton2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Buscar");
 
+        jComboBox1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Realizado", "En Proceso", "Pendientes" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,10 +106,15 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Buscar Por Código (ID):");
 
+        jLabel4.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel4.setText("Listar Por Estado:");
 
+        jButton3.setBackground(new java.awt.Color(31, 41, 55));
+        jButton3.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Listar");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -120,11 +130,11 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(txtBuscarServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jButton2)))
+                                        .addComponent(jButton2))
+                                    .addComponent(jLabel3))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -150,7 +160,7 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -316,7 +326,7 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
     // --- Botones ---
     JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 10));
     panelBotones.setOpaque(false);
-
+    
     JButton btnIniciar = crearBoton("️ Iniciar", new Color(142, 68, 173));
     JButton btnConfirmar = crearBoton(" Confirmar", new Color(52, 152, 219));
     JButton btnEditar = crearBoton("️ Editar", new Color(241, 196, 15));
@@ -324,7 +334,16 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
 
     btnIniciar.setVisible("Confirmada".equals(estado));
     btnConfirmar.setVisible("Pendiente".equals(estado));
-
+    
+    btnEditar.addActionListener(e -> {
+        try {
+            JdGestionarCitas objJd = new JdGestionarCitas(null, true,idCita);
+            objJd.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(JdMantenimientoCitas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    });
+    
     btnEliminar.addActionListener(e -> {
         int confirm = JOptionPane.showConfirmDialog(this,
                 "¿Seguro que deseas eliminar esta cita?",
@@ -351,37 +370,33 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
     return card;
 }
 
-private JButton crearBoton(String texto, Color colorFondo) {
-    JButton boton = new JButton(texto);
-    boton.setFont(new Font("Segoe UI", Font.BOLD, 13));
-    boton.setForeground(Color.WHITE);
-    boton.setBackground(colorFondo);
-    boton.setFocusPainted(false);
-    boton.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
-    boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    private JButton crearBoton(String texto, Color colorFondo) {
+        JButton boton = new JButton(texto);
+        boton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        boton.setForeground(Color.WHITE);
+        boton.setBackground(colorFondo);
+        boton.setFocusPainted(false);
+        boton.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
+        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-    // Efecto hover (ligeramente más oscuro)
-    boton.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mouseEntered(java.awt.event.MouseEvent evt) {
-            boton.setBackground(colorFondo.darker());
-        }
+        // Efecto hover (ligeramente más oscuro)
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                boton.setBackground(colorFondo.darker());
+            }
 
-        @Override
-        public void mouseExited(java.awt.event.MouseEvent evt) {
-            boton.setBackground(colorFondo);
-        }
-    });
-    return boton;
-}
-
-
-    
-    
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                boton.setBackground(colorFondo);
+            }
+        });
+        return boton;
+    }
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            JdGestionarCitas objJd = new JdGestionarCitas(null, true,true);
+            JdGestionarCitas objJd = new JdGestionarCitas(null, true);
             objJd.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(JdMantenimientoCitas.class.getName()).log(Level.SEVERE, null, ex);
