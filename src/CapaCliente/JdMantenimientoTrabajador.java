@@ -101,6 +101,8 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
         btnNuevo = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTrabajadores = new javax.swing.JTable();
+        btnNuevo1 = new javax.swing.JButton();
+        btnNuevo2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -125,7 +127,7 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
         btnNuevo.setBackground(new java.awt.Color(31, 41, 55));
         btnNuevo.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btnNuevo.setForeground(new java.awt.Color(255, 255, 255));
-        btnNuevo.setText("   Nuevo trabajador");
+        btnNuevo.setText("Nuevo trabajador");
         btnNuevo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnNuevo.setBorderPainted(false);
         btnNuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -149,18 +151,39 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tblTrabajadores);
 
+        btnNuevo1.setBackground(new java.awt.Color(31, 41, 55));
+        btnNuevo1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        btnNuevo1.setForeground(new java.awt.Color(255, 255, 255));
+        btnNuevo1.setText("Editar trabajador");
+        btnNuevo1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnNuevo1.setBorderPainted(false);
+        btnNuevo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevo1ActionPerformed(evt);
+            }
+        });
+
+        btnNuevo2.setBackground(new java.awt.Color(31, 41, 55));
+        btnNuevo2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        btnNuevo2.setForeground(new java.awt.Color(255, 255, 255));
+        btnNuevo2.setText("Cancelar");
+        btnNuevo2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnNuevo2.setBorderPainted(false);
+        btnNuevo2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevo2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlPrincipalLayout = new javax.swing.GroupLayout(pnlPrincipal);
         pnlPrincipal.setLayout(pnlPrincipalLayout);
         pnlPrincipalLayout.setHorizontalGroup(
             pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(15, 15, 15)
                 .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                        .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
-                        .addGap(691, 691, 691))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
                     .addGroup(pnlPrincipalLayout.createSequentialGroup()
                         .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,9 +191,12 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
                                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnBuscar)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnNuevo1, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                            .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                            .addComponent(btnNuevo2, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         pnlPrincipalLayout.setVerticalGroup(
             pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,13 +206,20 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel2)
                 .addGap(8, 8, 8)
+                .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtBuscar)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtBuscar)
-                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
+                        .addGap(236, 236, 236)
+                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
+                        .addComponent(btnNuevo1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
+                        .addComponent(btnNuevo2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -275,19 +308,36 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void tblTrabajadoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTrabajadoresMouseClicked
-        int fila = tblTrabajadores.getSelectedRow();
+        /*int fila = tblTrabajadores.getSelectedRow();
         int idTrabajador= (int) tblTrabajadores.getValueAt(fila, 0);
         JdGestionarTrabajador obj = new JdGestionarTrabajador( mnuPrincipal, false,idTrabajador);
         obj.setLocationRelativeTo( mnuPrincipal);
         obj.setVisible(true);
-        
+        */
     }//GEN-LAST:event_tblTrabajadoresMouseClicked
+
+    private void btnNuevo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevo1ActionPerformed
+        int fila = tblTrabajadores.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una fila");
+        }
+        int idTrabajador= (int) tblTrabajadores.getValueAt(fila, 0);
+        JdGestionarTrabajador obj = new JdGestionarTrabajador( mnuPrincipal, false,idTrabajador);
+        obj.setLocationRelativeTo( mnuPrincipal);
+        obj.setVisible(true);
+    }//GEN-LAST:event_btnNuevo1ActionPerformed
+
+    private void btnNuevo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevo2ActionPerformed
+       this.dispose();
+    }//GEN-LAST:event_btnNuevo2ActionPerformed
 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnNuevo1;
+    private javax.swing.JButton btnNuevo2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
