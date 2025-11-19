@@ -320,6 +320,7 @@ public class JdMantenimientoTrabajador extends javax.swing.JDialog {
         int fila = tblTrabajadores.getSelectedRow();
         if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione una fila");
+            
         }
         int idTrabajador= (int) tblTrabajadores.getValueAt(fila, 0);
         JdGestionarTrabajador obj = new JdGestionarTrabajador( mnuPrincipal, false,idTrabajador);

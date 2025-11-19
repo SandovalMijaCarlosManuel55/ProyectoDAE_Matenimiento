@@ -214,6 +214,7 @@ public class JdGestionarTipoTrabajador extends javax.swing.JDialog {
         int fila = tblTipo.getSelectedRow();
         txtCodigo.setText(""+tblTipo.getValueAt(fila, 0));
         txtTipo.setText(""+tblTipo.getValueAt(fila, 1));
+        
     }//GEN-LAST:event_tblTipoMouseClicked
 
 
