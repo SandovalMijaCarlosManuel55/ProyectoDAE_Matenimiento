@@ -122,7 +122,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/Reportes.png"))); // NOI18N
         btnReportes.setText("  Reportes");
         btnReportes.setBorderPainted(false);
-        btnReportes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReportes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnReportes.setDefaultCapable(false);
         btnReportes.setFocusable(false);
         btnReportes.setHideActionText(true);
@@ -134,28 +134,33 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                 btnReportesActionPerformed(evt);
             }
         });
-        jPanel3.add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 610, 340, 50));
+        jPanel3.add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 340, 50));
 
         btnAcercaDe.setBackground(new java.awt.Color(223, 218, 214));
         btnAcercaDe.setFont(new java.awt.Font("Verdana", 0, 22)); // NOI18N
         btnAcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/acercaDe.png"))); // NOI18N
         btnAcercaDe.setText("  Acerca De");
         btnAcercaDe.setBorderPainted(false);
-        btnAcercaDe.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAcercaDe.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnAcercaDe.setDefaultCapable(false);
         btnAcercaDe.setFocusable(false);
         btnAcercaDe.setHideActionText(true);
         btnAcercaDe.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAcercaDe.setIconTextGap(7);
         btnAcercaDe.setOpaque(true);
-        jPanel3.add(btnAcercaDe, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 680, 340, 50));
+        btnAcercaDe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAcercaDeActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnAcercaDe, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 340, 50));
 
         btnVehiculos.setBackground(new java.awt.Color(223, 218, 214));
         btnVehiculos.setFont(new java.awt.Font("Verdana", 0, 22)); // NOI18N
         btnVehiculos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/Vehiculos.png"))); // NOI18N
         btnVehiculos.setText(" Vehículos");
         btnVehiculos.setBorderPainted(false);
-        btnVehiculos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVehiculos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnVehiculos.setDefaultCapable(false);
         btnVehiculos.setFocusable(false);
         btnVehiculos.setHideActionText(true);
@@ -167,14 +172,14 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                 btnVehiculosActionPerformed(evt);
             }
         });
-        jPanel3.add(btnVehiculos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 340, 50));
+        jPanel3.add(btnVehiculos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 340, 50));
 
         btnServicios.setBackground(new java.awt.Color(223, 218, 214));
         btnServicios.setFont(new java.awt.Font("Verdana", 0, 22)); // NOI18N
         btnServicios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/Mantenimiento.png"))); // NOI18N
         btnServicios.setText("  Servicios");
         btnServicios.setBorderPainted(false);
-        btnServicios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnServicios.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnServicios.setDefaultCapable(false);
         btnServicios.setFocusable(false);
         btnServicios.setHideActionText(true);
@@ -186,14 +191,14 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                 btnServiciosActionPerformed(evt);
             }
         });
-        jPanel3.add(btnServicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 340, 50));
+        jPanel3.add(btnServicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 340, 50));
 
         btnClientes.setBackground(new java.awt.Color(223, 218, 214));
         btnClientes.setFont(new java.awt.Font("Verdana", 0, 22)); // NOI18N
         btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/Cliente.png"))); // NOI18N
         btnClientes.setText("  Clientes");
         btnClientes.setBorderPainted(false);
-        btnClientes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnClientes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnClientes.setDefaultCapable(false);
         btnClientes.setFocusable(false);
         btnClientes.setHideActionText(true);
@@ -205,14 +210,14 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                 btnClientesActionPerformed(evt);
             }
         });
-        jPanel3.add(btnClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 340, 50));
+        jPanel3.add(btnClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 340, 50));
 
         btnProductos.setBackground(new java.awt.Color(223, 218, 214));
         btnProductos.setFont(new java.awt.Font("Verdana", 0, 22)); // NOI18N
         btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/Productos.png"))); // NOI18N
         btnProductos.setText("  Productos");
         btnProductos.setBorderPainted(false);
-        btnProductos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnProductos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnProductos.setDefaultCapable(false);
         btnProductos.setFocusable(false);
         btnProductos.setHideActionText(true);
@@ -224,14 +229,14 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                 btnProductosActionPerformed(evt);
             }
         });
-        jPanel3.add(btnProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 340, 50));
+        jPanel3.add(btnProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 340, 50));
 
         btnVentas.setBackground(new java.awt.Color(223, 218, 214));
         btnVentas.setFont(new java.awt.Font("Verdana", 0, 22)); // NOI18N
         btnVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/Ventas.png"))); // NOI18N
         btnVentas.setText("  Ventas");
         btnVentas.setBorderPainted(false);
-        btnVentas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVentas.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnVentas.setDefaultCapable(false);
         btnVentas.setFocusable(false);
         btnVentas.setHideActionText(true);
@@ -243,14 +248,14 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                 btnVentasActionPerformed(evt);
             }
         });
-        jPanel3.add(btnVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 470, 340, 50));
+        jPanel3.add(btnVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 340, 50));
 
         btnInicio.setBackground(new java.awt.Color(223, 218, 214));
         btnInicio.setFont(new java.awt.Font("Verdana", 0, 22)); // NOI18N
         btnInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/Inicio.png"))); // NOI18N
         btnInicio.setText("  Inicio");
         btnInicio.setBorderPainted(false);
-        btnInicio.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnInicio.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnInicio.setDefaultCapable(false);
         btnInicio.setDisabledSelectedIcon(null);
         btnInicio.setFocusable(false);
@@ -258,14 +263,14 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         btnInicio.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnInicio.setIconTextGap(7);
         btnInicio.setOpaque(true);
-        jPanel3.add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 340, 50));
+        jPanel3.add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 340, 50));
 
         btnTrabajadores.setBackground(new java.awt.Color(223, 218, 214));
         btnTrabajadores.setFont(new java.awt.Font("Verdana", 0, 22)); // NOI18N
         btnTrabajadores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/Trabajadores.png"))); // NOI18N
         btnTrabajadores.setText("  Trabajadores");
         btnTrabajadores.setBorderPainted(false);
-        btnTrabajadores.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnTrabajadores.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnTrabajadores.setDefaultCapable(false);
         btnTrabajadores.setFocusable(false);
         btnTrabajadores.setHideActionText(true);
@@ -277,7 +282,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                 btnTrabajadoresActionPerformed(evt);
             }
         });
-        jPanel3.add(btnTrabajadores, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 340, 50));
+        jPanel3.add(btnTrabajadores, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 340, 50));
 
         JpFondo.setBackground(new java.awt.Color(255, 255, 255));
         JpFondo.setPreferredSize(new java.awt.Dimension(900, 600));
@@ -365,6 +370,12 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         JdMantenimientoTrabajador objTrabajador = new JdMantenimientoTrabajador(this, false);
         objTrabajador.setVisible(true);
     }//GEN-LAST:event_btnTrabajadoresActionPerformed
+
+    private void btnAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcercaDeActionPerformed
+        jdPrueba_reporte obj = new jdPrueba_reporte(this,true);
+        obj.setLocationRelativeTo(this);
+        obj.setVisible(true);
+    }//GEN-LAST:event_btnAcercaDeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
