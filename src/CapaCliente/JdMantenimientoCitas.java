@@ -18,6 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +32,7 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         panelServicios.setLayout(new GridLayout(0, 3, 20, 20));
-        cargarCitas();
+        cargarCitas("Todos");
         panelServicios.revalidate();
         panelServicios.repaint();
     }
@@ -48,7 +49,7 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
         jScrollPanel = new javax.swing.JScrollPane();
         panelServicios = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cboEstado = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
@@ -76,7 +77,6 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
         });
 
         txtBuscarServicio.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        txtBuscarServicio.setText("...");
 
         panelServicios.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
 
@@ -97,12 +97,17 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
         jButton2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Buscar");
-
-        jComboBox1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Realizado", "En Proceso", "Pendientes" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        cboEstado.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        cboEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Realizado", "En Proceso", "Pendiente" }));
+        cboEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboEstadoActionPerformed(evt);
             }
         });
 
@@ -116,6 +121,11 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
         jButton3.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Listar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -138,7 +148,7 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(jButton3))
                                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -169,7 +179,7 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtBuscarServicio)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1)
+                    .addComponent(cboEstado)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 638, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -192,10 +202,15 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
     
     private clsCita objCita = new clsCita(); 
 
-    private void cargarCitas() {
+    private void cargarCitas(String filtro) {
         panelServicios.removeAll();
         try {
             ResultSet rs = objCita.listarCitas();
+            if (filtro == null || filtro.equals("Todos")) {
+            rs = objCita.listarCitas(); 
+            } else {
+                rs = objCita.listarCitasPorEstado(filtro); 
+            }
             while (rs.next()) {
                 int idCita = rs.getInt("IDCITA");
                 Date fecha = rs.getDate("FECHA");
@@ -351,7 +366,7 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
         if (confirm == JOptionPane.YES_OPTION) {
             try {
                 objCita.eliminarServicio(idCita);
-                cargarCitas();
+                cargarCitas("Todos");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,
                         "Error al eliminar: " + ex.getMessage(),
@@ -368,6 +383,39 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
     card.add(panelBotones);
 
     return card;
+}
+    
+    private void mostrarResultados(ResultSet rs) throws SQLException {
+    panelServicios.removeAll(); // Limpiar lo anterior
+    boolean hayResultados = false;
+
+    while (rs.next()) {
+        hayResultados = true;
+        // 1. Obtener datos
+        int idCita = rs.getInt("IDCITA");
+        Date fecha = rs.getDate("FECHA");
+        String hora = rs.getString("HORA");
+        String estado = rs.getString("ESTADO");
+        String comentario = rs.getString("COMENTARIO");
+        String clienteNombre = rs.getString("CLIENTE_NOMBRE");
+        String placa = rs.getString("PLACA");
+        String modelo = rs.getString("TIPOVEHICULO");
+        String servicio = rs.getString("SERVICIO");
+        String mecanico = rs.getString("TRABAJADOR");
+
+        // 2. Agregar la tarjeta
+        panelServicios.add(crearTarjetaCita(
+            idCita, clienteNombre, modelo + " - " + placa,
+            servicio, fecha, hora, estado, mecanico, comentario
+        ));
+    }
+    
+    if (!hayResultados) {
+        JOptionPane.showMessageDialog(this, "No se encontraron citas con ese código.");
+    }
+
+    panelServicios.revalidate();
+    panelServicios.repaint();
 }
 
     private JButton crearBoton(String texto, Color colorFondo) {
@@ -403,17 +451,49 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cboEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboEstadoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cboEstadoActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            String estado = cboEstado.getSelectedItem().toString();
+            cargarCitas(estado);
+        } catch (Exception ex) {
+            Logger.getLogger(JdMantenimientoCitas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String textoId = txtBuscarServicio.getText().trim();
+        if (textoId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor escribe un código (ID) para buscar.");
+            return;
+        }
+
+        try {
+            int idBuscado = Integer.parseInt(textoId);
+
+            ResultSet rs = objCita.buscarCitaPorCodigo(idBuscado);
+
+            mostrarResultados(rs);
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El ID debe ser un número entero válido.", "Error de formato", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception e) {
+            Logger.getLogger(JdMantenimientoCitas.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(this, "Error al buscar: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cboEstado;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

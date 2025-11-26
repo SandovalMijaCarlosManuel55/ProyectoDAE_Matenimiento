@@ -42,6 +42,29 @@ public class clsCita {
 
         }
     }
+    
+    public ResultSet listarCitasPorEstado(String estado) throws Exception {
+        strSQL = "SELECT C.*, DC.PRECIOVENTA,TV.TIPOVEHICULO, V.PLACA ,S.SERVICIO, T.TRABAJADOR," +
+                 "COALESCE(P.PERSONA, E.RAZONSOCIAL) AS CLIENTE_NOMBRE " +
+                 "FROM CITA C " +
+                 "LEFT JOIN DETALLE_CITA DC ON DC.IDCITA = C.IDCITA " +
+                 "LEFT JOIN TIPO_VEHICULO TV ON TV.IDTIPOVEHICULO = DC.IDTIPOVEHICULO " +
+                 "LEFT JOIN SERVICIO S ON S.IDSERVICIO = DC.IDSERVICIO " +
+                 "LEFT JOIN VEHICULO V ON V.IDVEHICULO = C.IDVEHICULO " +
+                 "LEFT JOIN CLIENTE CL ON CL.IDCLIENTE = V.IDCLIENTE " +
+                 "LEFT JOIN PERSONA P ON CL.IDCLIENTE = P.IDCLIENTE " +
+                 "LEFT JOIN EMPRESA E ON CL.IDCLIENTE = E.IDCLIENTE " +
+                 "LEFT JOIN TRABAJADOR T ON T.IDTRABAJADOR = C.IDTRABAJADOR " +
+                 "WHERE C.estado = '" + estado + "' " +
+                 "ORDER BY IDCITA";
+        try {
+            rs = objConectar.consultarBD(strSQL);
+            return rs;
+        } catch (Exception e) {
+            throw new Exception("Error al consultar citas por estado: " + e.getMessage());
+
+        }
+    }
 
     public Integer generarCodigoCita() throws Exception {
         strSQL = "Select COALESCE (max(idCita),0) +1 as codigo from cita";

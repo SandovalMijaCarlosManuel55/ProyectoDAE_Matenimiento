@@ -368,7 +368,9 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
-        // TODO add your handling code here:
+        jdPrueba_reporte obj = new jdPrueba_reporte(this,true);
+        obj.setLocationRelativeTo(this);
+        obj.setVisible(true);
     }//GEN-LAST:event_btnReportesActionPerformed
 
     private void btnVehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVehiculosActionPerformed
@@ -406,14 +408,12 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTrabajadoresActionPerformed
 
     private void btnAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcercaDeActionPerformed
-        jdPrueba_reporte obj = new jdPrueba_reporte(this,true);
-        obj.setLocationRelativeTo(this);
-        obj.setVisible(true);
+        JdMantenimientoCitas objTrabajador = new JdMantenimientoCitas(this, false);
+        objTrabajador.setVisible(true);
     }//GEN-LAST:event_btnAcercaDeActionPerformed
 
     private void btnAcercaDe1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcercaDe1ActionPerformed
-        JdMantenimientoCitas objTrabajador = new JdMantenimientoCitas(this, false);
-        objTrabajador.setVisible(true);
+        
     }//GEN-LAST:event_btnAcercaDe1ActionPerformed
 
 
