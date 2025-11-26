@@ -5,8 +5,9 @@
 package CapaLogica;
 
 import CapaDatos.clsJDBC;
+import java.sql.Statement;
 import java.sql.ResultSet;
-import java.util.Date;
+import java.sql.Connection;
 import javax.swing.JTable;
 
 /**
@@ -18,7 +19,8 @@ public class clsCita {
     ResultSet rs = null;
     String strSQL;
     clsTipoVehiculo objTV = new clsTipoVehiculo();
-    
+    Connection con = null;
+    Statement sent;
     public ResultSet listarCitas() throws Exception {
         strSQL = "SELECT C.*, DC.PRECIOVENTA,TV.TIPOVEHICULO, V.PLACA ,S.SERVICIO, T.TRABAJADOR," +
                  "COALESCE(P.PERSONA, E.RAZONSOCIAL) AS CLIENTE_NOMBRE " +
@@ -55,22 +57,34 @@ public class clsCita {
     }
 
     public void registrar(int cantidad,int idcita, String fecha, String hora,String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador, JTable servicios) throws Exception {
-        strSQL = "insert into Cita values (" + idcita + ", '" + fecha + "', '" + hora + "', '" +estado + "', '" +  comentario + "', '" +
+        try{
+            objConectar.conectar();
+            con = (Connection) objConectar.getCon();
+            con.setAutoCommit(false);
+            sent = (Statement) con.createStatement();
+            strSQL = "insert into Cita values (" + idcita + ", '" + fecha + "', '" + hora + "', '" +estado + "', '" +  comentario + "', '" +
                                                fechaRecojo + "', " + idVehiculo + ", " + idTrabajador +"); ";
-        
-        for (int i = 0; i < servicios.getRowCount(); i++) {
-            int id = objTV.obtenerCodigoTipoVehiculo(servicios.getValueAt(i, 4).toString());
+
+            sent.executeUpdate(strSQL);
+            int ctd = servicios.getRowCount();
+            for (int i = 0; i < ctd; i++) {
+                int id = objTV.obtenerCodigoTipoVehiculo(servicios.getValueAt(i, 4).toString());
             
-            String strSQL1 = "insert into Detalle_Cita(precioventa,cantidad,idcita,idtipovehiculo,idservicio) values (" + servicios.getValueAt(i, 2) + "', " +
-                    1 + ", " + idcita + ", " + id + ", " + servicios.getValueAt(i, 0)+"); ";
-            objConectar.ejecutarBD(strSQL1);
-        }
-        
-        try {
-            objConectar.ejecutarBD(strSQL);
-        } catch (Exception e) {
+                String strSQL1 = "insert into Detalle_Cita(precioventa,cantidad,idcita,idtipovehiculo,idservicio) values (" + servicios.getValueAt(i, 2) + "', " +
+                        1 + ", " + idcita + ", " + id + ", " + servicios.getValueAt(i, 0)+"); ";
+                objConectar.ejecutarBD(strSQL1);
+
+                sent.executeUpdate(strSQL1);
+                
+            }
+            
+            con.commit();
+        }catch (Exception e) {
+            con.rollback();
             throw new Exception("Error al registrar la cita -> " + e.getMessage());
-        }
+        } finally {
+            objConectar.desconectar();
+        }    
     }
     
     public void modificar(int idcita, String fecha, String hora,String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador, JTable servicios) throws Exception {        

@@ -57,6 +57,8 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         btnVentas = new javax.swing.JButton();
         btnInicio = new javax.swing.JButton();
         btnTrabajadores = new javax.swing.JButton();
+        btnAcercaDe1 = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
         JpFondo = new FondoPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -134,12 +136,12 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                 btnReportesActionPerformed(evt);
             }
         });
-        jPanel3.add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 340, 50));
+        jPanel3.add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 560, 340, 50));
 
         btnAcercaDe.setBackground(new java.awt.Color(223, 218, 214));
         btnAcercaDe.setFont(new java.awt.Font("Verdana", 0, 22)); // NOI18N
-        btnAcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/acercaDe.png"))); // NOI18N
-        btnAcercaDe.setText("  Acerca De");
+        btnAcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/Citas.png"))); // NOI18N
+        btnAcercaDe.setText("  Citas");
         btnAcercaDe.setBorderPainted(false);
         btnAcercaDe.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnAcercaDe.setDefaultCapable(false);
@@ -153,7 +155,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                 btnAcercaDeActionPerformed(evt);
             }
         });
-        jPanel3.add(btnAcercaDe, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 340, 50));
+        jPanel3.add(btnAcercaDe, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 340, 50));
 
         btnVehiculos.setBackground(new java.awt.Color(223, 218, 214));
         btnVehiculos.setFont(new java.awt.Font("Verdana", 0, 22)); // NOI18N
@@ -282,7 +284,39 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                 btnTrabajadoresActionPerformed(evt);
             }
         });
-        jPanel3.add(btnTrabajadores, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 340, 50));
+        jPanel3.add(btnTrabajadores, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 340, 50));
+
+        btnAcercaDe1.setBackground(new java.awt.Color(223, 218, 214));
+        btnAcercaDe1.setFont(new java.awt.Font("Verdana", 0, 22)); // NOI18N
+        btnAcercaDe1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/acercaDe.png"))); // NOI18N
+        btnAcercaDe1.setText("  Acerca De");
+        btnAcercaDe1.setBorderPainted(false);
+        btnAcercaDe1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnAcercaDe1.setDefaultCapable(false);
+        btnAcercaDe1.setFocusable(false);
+        btnAcercaDe1.setHideActionText(true);
+        btnAcercaDe1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAcercaDe1.setIconTextGap(7);
+        btnAcercaDe1.setOpaque(true);
+        btnAcercaDe1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAcercaDe1ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnAcercaDe1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 620, 340, 50));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 470, -1, 40));
 
         JpFondo.setBackground(new java.awt.Color(255, 255, 255));
         JpFondo.setPreferredSize(new java.awt.Dimension(900, 600));
@@ -377,11 +411,17 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         obj.setVisible(true);
     }//GEN-LAST:event_btnAcercaDeActionPerformed
 
+    private void btnAcercaDe1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcercaDe1ActionPerformed
+        JdMantenimientoCitas objTrabajador = new JdMantenimientoCitas(this, false);
+        objTrabajador.setVisible(true);
+    }//GEN-LAST:event_btnAcercaDe1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JpFondo;
     private javax.swing.JPanel JpLogo;
     private javax.swing.JButton btnAcercaDe;
+    private javax.swing.JButton btnAcercaDe1;
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnInicio;
     private javax.swing.JButton btnProductos;
@@ -395,6 +435,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     // End of variables declaration//GEN-END:variables
 }
 
