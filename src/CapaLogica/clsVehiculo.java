@@ -16,6 +16,17 @@ public class clsVehiculo {
     ResultSet rs = null;
     String strSQL;
     
+    public ResultSet listarModeloVehiculoPorid(Integer id) throws Exception {
+        strSQL = "select * from modelo_vehiculo where idmodelovehiculo = " + id;
+        try {
+            rs = objConectar.consultarBD(strSQL);
+            return rs;
+        } catch (Exception ex) {
+            throw new Exception("Error al listar modelos de vehiculos -> " + ex.getMessage());
+        }
+    }
+
+    
     public ResultSet buscarVehiculoPorPersona(Integer cod) throws Exception {
         strSQL = "SELECT M.modelovehiculo, V.placa " +
                  "FROM VEHICULO V " +
