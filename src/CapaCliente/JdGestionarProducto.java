@@ -11,6 +11,9 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
+import java.util.Comparator;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -49,24 +52,41 @@ public class JdGestionarProducto extends javax.swing.JDialog {
             rs = objProducto.listarIdNombre(dato);
 
             while (rs.next()) {
-                obj = new Object[7];
-                obj[0] = rs.getInt("idproducto");
-                obj[1] = rs.getString("producto");
-                obj[2] = rs.getInt("stock");
                 if (rs.getBoolean("vigencia")) {
-                    obj[3]= "Vigente";
-                } else {
-                    obj[3]= "No Vigente";
+
+                    obj = new Object[7];
+                    obj[0] = rs.getInt("idproducto");
+                    obj[1] = rs.getString("producto");
+                    obj[2] = rs.getInt("stock");
+                    if (rs.getBoolean("vigencia")) {
+                        obj[3] = "Vigente";
+                    }
+                    obj[4] = rs.getFloat("precioactual");
+                    obj[5] = rs.getString("tipoproducto");
+                    obj[6] = rs.getString("marcaproducto");
+                    mdl.addRow(obj);
                 }
-                obj[4] = rs.getFloat("precioactual");
-                obj[5] = rs.getString("tipoproducto");
-                obj[6] = rs.getString("marcaproducto");
-                mdl.addRow(obj);
+                tblProducto.setModel(mdl);
             }
-            tblProducto.setModel(mdl);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al listar \n" + e.getMessage());
         }
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(mdl);
+        Comparator<Object> numericComparator = (a, b) -> {
+            try {
+                Double n1 = Double.parseDouble(a.toString().trim());
+                Double n2 = Double.parseDouble(b.toString().trim());
+                return n1.compareTo(n2);
+            } catch (Exception e) {
+                return a.toString().compareTo(b.toString());
+            }
+        };
+
+        sorter.setComparator(0, numericComparator); // ID
+        sorter.setComparator(2, numericComparator); // STOCK
+        sorter.setComparator(4, numericComparator); // PRECIO
+
+        tblProducto.setRowSorter(sorter);
     }
 
     public void listarcbo() {
@@ -127,11 +147,11 @@ public class JdGestionarProducto extends javax.swing.JDialog {
         tblProducto = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnDarsebaja = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -166,6 +186,8 @@ public class JdGestionarProducto extends javax.swing.JDialog {
                 btnBuscarActionPerformed(evt);
             }
         });
+
+        spnStock.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel5.setText("Stock:");
@@ -329,43 +351,53 @@ public class JdGestionarProducto extends javax.swing.JDialog {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(31, 41, 55));
-        jButton2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Modificar");
-
-        jButton3.setBackground(new java.awt.Color(31, 41, 55));
-        jButton3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Eliminar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnModificar.setBackground(new java.awt.Color(31, 41, 55));
+        btnModificar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnModificar.setForeground(new java.awt.Color(255, 255, 255));
+        btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnModificarActionPerformed(evt);
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(31, 41, 55));
-        jButton4.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("Dar de Baja");
-
-        jButton5.setBackground(new java.awt.Color(31, 41, 55));
-        jButton5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("Salir");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminar.setBackground(new java.awt.Color(31, 41, 55));
+        btnEliminar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnEliminarActionPerformed(evt);
             }
         });
 
-        jButton6.setBackground(new java.awt.Color(31, 41, 55));
-        jButton6.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jButton6.setForeground(new java.awt.Color(255, 255, 255));
-        jButton6.setText("Limpiar");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        btnDarsebaja.setBackground(new java.awt.Color(31, 41, 55));
+        btnDarsebaja.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnDarsebaja.setForeground(new java.awt.Color(255, 255, 255));
+        btnDarsebaja.setText("Dar de Baja");
+        btnDarsebaja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                btnDarsebajaActionPerformed(evt);
+            }
+        });
+
+        btnSalir.setBackground(new java.awt.Color(31, 41, 55));
+        btnSalir.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+
+        btnLimpiar.setBackground(new java.awt.Color(31, 41, 55));
+        btnLimpiar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnLimpiar.setForeground(new java.awt.Color(255, 255, 255));
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
             }
         });
 
@@ -377,15 +409,15 @@ public class JdGestionarProducto extends javax.swing.JDialog {
                 .addGap(15, 15, 15)
                 .addComponent(btnNuevo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6)
+                .addComponent(btnLimpiar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
+                .addComponent(btnDarsebaja)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addComponent(btnEliminar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5)
+                .addComponent(btnSalir)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -394,11 +426,11 @@ public class JdGestionarProducto extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNuevo)
-                    .addComponent(jButton2)
-                    .addComponent(jButton6)
-                    .addComponent(jButton4)
-                    .addComponent(jButton3)
-                    .addComponent(jButton5))
+                    .addComponent(btnModificar)
+                    .addComponent(btnLimpiar)
+                    .addComponent(btnDarsebaja)
+                    .addComponent(btnEliminar)
+                    .addComponent(btnSalir))
                 .addGap(97, 97, 97))
         );
 
@@ -450,9 +482,9 @@ public class JdGestionarProducto extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-limpiar() ;
-    }//GEN-LAST:event_jButton6ActionPerformed
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        limpiar();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         if (padre != null) {
@@ -464,22 +496,39 @@ limpiar() ;
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
 
 
-
     }//GEN-LAST:event_formWindowClosing
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         ResultSet rs = null;
-        //Estructura: idproducto,nomproducto,stock,vigencia,nommarcaproducto
+        //Estructura: idproducto,producto,stock,vigencia,marcaproducto
         try {
             rs = objProducto.buscarXid(Integer.parseInt(txtId.getText()));
-            txtNombre.setText(rs.getString("nomproducto"));
-            spnStock.setValue(rs.getInt("stock"));
-            chkVigencia.setSelected(rs.getBoolean("vigencia"));
-            cboMarcaProducto.setSelectedItem(rs.getString("nommarcaproducto"));
-            cboTipoProducto.setSelectedItem(rs.getString("nomtipoproducto"));
-            txtPrecio.setText(Float.toString(rs.getFloat("precioactual")));
+            if (rs.getBoolean("vigencia")) {
+                txtNombre.setText(rs.getString("producto"));
+                spnStock.setValue(rs.getInt("stock"));
+                chkVigencia.setSelected(rs.getBoolean("vigencia"));
+                cboMarcaProducto.setSelectedItem(rs.getString("marcaproducto"));
+                cboTipoProducto.setSelectedItem(rs.getString("tipoproducto"));
+                txtPrecio.setText(Float.toString(rs.getFloat("precioactual")));
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "EL PRODUCTO ESTA DADO DE BAJA");
+                int resp = JOptionPane.showConfirmDialog(
+                        null,
+                        "¿Quiere habilitar el producto en cuestión?",
+                        "Confirmación",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+                
+                if (resp == JOptionPane.YES_OPTION) {
+                objProducto.recuperarProducto(Integer.parseInt(txtId.getText()));
+                listar("");
+                } 
+
+            }
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al buscar Producto por id\n" + e);
+            JOptionPane.showMessageDialog(null, "EL PRODUCTO NO EXISTE O NO SE ENCUENTRA DISPONIBLE");
 
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -533,34 +582,112 @@ limpiar() ;
         }
     }//GEN-LAST:event_btnNuevoActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        try {
-            objProducto.eliminarProducto(Integer.parseInt(txtId.getText()));
-            limpiar();
-            listar("");
-            JOptionPane.showMessageDialog(this, "PRODUCTO ELIMINADO");
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        if (txtId.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this,"ESCOJA UN ID PARA ELIMINAR");
+           return;
+        }
+                try {
+            Integer.parseInt(txtId.getText());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Error al Eliminar" + e);
+            JOptionPane.showMessageDialog(rootPane, "ID incorrecto  \n" + e.getMessage());
+        }
+        int respuesta = JOptionPane.showConfirmDialog(
+                null,
+                "¿Realmente quiere eliminar este producto?",
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+
+            try {
+                objProducto.eliminarProducto(Integer.parseInt(txtId.getText()));
+                limpiar();
+                listar("");
+                JOptionPane.showMessageDialog(this, "PRODUCTO ELIMINADO");
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Error al Eliminar" + e);
+            }
+
         }
 
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-this.dispose();
-    }//GEN-LAST:event_jButton5ActionPerformed
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnTipoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTipoProductoActionPerformed
-JdGestionarTipoDeProducto obj = new JdGestionarTipoDeProducto(frmP,true,this);
-obj.setVisible(true);
+        JdGestionarTipoDeProducto obj = new JdGestionarTipoDeProducto(frmP, true, this);
+        obj.setLocationRelativeTo(this);
+        obj.setVisible(true);
 
     }//GEN-LAST:event_btnTipoProductoActionPerformed
 
     private void btnMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcaActionPerformed
-       JdGestionarMarca obj = new JdGestionarMarca(frmP,true,this);
-       obj.setVisible(true);
-       
+        JdGestionarMarca obj = new JdGestionarMarca(frmP, true, this);
+        obj.setLocationRelativeTo(this);
+        obj.setVisible(true);
+
     }//GEN-LAST:event_btnMarcaActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        //cboMarcaProducto,cboTipoProducto,chkVigencia,txtId,spnStock,txtNombre
+        int id = -1, tipoProducto = -1, marcaProducto = -1, stock = -1;
+        String nombre = "";
+        boolean vigencia = false;
+        ResultSet rs = null;
+        float precio = 0.0f;
+
+        try {
+            rs = objTipoProducto.buscarIdxNombre((String) cboTipoProducto.getSelectedItem());
+            tipoProducto = rs.getInt("idtipoproducto");
+            rs = null;
+            rs = objMarca.buscaridxNombre((String) cboMarcaProducto.getSelectedItem());
+            marcaProducto = rs.getInt("idmarcaproducto");
+            stock = (Integer) spnStock.getValue();
+            nombre = txtNombre.getText();
+            vigencia = chkVigencia.isSelected();
+            precio = Float.parseFloat(txtPrecio.getText());
+            id = Integer.parseInt(txtId.getText());
+
+            objProducto.modificarProducto(id, nombre, stock, vigencia, precio, tipoProducto, marcaProducto);
+            JOptionPane.showMessageDialog(this, "PRODUCTO CORRECTAMENTE MODIFICADO");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al buscar uno de los datos en la base de datos \n" + e);
+        } catch (NullPointerException c) {
+            JOptionPane.showMessageDialog(this, "uno de los campos esta mal seleccionados\n" + rs);
+        } catch (ClassNotFoundException cl) {
+            JOptionPane.showMessageDialog(this, "Uno de los campos no es valido\n" + cl);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al crear nuevo producto\n" + e);
+        }
+        //objProducto.registrarProducto(WIDTH, nombre, ABORT, rootPaneCheckingEnabled)
+        listar("");
+
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnDarsebajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarsebajaActionPerformed
+        int id = -1;
+               if (txtId.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this,"ESCOJA UN ID PARA ELIMINAR");
+           return;
+        }
+        try {
+            id = Integer.parseInt(txtId.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(rootPane, "ID incorrecto  \n" + e.getMessage());
+        }
+
+        try {
+            objProducto.darbajaProducto(id);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Error al dar de baja \n" + e.getMessage());
+        }
+        listar("");
+    }//GEN-LAST:event_btnDarsebajaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -568,17 +695,17 @@ obj.setVisible(true);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnDarsebaja;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnMarca;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnTipoProducto;
     private javax.swing.JComboBox<String> cboMarcaProducto;
     private javax.swing.JComboBox<String> cboTipoProducto;
     private javax.swing.JCheckBox chkVigencia;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -108,7 +108,7 @@ public class clsProducto {
     // Registrar nuevo producto
     public void registrarProducto(int id, String nombre, int stock, boolean estado,float precio, int idtipoProducto, int idmarcaproducto) throws Exception {
         strSQL = "INSERT INTO producto VALUES ("
-                + id + ", '" + nombre + "', " + stock + ", " + estado + ","+precio+"," + idtipoProducto + "," + idmarcaproducto + ")";
+                + id + ", '" + nombre + "', " + stock + ", " + estado + ","+precio+"," +idmarcaproducto + "," +  idtipoProducto + ")";
         try {
             objConectar.ejecutarBD(strSQL);
         } catch (Exception e) {
@@ -131,14 +131,36 @@ public class clsProducto {
 
     // Eliminar producto por ID
     public void eliminarProducto(int id) {
-        strSQL = "DELETE FROM producto WHERE idproducto = " + id;
+       String  strSQL[] = new String [2];
+               strSQL[1] = "DELETE FROM producto WHERE idproducto = " + id;
+               strSQL[0] = "DELETE FROM detalle_venta WHERE idproducto = " + id;
         try {
-            objConectar.ejecutarBD(strSQL);
+            objConectar.ejecutarBDTransacciones(strSQL);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-
+ 
+// Dar de baja
+    public void darbajaProducto(int id) throws Exception{
+        strSQL ="update producto set vigencia =false where idproducto = "+id;
+        try {
+            objConectar.ejecutarBD(strSQL);
+        } catch (Exception e) {
+            throw new Exception("\n"+e.getMessage());
+        }
+    }
+    
+    // recuperar producto
+    public void recuperarProducto(int id) throws Exception{
+        strSQL ="update producto set vigencia =true where idproducto = "+id;
+        try {
+            objConectar.ejecutarBD(strSQL);
+        } catch (Exception e) {
+            throw new Exception("\n"+e.getMessage());
+        }
+    }
+    
     // Generar nuevo ID para producto
     public Integer generarCodigoProducto() throws Exception {
         strSQL = "SELECT COALESCE(MAX(idproducto), 0) + 1 AS codigo FROM producto";

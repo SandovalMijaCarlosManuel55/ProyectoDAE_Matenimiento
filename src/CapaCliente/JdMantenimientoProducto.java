@@ -7,9 +7,12 @@ package CapaCliente;
 import CapaLogica.clsProducto;
 import java.awt.Point;
 import java.sql.ResultSet;
+import java.util.Comparator;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -51,24 +54,42 @@ public class JdMantenimientoProducto extends javax.swing.JDialog {
             rs = objProducto.listarIdNombre(dato);
 
             while (rs.next()) {
-                obj = new Object[7];
-                obj[0] = rs.getInt("idproducto");
-                obj[1] = rs.getString("producto");
-                obj[2] = rs.getInt("stock");
                 if (rs.getBoolean("vigencia")) {
-                    obj[3]= "Vigente";
-                } else {
-                    obj[3]= "No Vigente";
+
+                    obj = new Object[7];
+                    obj[0] = rs.getInt("idproducto");
+                    obj[1] = rs.getString("producto");
+                    obj[2] = rs.getInt("stock");
+                    if (rs.getBoolean("vigencia")) {
+                        obj[3] = "Vigente";
+                    }
+                    obj[4] = rs.getFloat("precioactual");
+                    obj[5] = rs.getString("tipoproducto");
+                    obj[6] = rs.getString("marcaproducto");
+                    mdl.addRow(obj);
                 }
-                obj[4] = rs.getFloat("precioactual");
-                obj[5] = rs.getString("tipoproducto");
-                obj[6] = rs.getString("marcaproducto");
-                mdl.addRow(obj);
+                tblProducto.setModel(mdl);
             }
-            tblProducto.setModel(mdl);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al listar \n" + e.getMessage());
         }
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(mdl);
+        Comparator<Object> numericComparator = (a, b) -> {
+            try {
+                Double n1 = Double.parseDouble(a.toString().trim());
+                Double n2 = Double.parseDouble(b.toString().trim());
+                return n1.compareTo(n2);
+            } catch (Exception e) {
+                return a.toString().compareTo(b.toString());
+            }
+        };
+
+        sorter.setComparator(0, numericComparator); // ID
+        sorter.setComparator(2, numericComparator); // STOCK
+        sorter.setComparator(4, numericComparator); // PRECIO
+
+        tblProducto.setRowSorter(sorter);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -78,8 +99,6 @@ public class JdMantenimientoProducto extends javax.swing.JDialog {
         pnlProducto = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txtbuscador = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
         btnGestionarPersona = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -96,16 +115,10 @@ public class JdMantenimientoProducto extends javax.swing.JDialog {
 
         txtbuscador.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
 
-        jComboBox1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox2.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         btnGestionarPersona.setBackground(new java.awt.Color(31, 41, 55));
         btnGestionarPersona.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btnGestionarPersona.setForeground(new java.awt.Color(255, 255, 255));
-        btnGestionarPersona.setText("Agregar Producto");
+        btnGestionarPersona.setText("Administrar Producto");
         btnGestionarPersona.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnGestionarPersona.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,7 +159,7 @@ public class JdMantenimientoProducto extends javax.swing.JDialog {
         });
         jScrollPane2.setViewportView(tblProducto);
 
-        jLabel1.setText("M");
+        jLabel1.setText("**");
 
         javax.swing.GroupLayout pnlProductoLayout = new javax.swing.GroupLayout(pnlProducto);
         pnlProducto.setLayout(pnlProductoLayout);
@@ -161,18 +174,15 @@ public class JdMantenimientoProducto extends javax.swing.JDialog {
                     .addGroup(pnlProductoLayout.createSequentialGroup()
                         .addGroup(pnlProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jScrollPane2)
-                            .addGroup(pnlProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlProductoLayout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addGroup(pnlProductoLayout.createSequentialGroup()
-                                    .addComponent(txtbuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(27, 27, 27)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnGestionarPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(499, 499, 499))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlProductoLayout.createSequentialGroup()
+                                .addComponent(txtbuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(279, 279, 279)
+                                .addComponent(btnGestionarPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(41, Short.MAX_VALUE))))
         );
         pnlProductoLayout.setVerticalGroup(
@@ -185,8 +195,6 @@ public class JdMantenimientoProducto extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtbuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGestionarPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -224,8 +232,6 @@ public class JdMantenimientoProducto extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnGestionarPersona;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;

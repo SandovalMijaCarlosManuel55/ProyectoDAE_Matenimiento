@@ -389,6 +389,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
         JdMantenimientoProducto objProducto = new JdMantenimientoProducto(this, false);
+       objProducto.setLocationRelativeTo(this);
         objProducto.setVisible(true);
     }//GEN-LAST:event_btnProductosActionPerformed
 

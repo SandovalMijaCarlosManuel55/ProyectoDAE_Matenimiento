@@ -81,19 +81,25 @@ public class JdGestionarMarca extends javax.swing.JDialog {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         jLabel3.setText("Mantenimiento de Marca");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        txtIdMarca.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+
+        txtNombre.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jLabel1.setText("id:");
 
-        jLabel2.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jLabel2.setText("Nombre:");
 
-        btnBuscar.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnBuscar.setBackground(new java.awt.Color(31, 41, 55));
+        btnBuscar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar.setText("buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,7 +143,7 @@ public class JdGestionarMarca extends javax.swing.JDialog {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        tblMarca.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        tblMarca.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tblMarca.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -184,7 +190,9 @@ public class JdGestionarMarca extends javax.swing.JDialog {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        btnNuevo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnNuevo.setBackground(new java.awt.Color(31, 41, 55));
+        btnNuevo.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnNuevo.setForeground(new java.awt.Color(255, 255, 255));
         btnNuevo.setText("Nuevo");
         btnNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -192,7 +200,9 @@ public class JdGestionarMarca extends javax.swing.JDialog {
             }
         });
 
-        btnModificar.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnModificar.setBackground(new java.awt.Color(31, 41, 55));
+        btnModificar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnModificar.setForeground(new java.awt.Color(255, 255, 255));
         btnModificar.setText("Modificar");
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -200,7 +210,9 @@ public class JdGestionarMarca extends javax.swing.JDialog {
             }
         });
 
-        btnEliminar.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnEliminar.setBackground(new java.awt.Color(31, 41, 55));
+        btnEliminar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -208,7 +220,9 @@ public class JdGestionarMarca extends javax.swing.JDialog {
             }
         });
 
-        btnSalir.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnSalir.setBackground(new java.awt.Color(31, 41, 55));
+        btnSalir.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
         btnSalir.setText("Salir");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -216,7 +230,9 @@ public class JdGestionarMarca extends javax.swing.JDialog {
             }
         });
 
-        btnLimpiar.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnLimpiar.setBackground(new java.awt.Color(31, 41, 55));
+        btnLimpiar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnLimpiar.setForeground(new java.awt.Color(255, 255, 255));
         btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
