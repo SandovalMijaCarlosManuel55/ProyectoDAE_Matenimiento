@@ -25,7 +25,8 @@ public class clsTipoVehiculo {
             throw new Exception("Error al listar tipos de vehiculos -> " + ex.getMessage());
         }
     }
-
+    
+    
     public Integer generarCodigoTipoVehiculo() throws Exception {
         strSQL = "Select COALESCE(Max(idTipoVehiculo),0)+1 as codigo from tipoVehiculo";
 

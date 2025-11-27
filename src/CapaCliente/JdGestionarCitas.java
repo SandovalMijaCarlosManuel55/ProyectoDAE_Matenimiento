@@ -8,6 +8,7 @@ import static CapaCliente.JdVentas.extraerColumnas;
 import CapaLogica.clsCita;
 import CapaLogica.clsCliente;
 import CapaLogica.clsServicio;
+import CapaLogica.clsTipoVehiculo;
 import CapaLogica.clsVehiculo;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
@@ -34,6 +35,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
 
     clsCliente objCliente = new clsCliente();
     clsVehiculo objVehiculo = new clsVehiculo();
+    clsTipoVehiculo objTipoVehiculo = new clsTipoVehiculo();
     clsCita objCita = new clsCita();
     clsServicio objServicio = new clsServicio();
     Boolean nuevo = true;
@@ -126,13 +128,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 txtFecha.setText(sdf.format(fechaCita));
             }
-            // Si txtFecha es un JDateChooser, usarías:
-            // jdcFecha.setDate(fechaCita);
 
-
-            // --- 2. Cargar Vehículos del Cliente ---
-            
-            // Debemos cargar los vehículos de ese cliente manualmente
             cboVehiculo.setEnabled(true); // Lo activamos
             cboVehiculo.removeAllItems(); // Limpiamos ítems por si acaso
 
@@ -157,7 +153,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
             float precio = rsServicios.getFloat("precioventa"); 
             int duracion = rsServicios.getInt("tiempoestimado"); 
             String tipo = rsServicios.getString("tipovehiculo"); 
-            boolean estado = rsServicios.getBoolean("estado"); 
+            String estado = rsServicios.getString("estado"); 
 
             agregarServicio(codigo, nombre, precio, duracion, tipo, estado);
         }
@@ -188,7 +184,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         tblDetalle.setRowHeight(22);
     }
     
-    public void agregarServicio(int codigo, String nombre, float precio, int duracion, String tipo, boolean estado) {
+    public void agregarServicio(int codigo, String nombre, float precio, int duracion, String tipo, String estado) {
         modelo.addRow(new Object[]{codigo, nombre, precio, duracion, tipo, estado});
         actualizarTotal();
     }
@@ -581,11 +577,30 @@ public class JdGestionarCitas extends javax.swing.JDialog {
             String comentario = txtComentario.getText();
             String fechaRecojo = txtFecha.getText();
             String valor = cboVehiculo.getSelectedItem().toString();
+            Integer idmodeloVehiculoBD;
+            String tipoVehiculoBD = "";
             String placaVehiculo = valor.substring(Math.max(0, valor.length() - 7));
             Integer idVehiculo = 0;
-            ResultSet rsVehiculo = objVehiculo.buscarVehiculoPorPlaca(placaVehiculo); 
+            Integer idTipoVehiculo;
+            ResultSet rsVehiculo = objVehiculo.buscarVehiculoPorPlaca(placaVehiculo);
+            
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            sdf.setLenient(false);
+            Date fechaEnvio = sdf.parse(fecha);
+            Date fechaRecojo1 = sdf.parse(fechaRecojo);
+            Boolean errorDeTipo = false;
+            
             while(rsVehiculo.next()){
                     idVehiculo = rsVehiculo.getInt("idvehiculo");
+                    idmodeloVehiculoBD = rsVehiculo.getInt("idmodelovehiculo");
+                    ResultSet rsModeloVehiculo = objVehiculo.listarModeloVehiculoPorid(idmodeloVehiculoBD);
+                    while(rsModeloVehiculo.next()){
+                        idTipoVehiculo = rsModeloVehiculo.getInt("idtipovehiculo");
+                        ResultSet rsTipoVehiculo = objTipoVehiculo.buscarTipoVehiculo(idTipoVehiculo);
+                        while(rsTipoVehiculo.next()){
+                        tipoVehiculoBD = rsTipoVehiculo.getString("tipovehiculo");                        
+                    }
+                    }
                 }
             Integer idTrabajador = 1;
             int filas = tblDetalle.getRowCount();
@@ -593,19 +608,34 @@ public class JdGestionarCitas extends javax.swing.JDialog {
             if (txtFecha.equals("") || cboClientes.getSelectedItem().toString().equals("")) {
                 JOptionPane.showMessageDialog(this, "Debe llenar todos los campos obligatorios");
             }else{
-                if (tblDetalle.getRowCount() < 1) {
-                    JOptionPane.showMessageDialog(this, "Seleccione almenos un servicio");
+                if (fechaRecojo1.before(fechaEnvio)) {
+                    JOptionPane.showMessageDialog(this, "La fecha de recojo no puede ser anterior a la fecha actual");
                 }else{
-                    if(nuevo == true){
-                        objCita.registrar(filas, id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador, tblDetalle);
-                        }else{
-                            objCita.modificar(id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador, tblDetalle);
+                    if (tblDetalle.getRowCount() < 1) {
+                        JOptionPane.showMessageDialog(this, "Seleccione almenos un servicio");
+                    }else{
+                        for (int i = 0; i < tblDetalle.getRowCount(); i++) {
+                            String tipoServicioTabla = tblDetalle.getValueAt(i, 4).toString();
+                            if (!tipoServicioTabla.equals(tipoVehiculoBD)) {
+                                errorDeTipo = true;
+                                break; 
+                            }
                         }
-                        int[] columnasAPasar = {1,2, 3};
-                        Object[][] datosFiltrados = extraerColumnas(this.tblDetalle, columnasAPasar);
-                        String[] encabezados = {"Servicio", "Precio", "Tipo de Vehiculo"};
-                        JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha, id, tipoComprobante, true, cboVehiculo.getSelectedItem().toString());
-                        dialogDestino.setVisible(true);
+                        if (errorDeTipo == true) {
+                            JOptionPane.showMessageDialog(this, "Los tipos de vehiculos deben coincidir (" + tipoVehiculoBD + ")");
+                        }else{
+                                if(nuevo == true){
+                                objCita.registrar(filas, id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador, tblDetalle);
+                                }else{
+                                    objCita.modificar(id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador, tblDetalle);
+                                }
+                                int[] columnasAPasar = {1,2, 4};
+                                Object[][] datosFiltrados = extraerColumnas(this.tblDetalle, columnasAPasar);
+                                String[] encabezados = {"Servicio", "Precio", "Tipo de Vehiculo"};
+                                JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha, id, tipoComprobante, true, cboVehiculo.getSelectedItem().toString());
+                                dialogDestino.setVisible(true);
+                        }
+                    }
                 }
             }
             

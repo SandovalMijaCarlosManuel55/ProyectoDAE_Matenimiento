@@ -65,13 +65,19 @@ public class JdSeleccionarServicio extends javax.swing.JDialog {
             rsServicioTipo = objServicio.listarServicio();
 
             while (rsServicioTipo.next()) {
+                String vigencia = "";
+                if (rsServicioTipo.getBoolean("estado")==true) {
+                    vigencia = "Vigente";
+                }else{
+                    vigencia = "No vigente";
+                }
                 registro = new Vector();
                 registro.add(0, rsServicioTipo.getInt("idServicio"));
                 registro.add(1, rsServicioTipo.getString("servicio"));
                 registro.add(2, rsServicioTipo.getFloat("precioActual"));
                 registro.add(3, rsServicioTipo.getString("duracion"));
                 registro.add(4, rsServicioTipo.getString("tipoVehiculo"));
-                registro.add(5, rsServicioTipo.getBoolean("estado"));
+                registro.add(5, vigencia);
                 modelo.addRow(registro);
             }
             tblServicios.setModel(modelo);
@@ -103,16 +109,19 @@ public class JdSeleccionarServicio extends javax.swing.JDialog {
             float precio = Float.parseFloat(modelo.getValueAt(fila, 2).toString());
             int duracion = Integer.parseInt(modelo.getValueAt(fila, 3).toString());
             String tipo = (String) modelo.getValueAt(fila, 4);
-            boolean estado = Boolean.parseBoolean(modelo.getValueAt(fila, 5).toString());
-            
-            citas.agregarServicio(codigo, nombre, precio,duracion , tipo, estado);
+            String estado = modelo.getValueAt(fila, 5).toString();
+            if (estado.equals("No vigente")) {
+               JOptionPane.showMessageDialog(this, "El servicio debe estar vigente", "Error", JOptionPane.ERROR_MESSAGE); 
+            }else{
+               citas.agregarServicio(codigo, nombre, precio,duracion , tipo, estado);
             listarServicio();
             int opcion = JOptionPane.showConfirmDialog(this, "Servicio añadido con éxito, ¿Desea agregar otro servicio?", "Sistema", JOptionPane.YES_NO_OPTION);
             if (opcion == JOptionPane.NO_OPTION) {
                 dispose();
+            } 
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al seleccionar el servicio: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al seleccionar el servicio, no tiene un tipo asignado ", "Error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
     }

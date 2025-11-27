@@ -93,10 +93,8 @@ public class clsCita {
             for (int i = 0; i < ctd; i++) {
                 int id = objTV.obtenerCodigoTipoVehiculo(servicios.getValueAt(i, 4).toString());
             
-                String strSQL1 = "insert into Detalle_Cita(precioventa,cantidad,idcita,idtipovehiculo,idservicio) values (" + servicios.getValueAt(i, 2) + "', " +
+                String strSQL1 = "insert into Detalle_Cita(precioventa,cantidad,idcita,idtipovehiculo,idservicio) values ("+servicios.getValueAt(i, 2) + ", " +
                         1 + ", " + idcita + ", " + id + ", " + servicios.getValueAt(i, 0)+"); ";
-                objConectar.ejecutarBD(strSQL1);
-
                 sent.executeUpdate(strSQL1);
                 
             }
