@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteN3" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f46a969f-1125-4cdf-a4ba-d09f233232ce">
+	<property name="ireport.zoom" value="1.3310000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="197"/>
+	<queryString>
+		<![CDATA[SELECT
+    mv.marcavehiculo AS marca,
+    s.servicio AS falla_o_servicio,
+    COUNT(dc.iddetallecita) AS frecuencia
+FROM
+    marca_vehiculo mv
+JOIN
+    modelo_vehiculo mod ON mv.idmarcavehiculo = mod.idmarcavehiculo
+JOIN
+    vehiculo v ON mod.idmodelovehiculo = v.idmodelovehiculo
+JOIN
+    cita c ON v.idvehiculo = c.idvehiculo
+JOIN
+    detalle_cita dc ON c.idcita = dc.idcita
+JOIN
+    servicio s ON dc.idservicio = s.idservicio
+
+GROUP BY
+    mv.marcavehiculo, s.servicio
+ORDER BY
+    mv.marcavehiculo, frecuencia DESC;]]>
+	</queryString>
+	<field name="marca" class="java.lang.String"/>
+	<field name="falla_o_servicio" class="java.lang.String"/>
+	<field name="frecuencia" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="239" splitType="Stretch">
+			<line>
+				<reportElement x="26" y="123" width="503" height="1" forecolor="#1F2937" uuid="c126e70f-e9fb-453b-8d0a-5255f21cd185"/>
+			</line>
+			<rectangle>
+				<reportElement x="0" y="228" width="555" height="11" forecolor="#FFFFFF" backcolor="#1F2937" uuid="71ebab5a-cfa9-46eb-a163-4175927fc035"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="33" y="154" width="488" height="66" forecolor="#1F2937" backcolor="#1F2937" uuid="5931d8d9-60f7-48bd-8110-36fed6b25f1a"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="24" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Fallas Comunes por Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="73" width="290" height="14" uuid="a3ea56b6-09dd-413b-afb8-41c0b12eddb5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Av. Miguel Grau 892 - La Victoria - Chiclayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="83" width="290" height="14" uuid="37e70e8a-58c1-4ee7-be9e-83f05eaa20b7"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Jr. Callao 134 - Miraflores - Chiclayo]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" forecolor="#FFFFFF" backcolor="#1F2937" uuid="02a5a486-d24d-4129-ae00-0295386ab6f7"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="31" y="129" width="118" height="17" forecolor="#1F2937" backcolor="#1F2937" uuid="b8116ab0-f31c-4d69-b2de-5d5471cb20df"/>
+				<textElement>
+					<font fontName="Verdana" size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[REPORTE SOBRE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="208" y="24" width="290" height="49" forecolor="#1F2937" backcolor="#1F2937" uuid="82b92842-69b5-41e1-82e0-96550a649d19"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="36" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA["WASHYCAR"]]></text>
+			</staticText>
+			<image>
+				<reportElement x="34" y="24" width="146" height="83" uuid="4edf7d7b-919e-4db7-9784-5b7b44bf6225"/>
+				<imageExpression><![CDATA["C:\\Users\\piero\\OneDrive\\Documentos\\NetBeansProjects\\ProyectoDAE_Matenimiento\\src\\Recursos\\logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="208" y="93" width="290" height="14" uuid="a47d8c19-677b-4a3d-ae5e-7c6be4abdd32"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Telf. 265-6091 / 998657423 / 968754123]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="15" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="234" y="41" width="100" height="20" uuid="9d81ec13-5ac5-46cc-bde2-ce66cf1e83e9"/>
+				<textElement>
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Falla o Servicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="41" width="100" height="20" uuid="1eed7b60-c5e1-4adb-b333-15138646a4a6"/>
+				<textElement>
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="438" y="41" width="100" height="20" uuid="ca206408-4b04-4d57-b786-15c09cc210da"/>
+				<textElement>
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Frecuencia]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="49" splitType="Stretch">
+			<textField>
+				<reportElement x="20" y="0" width="132" height="20" uuid="f44a56b7-4378-46e5-b9f2-258d2d1dd30e"/>
+				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="33" width="554" height="1" uuid="2923103a-04bf-420e-a373-c04f7a9db51f"/>
+			</line>
+			<line>
+				<reportElement x="376" y="0" width="1" height="49" uuid="6f320e9b-1d9a-4600-a71f-3627d13f1c9c"/>
+			</line>
+			<textField>
+				<reportElement x="195" y="0" width="171" height="20" uuid="24fa9d1f-7bab-432d-a0bd-0141cacd6c5f"/>
+				<textFieldExpression><![CDATA[$F{falla_o_servicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="456" y="0" width="59" height="20" uuid="8baea67d-eb06-4b69-a17d-ec8b1570b483"/>
+				<textFieldExpression><![CDATA[$F{frecuencia}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="175" y="0" width="1" height="49" uuid="da9f7e53-16d9-44b9-86f9-690729e45804"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="63" splitType="Stretch">
+			<textField>
+				<reportElement x="439" y="18" width="67" height="28" uuid="e428f489-3773-4afd-b7f0-6a0908a00fb6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Verdana"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" forecolor="#FFFFFF" backcolor="#1F2937" uuid="040ef3c3-bb3d-46da-a730-c69bbf123aba"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="26" y="18" width="290" height="14" uuid="0f79d073-1b80-4e19-a9dd-4e949c6845ea"/>
+				<textElement>
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Encargado: Vélez Vivanco Jean Piero]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="506" y="18" width="32" height="28" uuid="7439aa2c-1414-48b5-8ac3-79c651852a46"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="26" y="31" width="290" height="15" uuid="ec1d32f6-dde1-4172-931b-ace24d9c8415"/>
+				<textElement>
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

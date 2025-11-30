@@ -154,16 +154,16 @@ public class JdReportes extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String reporte = cboReportes.getSelectedItem().toString();
         if (reporte.equals("Ranking de Servicios: Popularidad vs. Facturación")) {
-            reporte = "ReporteDae.jasper";
+            reporte = "ReporteN1.jasper";
             verReporte(reporte);
             
         }
         if (reporte.equals("Eficiencia del Taller (Ingresos vs. Tiempo Estimado)")) {
-            reporte = "ReporteDae2.jasper";
+            reporte = "ReporteN2.jasper";
             verReporte(reporte);
         }
         if (reporte.equals("Fallas Comunes por Marca")) {
-            reporte = "ReporteDae3.jasper";
+            reporte = "ReporteN3.jasper";
             verReporte(reporte);
         }
     }//GEN-LAST:event_jButton1ActionPerformed

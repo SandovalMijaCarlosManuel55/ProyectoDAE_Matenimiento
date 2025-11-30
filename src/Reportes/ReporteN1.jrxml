@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteN1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="79cd64d3-5cb5-4014-88a7-43281acf9420">
+	<property name="ireport.zoom" value="1.1000000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="55"/>
+	<queryString>
+		<![CDATA[SELECT
+    s.servicio AS "Nombre del Servicio",
+    COUNT(dc.idservicio) AS "Cantidad de Veces Solicitado",
+    SUM(dc.precioventa * dc.cantidad) AS "Ingresos Totales Generados",
+    ROUND(AVG(dc.precioventa), 2) AS "Precio Promedio (Ticket)"
+FROM
+    servicio s
+JOIN
+    detalle_cita dc ON s.idservicio = dc.idservicio
+JOIN
+    cita c ON dc.idcita = c.idcita
+GROUP BY
+    s.servicio
+ORDER BY
+    "Ingresos Totales Generados" DESC;]]>
+	</queryString>
+	<field name="Nombre del Servicio" class="java.lang.String"/>
+	<field name="Cantidad de Veces Solicitado" class="java.lang.Long"/>
+	<field name="Ingresos Totales Generados" class="java.math.BigDecimal"/>
+	<field name="Precio Promedio (Ticket)" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="233" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" forecolor="#FFFFFF" backcolor="#1F2937" uuid="39fd5ce8-014a-453f-9a87-4750d6185b81"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="208" y="83" width="290" height="14" uuid="9d1117bd-77d0-4e7c-ada8-eeb25a43fa4d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Jr. Callao 134 - Miraflores - Chiclayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="93" width="290" height="14" uuid="0eb55209-79ea-4c2e-b8eb-a0eb8f8c2ea6"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Telf. 265-6091 / 998657423 / 968754123]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="73" width="290" height="14" uuid="67ddc408-5554-46c9-9a51-3021c92319b9"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Av. Miguel Grau 892 - La Victoria - Chiclayo]]></text>
+			</staticText>
+			<line>
+				<reportElement x="26" y="123" width="503" height="1" forecolor="#1F2937" uuid="8b34b4de-2a08-4b6f-b8bc-0985f856239e"/>
+			</line>
+			<staticText>
+				<reportElement mode="Transparent" x="31" y="129" width="118" height="17" forecolor="#1F2937" backcolor="#1F2937" uuid="a90594a8-6c1d-4be9-a1b6-c7cd2a1db540"/>
+				<textElement>
+					<font fontName="Verdana" size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[REPORTE SOBRE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="208" y="24" width="290" height="49" forecolor="#1F2937" backcolor="#1F2937" uuid="f546bd30-fbaf-4f20-948d-89704c914f8e"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="36" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA["WASHYCAR"]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="33" y="154" width="488" height="66" forecolor="#1F2937" backcolor="#1F2937" uuid="e51e8632-4a2c-4159-9ae0-db9ab9de518b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="24" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Ranking de Servicios: Popularidad vs. Facturación]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="222" width="555" height="11" forecolor="#FFFFFF" backcolor="#1F2937" uuid="b8bb212a-2ee9-4c89-95da-731bd37a1018"/>
+			</rectangle>
+			<image>
+				<reportElement x="34" y="24" width="146" height="83" uuid="3daf89c0-5c36-4660-812d-83ac90a56f15"/>
+				<imageExpression><![CDATA["C:\\Users\\piero\\OneDrive\\Documentos\\NetBeansProjects\\ProyectoDAE_Matenimiento\\src\\Recursos\\logo.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="9" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="211" y="41" width="100" height="20" uuid="7a721e29-d3d5-4f11-abc2-c9f3d8c50cba"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad de Veces Solicitado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="345" y="41" width="84" height="20" uuid="7de118b1-a5af-4134-88e4-4de72940f87a"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Ingresos Totales Generados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="453" y="41" width="85" height="20" uuid="dc1a8cbf-c969-480a-9c67-8a1b02056980"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Precio Promedio (Ticket)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="41" width="131" height="20" uuid="c562d4f2-eedd-40f9-b9b6-d33fa3de8b85"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Nombre del Servicio]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="39" splitType="Stretch">
+			<textField>
+				<reportElement x="363" y="10" width="76" height="20" uuid="3575dd7b-0287-4a50-8100-9c379c159f2f"/>
+				<textFieldExpression><![CDATA[$F{Ingresos Totales Generados}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="10" width="21" height="20" uuid="41a69a45-7a28-49df-880f-4c1045ea66fd"/>
+				<textFieldExpression><![CDATA[$F{Cantidad de Veces Solicitado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="478" y="10" width="75" height="20" uuid="b0c3c8f1-c747-4db2-b789-438ccd378d81"/>
+				<textFieldExpression><![CDATA[$F{Precio Promedio (Ticket)}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="10" y="37" width="535" height="1" uuid="5059a892-8e1f-4daf-ac99-ad0afaa07b71"/>
+			</line>
+			<textField>
+				<reportElement x="10" y="10" width="170" height="20" uuid="3f499160-974e-4c4d-9774-431670548e3d"/>
+				<textFieldExpression><![CDATA[$F{Nombre del Servicio}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="197" y="0" width="1" height="39" uuid="d27a5734-83b4-472c-8517-a745e809092a"/>
+			</line>
+			<line>
+				<reportElement x="319" y="0" width="1" height="39" uuid="cd0343a7-6b29-4d43-912e-6cea021c634e"/>
+			</line>
+			<line>
+				<reportElement x="441" y="0" width="1" height="39" uuid="33097e39-0126-48f3-9d29-982e28923c63"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="26" y="31" width="290" height="15" uuid="570ecde1-6b2b-4912-b8b2-9a912c17865f"/>
+				<textElement>
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="506" y="18" width="32" height="28" uuid="a01f9e1f-0c23-41b3-97bf-55c64a682d8b"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" forecolor="#FFFFFF" backcolor="#1F2937" uuid="2051d996-b443-414a-b6ff-df65d2f9f27c"/>
+			</rectangle>
+			<textField>
+				<reportElement x="439" y="18" width="67" height="28" uuid="19acb848-9d64-4188-bf07-5aa2ea71a4b2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Verdana"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="26" y="18" width="290" height="14" uuid="8c665866-a433-4983-9c4b-f695f432c6a4"/>
+				<textElement>
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Encargado: Vélez Vivanco Jean Piero]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

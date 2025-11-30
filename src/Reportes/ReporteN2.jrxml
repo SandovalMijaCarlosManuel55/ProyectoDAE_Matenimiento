@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteN2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7bad5ca1-87d2-43a5-8154-79d7f7b4d4d5">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="222"/>
+	<queryString>
+		<![CDATA[SELECT
+    s.servicio AS nombre_servicio,
+    tv.tipovehiculo AS tipo_vehiculo,
+    t.precioactual AS precio_lista,
+    t.tiempoestimado AS minutos_estimados,
+    ROUND((t.precioactual / NULLIF(t.tiempoestimado, 0)) * 60, 2) AS ingreso_por_hora_teorico
+FROM
+    tarifario t
+JOIN
+    servicio s ON t.idservicio = s.idservicio
+JOIN
+    tipo_vehiculo tv ON t.idtipovehiculo = tv.idtipovehiculo
+ORDER BY
+    ingreso_por_hora_teorico DESC;]]>
+	</queryString>
+	<field name="nombre_servicio" class="java.lang.String"/>
+	<field name="tipo_vehiculo" class="java.lang.String"/>
+	<field name="precio_lista" class="java.math.BigDecimal"/>
+	<field name="minutos_estimados" class="java.lang.Integer"/>
+	<field name="ingreso_por_hora_teorico" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="239" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="33" y="154" width="488" height="66" forecolor="#1F2937" backcolor="#1F2937" uuid="50d72435-2b86-4cb5-b981-da2da41d49f9"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="24" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Eficiencia del Taller (Ingresos vs. Tiempo Estimado)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="73" width="290" height="14" uuid="70729513-91d7-4dbc-940d-461beb71b8c7"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Av. Miguel Grau 892 - La Victoria - Chiclayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="83" width="290" height="14" uuid="59f8c46a-2da9-4820-8216-8b269386f1b2"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Jr. Callao 134 - Miraflores - Chiclayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="208" y="24" width="290" height="49" forecolor="#1F2937" backcolor="#1F2937" uuid="8b31c2ca-ea1a-4fee-b516-381163edddc4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="36" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA["WASHYCAR"]]></text>
+			</staticText>
+			<line>
+				<reportElement x="26" y="123" width="503" height="1" forecolor="#1F2937" uuid="f169c467-0f7f-4ba3-ad26-3d1c7900c581"/>
+			</line>
+			<staticText>
+				<reportElement x="208" y="93" width="290" height="14" uuid="67e69688-09e0-4d2f-8552-583bf25710f3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Telf. 265-6091 / 998657423 / 968754123]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" forecolor="#FFFFFF" backcolor="#1F2937" uuid="2ec5fd5f-99a7-4f4d-877f-7ca63227552e"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="31" y="129" width="118" height="17" forecolor="#1F2937" backcolor="#1F2937" uuid="e2f49294-544a-4e0c-9db9-262432c53567"/>
+				<textElement>
+					<font fontName="Verdana" size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[REPORTE SOBRE:]]></text>
+			</staticText>
+			<image>
+				<reportElement x="34" y="24" width="146" height="83" uuid="754eebd6-b78b-429b-a946-7eb7de331576"/>
+				<imageExpression><![CDATA["C:\\Users\\piero\\OneDrive\\Documentos\\NetBeansProjects\\ProyectoDAE_Matenimiento\\src\\Recursos\\logo.png"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="0" y="228" width="555" height="11" forecolor="#FFFFFF" backcolor="#1F2937" uuid="96db3949-6f93-46fb-b02a-7ac9f246f24d"/>
+			</rectangle>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="17" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement x="300" y="10" width="32" height="20" uuid="9253fd79-61d2-4981-8beb-4c008485aaa2"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Precio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="54" y="10" width="71" height="20" uuid="af840fd1-c318-47b7-8325-af088c7825c2"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Servicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="10" width="41" height="20" uuid="b9fb7ac4-16bb-408a-a5a7-8b58977b4b28"/>
+				<textElement>
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Minutos Estimados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="172" y="10" width="110" height="20" uuid="06875218-4573-4b0b-982c-de8b62f7b8a1"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Tipo de Vehículo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="489" y="10" width="39" height="20" uuid="70fb6e2f-66d5-4063-b0ad-9103528f95ea"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Ingreso Teórico]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="49" splitType="Stretch">
+			<textField>
+				<reportElement x="502" y="0" width="53" height="20" uuid="61b739cc-bc5d-4119-8473-033f41195aef"/>
+				<textFieldExpression><![CDATA[$F{ingreso_por_hora_teorico}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="37" width="554" height="1" uuid="2d172725-612a-44b5-8de1-c006acb8c3c8"/>
+			</line>
+			<line>
+				<reportElement x="372" y="0" width="1" height="49" uuid="3320edae-0925-4bea-a0cd-8735b71091ce"/>
+			</line>
+			<textField>
+				<reportElement x="175" y="0" width="110" height="20" uuid="0843bef2-bfef-4a60-bbdf-6ebb8f26e95d"/>
+				<textFieldExpression><![CDATA[$F{tipo_vehiculo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="412" y="0" width="42" height="20" uuid="8f703f98-fadc-4060-affa-a66153fafa34"/>
+				<textFieldExpression><![CDATA[$F{minutos_estimados}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="161" y="0" width="1" height="49" uuid="2086e43a-7b04-42a6-8723-c9b251a81dc3"/>
+			</line>
+			<line>
+				<reportElement x="269" y="0" width="1" height="49" uuid="ae293536-ac3a-4b88-9cb9-6642e52db75f"/>
+			</line>
+			<textField>
+				<reportElement x="-2" y="10" width="143" height="20" uuid="e909fcc0-345e-4f0a-a3b4-c963752fc1f8"/>
+				<textFieldExpression><![CDATA[$F{nombre_servicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="311" y="10" width="59" height="20" uuid="21b3a9c1-03d4-4e74-8c92-3c350eba4d33"/>
+				<textFieldExpression><![CDATA[$F{precio_lista}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="471" y="0" width="1" height="49" uuid="41676fc5-c7d7-495f-ad8d-d14d8b7ca726"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="62" splitType="Stretch">
+			<staticText>
+				<reportElement x="26" y="18" width="290" height="14" uuid="20429010-1381-493a-a993-779e19796c7c"/>
+				<textElement>
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[Encargado: Vélez Vivanco Jean Piero]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="506" y="18" width="32" height="28" uuid="5f47afd7-fd3f-40ca-9e85-3db0f980652c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="26" y="31" width="290" height="15" uuid="cc0819a3-6d49-4b57-9a56-d9d6c9aeb38f"/>
+				<textElement>
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="439" y="18" width="67" height="28" uuid="bdf20166-0b93-484f-b518-26b4dfbf26d6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Verdana"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" forecolor="#FFFFFF" backcolor="#1F2937" uuid="73546c8e-9f46-48c3-bd4e-50628f2e743c"/>
+			</rectangle>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
