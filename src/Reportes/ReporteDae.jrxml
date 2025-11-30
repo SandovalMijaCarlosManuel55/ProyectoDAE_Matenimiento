@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteDae" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c1fdb5fd-b197-4221-bbb4-5489f9ab5757">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+    s.servicio AS "Nombre del Servicio",
+    COUNT(dc.idservicio) AS "Cantidad de Veces Solicitado",
+    SUM(dc.precioventa * dc.cantidad) AS "Ingresos Totales Generados",
+    ROUND(AVG(dc.precioventa), 2) AS "Precio Promedio (Ticket)"
+FROM
+    servicio s
+JOIN
+    detalle_cita dc ON s.idservicio = dc.idservicio
+JOIN
+    cita c ON dc.idcita = c.idcita
+GROUP BY
+    s.servicio
+ORDER BY
+    "Ingresos Totales Generados" DESC;]]>
+	</queryString>
+	<field name="Nombre del Servicio" class="java.lang.String"/>
+	<field name="Cantidad de Veces Solicitado" class="java.lang.Long"/>
+	<field name="Ingresos Totales Generados" class="java.math.BigDecimal"/>
+	<field name="Precio Promedio (Ticket)" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="148" y="24" width="280" height="55" uuid="93e859c8-a1aa-4ef4-8567-06753b05ba35"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ranking de Servicios: Popularidad vs. Facturación]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="328" y="41" width="100" height="20" uuid="d4a8fe74-e028-4b3e-a013-7e43e32973c2"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Ingresos Totales Generados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="48" y="41" width="100" height="20" uuid="8997d193-d19c-4eb7-9e58-adb941757abe"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Nombre del Servicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="452" y="41" width="100" height="20" uuid="e9ed66ef-6735-41e2-8a65-7c19c22264ab"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Precio Promedio (Ticket)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="41" width="100" height="20" uuid="f79c52b2-f167-4798-90ae-0df8372da851"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad de Veces Solicitado]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="39" splitType="Stretch">
+			<line>
+				<reportElement x="314" y="0" width="1" height="39" uuid="d7f0e4e4-b917-4b83-8458-69c619117042"/>
+			</line>
+			<textField>
+				<reportElement x="347" y="0" width="76" height="20" uuid="2cd2d6d6-84ea-4eb4-9e7c-7de2ac79edf4"/>
+				<textFieldExpression><![CDATA[$F{Ingresos Totales Generados}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="12" y="27" width="535" height="1" uuid="d43a76c2-e63c-4279-8aea-12e90ca490bb"/>
+			</line>
+			<textField>
+				<reportElement x="472" y="0" width="75" height="20" uuid="62f73ffa-2561-4909-915f-c78afa4fc580"/>
+				<textFieldExpression><![CDATA[$F{Precio Promedio (Ticket)}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="244" y="0" width="21" height="20" uuid="d4c4300b-af65-4737-aabd-d1af88ab57b2"/>
+				<textFieldExpression><![CDATA[$F{Cantidad de Veces Solicitado}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="436" y="0" width="1" height="39" uuid="866520fe-53ec-4cdc-84a4-c7c0d847c792"/>
+			</line>
+			<line>
+				<reportElement x="192" y="0" width="1" height="39" uuid="ae72b3e5-d961-4f7a-ab97-5b2c8a5a789b"/>
+			</line>
+			<textField>
+				<reportElement x="12" y="0" width="170" height="20" uuid="26f19c88-f0b3-4b1d-aea6-68f38bec6b88"/>
+				<textFieldExpression><![CDATA[$F{Nombre del Servicio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="34" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="77" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="12" y="34" width="100" height="20" uuid="f92f65ea-4760-43b1-9be7-8a038229c598"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="427" y="54" width="80" height="20" uuid="46424ab5-1733-4baa-b4ca-d0b56ae838cf"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="507" y="54" width="40" height="20" uuid="4daf7c00-8528-4eb6-b036-f3f5d22c6d9d"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH.mm">
+				<reportElement x="12" y="54" width="100" height="20" uuid="6a3d5b93-9249-4d60-926b-62460fccc906"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

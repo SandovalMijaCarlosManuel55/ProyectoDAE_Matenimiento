@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteDae3" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0a00402b-c891-40aa-9a45-5a683d7ee4c5">
+	<property name="ireport.zoom" value="1.331000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+    mv.marcavehiculo AS marca,
+    s.servicio AS falla_o_servicio,
+    COUNT(dc.iddetallecita) AS frecuencia
+FROM
+    marca_vehiculo mv
+JOIN
+    modelo_vehiculo mod ON mv.idmarcavehiculo = mod.idmarcavehiculo
+JOIN
+    vehiculo v ON mod.idmodelovehiculo = v.idmodelovehiculo
+JOIN
+    cita c ON v.idvehiculo = c.idvehiculo
+JOIN
+    detalle_cita dc ON c.idcita = dc.idcita
+JOIN
+    servicio s ON dc.idservicio = s.idservicio
+
+GROUP BY
+    mv.marcavehiculo, s.servicio
+ORDER BY
+    mv.marcavehiculo, frecuencia DESC;]]>
+	</queryString>
+	<field name="marca" class="java.lang.String"/>
+	<field name="falla_o_servicio" class="java.lang.String"/>
+	<field name="frecuencia" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="142" y="45" width="280" height="34" uuid="72ec8aa9-b514-48b5-9adf-ec3868d11c09"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fallas Comunes por Marca]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="34" splitType="Stretch">
+			<staticText>
+				<reportElement x="42" y="14" width="100" height="20" uuid="8722c52f-2302-49cb-bfe5-0eafa5dce83b"/>
+				<textElement>
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="233" y="14" width="100" height="20" uuid="d5740545-d4d7-483a-8708-0d6b1f542a65"/>
+				<textElement>
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Falla o Servicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="437" y="14" width="100" height="20" uuid="8029f5ea-a89a-41b7-9584-0025562b6820"/>
+				<textElement>
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Frecuencia]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="49" splitType="Stretch">
+			<textField>
+				<reportElement x="22" y="0" width="132" height="20" uuid="e6c25441-6436-4991-a471-dd001b9a73ac"/>
+				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="197" y="0" width="171" height="20" uuid="bb15418d-0118-4f7c-b20b-4b2fc822f153"/>
+				<textFieldExpression><![CDATA[$F{falla_o_servicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="458" y="0" width="59" height="20" uuid="6aa110cf-5f5c-4273-8bc2-707898e9b114"/>
+				<textFieldExpression><![CDATA[$F{frecuencia}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="3" y="33" width="554" height="1" uuid="1e2219e3-0711-4f85-98a7-ce6b8f84d919"/>
+			</line>
+			<line>
+				<reportElement x="173" y="0" width="1" height="49" uuid="aeb32ba4-86f0-487c-93d5-bb5bcd687bdc"/>
+			</line>
+			<line>
+				<reportElement x="378" y="0" width="1" height="49" uuid="b410f437-de78-42cd-837b-6c0934481ae4"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="28" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="8" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="121" splitType="Stretch">
+			<textField>
+				<reportElement x="437" y="93" width="80" height="20" uuid="ac42f022-ee25-4db2-a81e-4713fe7a7fd1"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH.mm">
+				<reportElement x="22" y="93" width="100" height="20" uuid="920478d1-5326-4535-b56f-1642b78705e8"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="517" y="93" width="40" height="20" uuid="80b920d0-48e0-4608-98f6-b93472e6e7de"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="22" y="73" width="100" height="20" uuid="4613f36e-251d-4e10-8ae4-c4c7c416c5e2"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

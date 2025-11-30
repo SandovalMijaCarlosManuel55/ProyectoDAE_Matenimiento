@@ -368,7 +368,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
-        jdPrueba_reporte obj = new jdPrueba_reporte(this,true);
+        JdReportes obj = new JdReportes(this,true);
         obj.setLocationRelativeTo(this);
         obj.setVisible(true);
     }//GEN-LAST:event_btnReportesActionPerformed
