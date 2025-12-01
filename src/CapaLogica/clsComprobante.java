@@ -107,6 +107,25 @@ public class clsComprobante {
         return parteEntera + " soles con " + String.format("%02d", centavos) + "/100";
     }
     
-    
+    public String mostrarNuevoNumeroComprobante(String tipoComprobante) throws Exception{
+        strSQL = "select " + 
+                 " split_part(MAX(numcomprobante), '-', 1) || '-' || " +
+                 " LPAD((split_part(MAX(numcomprobante), '-', 2)::int + 1)::text, 8, '0') AS siguiente_num_comprobante" +
+                 " FROM comprobante_venta" +
+                 " WHERE tipocomprobante = '" + tipoComprobante + "';";
+        
+        String numComprobante;
+        try{
+            rs = objConectar.consultarBD(strSQL);
+            while (rs.next()) {                
+                numComprobante = rs.getString("siguiente_num_comprobante");
+                return numComprobante;
+            }
+            return "";
+        }
+        catch (Exception e){
+            throw new Exception("Error al obtener numero de comprobante -> " + e.getMessage());
+        }
+    }
 
 }

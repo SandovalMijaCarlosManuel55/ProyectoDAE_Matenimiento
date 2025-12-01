@@ -148,6 +148,27 @@ public class clsCliente {
             throw new Exception("Error al listar clientes --> " + e.getMessage());
         }
     }
+    
+    public String obtenerNumeroDocumento(String nombre) throws Exception{
+        strSQL = "select cli.numdocumento as nroDocumento " +
+                 "from cliente cli " +
+                 "inner join tipo_documento tp on tp.idtipodocumento = cli.idtipodocumento " +
+                 "left join persona per on cli.idcliente = per.idcliente " +
+                 "left join empresa emp on cli.idcliente = emp.idcliente " +
+                 "where per.persona = '" + nombre + "' or emp.razonsocial = '" + nombre + "';";
+        String nrodocumento;
+        try{
+            rs = objConectar.consultarBD(strSQL);
+            while (rs.next()) {                
+                nrodocumento = rs.getString("nroDocumento");
+                return nrodocumento;
+            }
+            return "";
+        }
+        catch (Exception e){
+            throw new Exception("Error al obtener numero de documento del cliente -> " + e.getMessage());
+        }
+    }
            //***********************************************************
     
     public clsCliente() {

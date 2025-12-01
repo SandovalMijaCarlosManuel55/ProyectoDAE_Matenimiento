@@ -15,6 +15,31 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Graphics2D;
+import java.io.FileOutputStream;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -69,41 +94,154 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         return suma;
     }
     
-    private void mostrarDatos(){
+    public static void exportarPanelAPdf(JPanel panel) {
+        // 1. Mostrar diálogo de guardar archivo
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar PDF");
+        // Filtro para asegurar la extensión .pdf
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos PDF (*.pdf)", "pdf");
+        fileChooser.setFileFilter(filter);
+        
+        int userSelection = fileChooser.showSaveDialog(panel);
+        
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            String path = fileChooser.getSelectedFile().getAbsolutePath();
+            
+            // Aseguramos que la extensión .pdf esté presente
+            if (!path.toLowerCase().endsWith(".pdf")) {
+                path += ".pdf";
+            }
+            
+            // 2. Definir el tamaño del documento PDF
+            int panelWidth = panel.getWidth();
+            int panelHeight = panel.getHeight();
+            Rectangle pagesize = new Rectangle(panelWidth, panelHeight);
+            
+            Document document = new Document(pagesize);
+            
+            try {
+                // 3. Crear el escritor PDF
+                PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
+                document.open();
+                
+                // 4. Obtener el contexto gráfico del PDF
+                PdfContentByte cb = writer.getDirectContent();
+                Graphics2D g2 = cb.createGraphics(panelWidth, panelHeight);
+                
+                // 5. Pintar el contenido del JPanel en el contexto gráfico del PDF
+                panel.printAll(g2); // Usamos printAll() para dibujar todos los componentes hijos
+                
+                g2.dispose(); // Liberar recursos
+                document.close();
+                
+                System.out.println("PDF creado exitosamente en: " + path);
+                javax.swing.JOptionPane.showMessageDialog(panel, 
+                        "¡PDF guardado con éxito!", 
+                        "Éxito", 
+                        javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(panel, 
+                        "Error al crear el PDF: " + e.getMessage(), 
+                        "Error", 
+                        javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    public static void exportarPanelAImagen(JPanel panel) {
+        
+        // 1. Mostrar diálogo de guardar archivo
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar Imagen");
+        
+        // Filtros de extensión para PNG y JPG
+        FileNameExtensionFilter pngFilter = new FileNameExtensionFilter("Imagen PNG (*.png)", "png");
+        FileNameExtensionFilter jpgFilter = new FileNameExtensionFilter("Imagen JPEG (*.jpg)", "jpg", "jpeg");
+        fileChooser.addChoosableFileFilter(pngFilter);
+        fileChooser.addChoosableFileFilter(jpgFilter);
+        fileChooser.setFileFilter(pngFilter); // Establecer PNG como opción por defecto
+
+        int userSelection = fileChooser.showSaveDialog(panel);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            
+            // 2. Determinar el formato y asegurar la extensión
+            String formatName = "png"; // PNG por defecto
+            String path = fileToSave.getAbsolutePath();
+            
+            // Determinar el formato basándose en el filtro seleccionado
+            if (fileChooser.getFileFilter() == jpgFilter) {
+                formatName = "jpg";
+            }
+            
+            // Asegurar que la extensión sea correcta
+            if (!path.toLowerCase().endsWith("." + formatName)) {
+                fileToSave = new File(path + "." + formatName);
+            }
+            
+            // 3. Crear el buffer de imagen con el tamaño del panel
+            Dimension d = panel.getSize();
+            // Creamos un BufferedImage de tipo RGB que representará la imagen final
+            BufferedImage image = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_RGB);
+
+            // 4. Obtener el contexto gráfico y dibujar el panel
+            Graphics g = image.getGraphics();
+            panel.printAll(g); // 'printAll' dibuja el JPanel y sus componentes
+            g.dispose(); // Liberar recursos del contexto gráfico
+
+            try {
+                // 5. Guardar el buffer de imagen en el archivo
+                ImageIO.write(image, formatName, fileToSave);
+
+                System.out.println("Imagen creada exitosamente en: " + fileToSave.getAbsolutePath());
+                javax.swing.JOptionPane.showMessageDialog(panel, 
+                        "¡Imagen guardada con éxito!", 
+                        "Éxito", 
+                        javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(panel, 
+                        "Error al crear la imagen: " + e.getMessage(), 
+                        "Error", 
+                        javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    private void mostrarDatos() {
         lblTipoComprobante.setText(NomtipoComprobante.toUpperCase());
         lblFechaEmision.setText(Nomfecha);
         lblCodVentaCita.setText(String.valueOf(codigo));
         lblCliente.setText(Nomcliente);
+
+        Double subtotal = sumarColumna(tabla, 3);
+        lblSubTotal.setText(String.format("%.2f", subtotal));
+
+        Double igv = subtotal * 0.18;
+        lblIgv.setText(String.format("%.2f", igv));
+
+        Double total = subtotal + igv;
+        lblTotal.setText(String.format("%.2f", total));
+
+        String montoLetras = objComprobante.numeroALetras(total);
+        lblPrecioLetras.setText(montoLetras);
         
-        if (servicio = false) {
-            Double subtotal = sumarColumna(tabla, 3);
-            lblSubTotal.setText(String.format("%.2f",subtotal));
-
-            Double igv = subtotal * 0.18;
-            lblIgv.setText(String.format("%.2f",igv));
-
-            Double total = subtotal + igv;
-            lblTotal.setText(String.format("%.2f",total));
-
-            String montoLetras = objComprobante.numeroALetras(total);
-            lblPrecioLetras.setText(montoLetras);
-        } else{
-            Double subtotal = sumarColumna(tabla, 2);
-            lblSubTotal.setText(String.format("%.2f",subtotal));
-
-            Double igv = subtotal * 0.18;
-            lblIgv.setText(String.format("%.2f",igv));
-
-            Double total = subtotal + igv;
-            lblTotal.setText(String.format("%.2f",total));
-
-            String montoLetras = objComprobante.numeroALetras(total);
-            lblPrecioLetras.setText(montoLetras);
+        try {
+            String nroDocumento = objCliente.obtenerNumeroDocumento(Nomcliente);
+            lblDocumentoIdentidad.setText(nroDocumento);
             
-            lblVehiculo.setVisible(true);
-            lblVehiculo.setText(vehiculo);
-            lblVehiculo1.setVisible(true);
+            String nroComprobante = objComprobante.mostrarNuevoNumeroComprobante(NomtipoComprobante);
+            lblNumComprobante.setText(nroComprobante);
+        } catch (Exception ex) {
+            Logger.getLogger(JdComprobanteVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        lblTrabajador.setText("Ricardo Torres Vega");   //PRUEBAAAAAAAAAAAAAAAAAAAAA
+        
     }
     
     private void listarMedioPago(){
@@ -118,6 +256,41 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Error al cargar medio de pago -> " + e.getMessage(), "Sistema", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    private void calcularVueltoAutomatico() {
+        try {
+            // 1. Obtener los valores de los campos de texto
+            String strTotal = lblTotal.getText().trim();
+            String strPagado = txtMontoPagado.getText().trim();
+
+            // Asegurarse de que los campos no estén vacíos
+            if (strTotal.isEmpty() || strPagado.isEmpty()) {
+                lblVuelto.setText("0.00");
+                return;
+            }
+
+            // 2. Convertir los textos a números (usando double para precisión monetaria)
+            double totalAPagar = Double.parseDouble(strTotal);
+            double montoPagado = Double.parseDouble(strPagado);
+
+            // 3. Realizar la resta
+            double vuelto = montoPagado - totalAPagar;
+
+            // 4. Mostrar el resultado
+            // Usamos String.format para mostrar el vuelto con dos decimales (formato de moneda)
+            if (vuelto < 0) {
+                // Si es negativo, significa que el cliente aún debe dinero (o pagó menos del total)
+                lblVuelto.setText("FALTA: " + String.format("%.2f", Math.abs(vuelto)));
+            } else {
+                lblVuelto.setText(String.format("%.2f", vuelto));
+            }
+
+        } catch (NumberFormatException e) {
+            // Manejar la excepción si el usuario ingresa un texto no válido
+            lblVuelto.setText("Error");
+            System.err.println("Error al convertir el monto: " + e.getMessage());
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -125,7 +298,7 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
 
         jLabel18 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        JpExportar = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -188,7 +361,7 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        JpExportar.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -410,6 +583,11 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         lblVuelto.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
         lblVuelto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblVuelto.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        lblVuelto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                lblVueltoKeyReleased(evt);
+            }
+        });
 
         jLabel31.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
         jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -436,18 +614,18 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         lblVehiculo.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
         lblVehiculo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout JpExportarLayout = new javax.swing.GroupLayout(JpExportar);
+        JpExportar.setLayout(JpExportarLayout);
+        JpExportarLayout.setHorizontalGroup(
+            JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JpExportarLayout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(JpLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createSequentialGroup()
+                        .addComponent(JpLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
                         .addGap(44, 44, 44)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -455,74 +633,74 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(46, 46, 46)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(JpExportarLayout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblPrecioLetras, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createSequentialGroup()
                                     .addComponent(jLabel22)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(lblSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createSequentialGroup()
                                     .addComponent(jLabel24)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(lblIgv, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(JpExportarLayout.createSequentialGroup()
                                     .addComponent(jLabel28)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(txtMontoPagado, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createSequentialGroup()
                                 .addComponent(jLabel26)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createSequentialGroup()
                             .addComponent(jLabel31)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(lblVuelto, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createSequentialGroup()
                             .addComponent(jLabel10)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(lblTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(39, 39, 39)
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(lblFechaEmision, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(JpExportarLayout.createSequentialGroup()
+                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblVehiculo1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel16))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(JpExportarLayout.createSequentialGroup()
+                                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                                 .addComponent(jLabel20)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblDocumentoIdentidad, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(1, 1, 1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(JpExportarLayout.createSequentialGroup()
                                 .addComponent(lblVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(35, 35, 35))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        JpExportarLayout.setVerticalGroup(
+            JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JpExportarLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JpExportarLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)
@@ -532,69 +710,69 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel9))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(JpLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)))
                 .addGap(24, 24, 24)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JpExportarLayout.createSequentialGroup()
+                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, 0)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(JpExportarLayout.createSequentialGroup()
+                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblFechaEmision, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, 0)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JpExportarLayout.createSequentialGroup()
+                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, 0)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(JpExportarLayout.createSequentialGroup()
+                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblDocumentoIdentidad, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, 0)
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JpExportarLayout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addComponent(lblVehiculo1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(JpExportarLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel22))
                 .addGap(0, 0, 0)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblIgv, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(JpExportarLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblPrecioLetras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel26))
                 .addGap(0, 0, 0)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtMontoPagado)
                     .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel31)
                     .addComponent(lblVuelto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19))
@@ -624,11 +802,21 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         btnExportarPdf.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btnExportarPdf.setForeground(new java.awt.Color(255, 255, 255));
         btnExportarPdf.setText("Exportar a PDF");
+        btnExportarPdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportarPdfActionPerformed(evt);
+            }
+        });
 
         btnExportarImg.setBackground(new java.awt.Color(31, 41, 55));
         btnExportarImg.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btnExportarImg.setForeground(new java.awt.Color(255, 255, 255));
-        btnExportarImg.setText("Exportar a IMG");
+        btnExportarImg.setText("Exportar a JPG/PNG");
+        btnExportarImg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportarImgActionPerformed(evt);
+            }
+        });
 
         jLabel19.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -724,7 +912,7 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(JpExportar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
@@ -732,7 +920,7 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(JpExportar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -744,8 +932,29 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMontoPagadoActionPerformed
 
+    private void lblVueltoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lblVueltoKeyReleased
+        
+        calcularVueltoAutomatico();
+        
+    }//GEN-LAST:event_lblVueltoKeyReleased
+
+    private void btnExportarPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarPdfActionPerformed
+        
+        JPanel panelAExportar = this.JpExportar;
+        exportarPanelAPdf(panelAExportar);
+        
+    }//GEN-LAST:event_btnExportarPdfActionPerformed
+
+    private void btnExportarImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarImgActionPerformed
+        
+        JPanel panelAExportar = this.JpExportar;
+        exportarPanelAImagen(panelAExportar);
+        
+    }//GEN-LAST:event_btnExportarImgActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel JpExportar;
     private javax.swing.JPanel JpLogo;
     private javax.swing.JButton btnExportarImg;
     private javax.swing.JButton btnExportarPdf;
@@ -775,7 +984,6 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
