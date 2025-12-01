@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- *
+ * 
  * @author Josselyn
  */
 public class clsJDBC {
@@ -77,10 +77,6 @@ public class clsJDBC {
                 desconectar();
             }
         }
-    }
-
-    public Connection getCon() {
-        return con;
     }
 
     public void ejecutarBDTransacciones(String[] str) throws Exception {
