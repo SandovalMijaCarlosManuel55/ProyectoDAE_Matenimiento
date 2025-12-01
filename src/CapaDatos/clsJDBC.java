@@ -27,6 +27,10 @@ public class clsJDBC {
         this.password = "daepass";
         this.con = null;
     }
+    
+    public Connection getCon() {
+        return con;
+    }
 
     public void conectar() throws Exception {
         try {
