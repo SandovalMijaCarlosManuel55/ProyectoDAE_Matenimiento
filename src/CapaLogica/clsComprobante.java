@@ -5,6 +5,7 @@
 package CapaLogica;
 
 import CapaDatos.clsJDBC;
+import java.sql.Connection;
 import java.sql.ResultSet;
 
 /**
@@ -16,6 +17,7 @@ public class clsComprobante {
     clsJDBC objConectar = new clsJDBC();
     ResultSet rs = null;
     String strSQL;
+    Connection con = null;
 
     public ResultSet listarMedioPago() throws Exception {
         strSQL = "select mediopago from medio_pago;";
