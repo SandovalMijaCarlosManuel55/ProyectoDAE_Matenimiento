@@ -18,16 +18,19 @@ import javax.swing.table.TableRowSorter;
  * @author Mercurio5
  */
 public class JdMatenimientoVehiculo extends javax.swing.JDialog {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JdMatenimientoVehiculo.class.getName());
     clsVehiculo objVehiculo = new clsVehiculo();
     clsTipoVehiculo objTipoVehiculo = new clsTipoVehiculo();
+    FrmMenuPrincipal frmP;
+
     /**
      * Creates new form JdMatenimientoVehiculo
      */
-    public JdMatenimientoVehiculo(java.awt.Frame parent, boolean modal) {
+    public JdMatenimientoVehiculo(java.awt.Frame parent, boolean modal, FrmMenuPrincipal frmP) {
         super(parent, modal);
         initComponents();
+        listar();
     }
 
     /**
@@ -45,7 +48,7 @@ public class JdMatenimientoVehiculo extends javax.swing.JDialog {
         btnGestionarPersona = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblProducto = new javax.swing.JTable();
+        tblVehiculo = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -60,7 +63,7 @@ public class JdMatenimientoVehiculo extends javax.swing.JDialog {
         btnGestionarPersona.setBackground(new java.awt.Color(31, 41, 55));
         btnGestionarPersona.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btnGestionarPersona.setForeground(new java.awt.Color(255, 255, 255));
-        btnGestionarPersona.setText("Administrar Producto");
+        btnGestionarPersona.setText("Administrar Vehiculos");
         btnGestionarPersona.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnGestionarPersona.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -71,7 +74,7 @@ public class JdMatenimientoVehiculo extends javax.swing.JDialog {
         btnBuscar.setBackground(new java.awt.Color(31, 41, 55));
         btnBuscar.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
-        btnBuscar.setText("Buscar");
+        btnBuscar.setText("Buscar Por Placa");
         btnBuscar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -79,8 +82,8 @@ public class JdMatenimientoVehiculo extends javax.swing.JDialog {
             }
         });
 
-        tblProducto.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        tblProducto.setModel(new javax.swing.table.DefaultTableModel(
+        tblVehiculo.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tblVehiculo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -99,7 +102,7 @@ public class JdMatenimientoVehiculo extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(tblProducto);
+        jScrollPane2.setViewportView(tblVehiculo);
 
         jLabel1.setText("**");
 
@@ -160,75 +163,74 @@ public class JdMatenimientoVehiculo extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void listar(String dato) {
-        ResultSet rs = null;
-        Object[] obj;
+    private void listar() {
         DefaultTableModel mdl = new DefaultTableModel();
-        mdl.addColumn("Id");
-        mdl.addColumn("Nombre");
-        mdl.addColumn("stock");
-        mdl.addColumn("vigencia");
-        mdl.addColumn("Precio");
-        mdl.addColumn("Tipo Producto");
-        mdl.addColumn("Marca");
-
+        mdl.addColumn("ID");
+        mdl.addColumn("Placa");
+        mdl.addColumn("Año fabricacion");
+        mdl.addColumn("modelo");
+        mdl.addColumn("nro. doc. Cliente");
+        ResultSet rs = null;
         try {
-            rs = objProducto.listarIdNombre(dato);
-
+            rs = objVehiculo.listarVehiculo();
             while (rs.next()) {
-                if (rs.getBoolean("vigencia")) {
-
-                    obj = new Object[7];
-                    obj[0] = rs.getInt("idproducto");
-                    obj[1] = rs.getString("producto");
-                    obj[2] = rs.getInt("stock");
-                    if (rs.getBoolean("vigencia")) {
-                        obj[3] = "Vigente";
-                    }
-                    obj[4] = rs.getFloat("precioactual");
-                    obj[5] = rs.getString("tipoproducto");
-                    obj[6] = rs.getString("marcaproducto");
-                    mdl.addRow(obj);
-                }
-                tblProducto.setModel(mdl);
+                mdl.addRow(new Object[]{
+                    rs.getString("idVehiculo"),
+                    rs.getString("placa"),
+                    rs.getString("anofabricacion"),
+                    rs.getString("modelovehiculo"),
+                    rs.getString("numdocumento")
+                });
+                tblVehiculo.setModel(mdl);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al listar \n" + e.getMessage());
+            JOptionPane.showMessageDialog(rootPane, "Error al listar \n" + e.getMessage());
         }
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(mdl);
-        Comparator<Object> numericComparator = (a, b) -> {
-            try {
-                Double n1 = Double.parseDouble(a.toString().trim());
-                Double n2 = Double.parseDouble(b.toString().trim());
-                return n1.compareTo(n2);
-            } catch (Exception e) {
-                return a.toString().compareTo(b.toString());
-            }
-        };
-
-        sorter.setComparator(0, numericComparator); // ID
-        sorter.setComparator(2, numericComparator); // STOCK
-        sorter.setComparator(4, numericComparator); // PRECIO
-
-        tblProducto.setRowSorter(sorter);
 
     }
 
     private void btnGestionarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarPersonaActionPerformed
-        JdGestionarProducto obj = new JdGestionarProducto(frmP, true, this);
+        JdGestionarVehiculo obj = new JdGestionarVehiculo(frmP, true);
         obj.setLocationRelativeTo(frmP);
         obj.setVisible(true);
     }//GEN-LAST:event_btnGestionarPersonaActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        listar(txtbuscador.getText());
+        DefaultTableModel mdl = new DefaultTableModel();
+        mdl.addColumn("ID");
+        mdl.addColumn("Placa");
+        mdl.addColumn("Año fabricacion");
+        mdl.addColumn("modelo");
+        mdl.addColumn("nro. doc. Cliente");
+        ResultSet rs = null;
+        if (txtbuscador.getText().isBlank()) {
+            listar();
+        } else {
+            try {
+                rs = objVehiculo.buscarPLacaTotal(txtbuscador.getText());
+                if (rs.next()) {
+                    mdl.addRow(new Object[]{
+                        rs.getString("idVehiculo"),
+                        rs.getString("placa"),
+                        rs.getString("anofabricacion"),
+                        rs.getString("modelovehiculo"),
+                        rs.getString("numdocumento")
+                    });
+                            }else{
+                JOptionPane.showMessageDialog(rootPane,"No se encontro ninguna coincidencia");
+                }
+                tblVehiculo.setModel(mdl);
+                }catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+
+            }
+        
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
-     * @param args the command line arguments
-     */
-
-
+         * @param args the command line arguments
+         */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnGestionarPersona;
@@ -236,7 +238,7 @@ public class JdMatenimientoVehiculo extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel pnlProducto;
-    private javax.swing.JTable tblProducto;
+    private javax.swing.JTable tblVehiculo;
     private javax.swing.JTextField txtbuscador;
     // End of variables declaration//GEN-END:variables
 }

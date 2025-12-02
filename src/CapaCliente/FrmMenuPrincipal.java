@@ -374,7 +374,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReportesActionPerformed
 
     private void btnVehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVehiculosActionPerformed
-        JdGestionarVehiculo obj = new JdGestionarVehiculo(this, true);
+        JdMatenimientoVehiculo obj = new JdMatenimientoVehiculo(this, true,this);
         obj.setLocationRelativeTo(this);
         obj.setVisible(true);
     }//GEN-LAST:event_btnVehiculosActionPerformed

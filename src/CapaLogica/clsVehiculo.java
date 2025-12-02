@@ -6,6 +6,7 @@ package CapaLogica;
 
 import CapaDatos.clsJDBC;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -56,7 +57,8 @@ public class clsVehiculo {
     strSQL="select * from vehiculo where idvehiculo =" +id;
         try {
            rs = objConectar.consultarBD(strSQL);
-            return rs;
+            if (rs.next())return rs;
+            else return null;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -119,5 +121,21 @@ public class clsVehiculo {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+    }
+    
+    public ResultSet buscarPLacaTotal(String placa)throws Exception{
+    strSQL ="""
+            select c.numdocumento,mv.modelovehiculo, v.* from vehiculo v
+            inner join modelo_vehiculo mv on mv.idmodelovehiculo = v.idmodelovehiculo
+            inner join cliente c on c.idcliente = v.idcliente
+           """
+            + " where placa = '"+placa+"'";
+        try {
+            rs = objConectar.consultarBD(strSQL);
+           return rs;
+        } catch (Exception e) {
+           throw new Exception(e.getMessage());
+        }
+  
     }
 }

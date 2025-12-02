@@ -420,7 +420,7 @@ public class JdGestionarVehiculo extends javax.swing.JDialog {
             cboMarcaProducto.setSelectedItem(objModeloVehiculo.buscarxId(rs.getInt("idmodelovehiculo")).getString("modelovehiculo"));
             txtdoc.setText(rs.getString("idcliente"));
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "EL PRODUCTO NO EXISTE O NO SE ENCUENTRA DISPONIBLE");
+            JOptionPane.showMessageDialog(null, "EL PRODUCTO NO EXISTE O NO SE ENCUENTRA DISPONIBLE" + e.getMessage());
 
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -478,19 +478,10 @@ public class JdGestionarVehiculo extends javax.swing.JDialog {
         String nombre = "";
         boolean vigencia = false;
         ResultSet rs = null;
+        id = Integer.parseInt(txtId.getText());
 
-        try {
-            id = objVehiculo.obtenercod();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al generar codigo Producto\n" + ex);
-        }
 
-        if (btnNuevo.getText().equals("Nuevo")) {
-            btnNuevo.setText("Guardar");
-            limpiar();
-            txtId.setText(String.valueOf(id));
-        } else {
-            btnNuevo.setText("Nuevo");
+           
             try {
                 modeloV = objModeloVehiculo.buscarIdxNombre((String) cboMarcaProducto.getSelectedItem());
                 cliente = Integer.parseInt(txtdoc.getText());
@@ -510,7 +501,7 @@ public class JdGestionarVehiculo extends javax.swing.JDialog {
             }
             //objProducto.registrarProducto(WIDTH, nombre, ABORT, rootPaneCheckingEnabled)
             listar();
-        }
+        
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
