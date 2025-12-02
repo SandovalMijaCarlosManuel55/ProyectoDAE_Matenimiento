@@ -346,7 +346,7 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
     JButton btnEliminar = crearBoton("️ Eliminar", new Color(231, 76, 60));
 
     btnEditar.setVisible(!"Realizado".equals(estado));
-    
+    btnEliminar.setVisible(!"Realizado".equals(estado));
     btnEditar.addActionListener(e -> {
         try {
             JdGestionarCitas objJd = new JdGestionarCitas(null, true,idCita);
