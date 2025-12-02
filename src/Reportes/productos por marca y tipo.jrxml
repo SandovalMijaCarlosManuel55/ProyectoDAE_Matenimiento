@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PLANTILLA REPORTE" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62b1e898-4694-4fc6-bdb0-64ca9e0a9b65">
+	<property name="ireport.zoom" value="1.0245201830476065"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="149"/>
+	<queryString>
+		<![CDATA[select
+    p.idproducto,
+    p.producto,
+    mp.marcaproducto,
+    tp.tipoproducto,
+    p.stock,
+    p.precioactual,
+    case 
+        when p.vigencia = true then 'VIGENTE'
+        else 'NO VIGENTE'
+    end as estado_vigencia
+from producto p
+join marca_producto mp
+    on mp.idmarcaproducto = p.idmarcaproducto
+join tipo_producto tp
+    on tp.idtipoproducto = p.idtipoproducto
+order by
+    tp.tipoproducto,
+    mp.marcaproducto,
+    p.producto;]]>
+	</queryString>
+	<field name="idproducto" class="java.lang.Integer"/>
+	<field name="producto" class="java.lang.String"/>
+	<field name="marcaproducto" class="java.lang.String"/>
+	<field name="tipoproducto" class="java.lang.String"/>
+	<field name="stock" class="java.lang.Integer"/>
+	<field name="precioactual" class="java.math.BigDecimal"/>
+	<field name="estado_vigencia" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="233">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" backcolor="#1F2937" uuid="34d396e9-667e-4116-b34d-c92d9e11713d"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="208" y="24" width="290" height="49" uuid="bcf7155f-e000-4a5e-9b9a-2df8c5cbbf21"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="36" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA["WASHYCAR"]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="73" width="290" height="14" uuid="2d32b87d-54a4-4022-b78c-2a7b9aeb3afc"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Av. Miguel Grau 892 - La Victoria - Chiclayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="83" width="290" height="14" uuid="54b1efcb-b69f-4854-876c-65f60abf5c50"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Jr. Callao 134 - Miraflores - Chiclayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="93" width="290" height="14" uuid="9786e67f-ecd5-48a8-92fe-b43e9bb6be3e"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Telf. 265-6091 / 998657423 / 968754123]]></text>
+			</staticText>
+			<line>
+				<reportElement x="26" y="123" width="503" height="1" forecolor="#1F2937" uuid="618e77b0-e112-451d-9f25-77a2ca87c29b"/>
+			</line>
+			<staticText>
+				<reportElement x="31" y="129" width="180" height="17" uuid="179068e5-ad11-4cae-bb0a-f069ce9d813f"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE SOBRE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="154" width="488" height="43" uuid="c137b7a5-3ac7-409b-9fb9-5e3bda7f70e9"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Productos por Marca y Tipo]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="222" width="555" height="11" backcolor="#1F2937" uuid="50cdbebf-ec74-4630-aa6c-0009d96f91e6"/>
+			</rectangle>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30">
+			<staticText>
+				<reportElement x="0" y="5" width="26" height="20" uuid="6fcac083-f2ac-4c8a-9a4f-7348bda22bb4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="5" width="150" height="20" uuid="0ed8c7a6-205b-4a66-b53d-0f012070c766"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="5" width="100" height="20" uuid="d61ac034-d3f6-47fc-afc3-48e1269b6afe"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="286" y="5" width="100" height="20" uuid="a5cb0875-1d28-4aba-b036-8b00c271eab1"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="5" width="50" height="20" uuid="7da7bd7e-3403-4c1a-ac5a-46b38fbcfd41"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stock]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="446" y="5" width="60" height="20" uuid="eddf8ed3-42f4-48dc-b1c0-8f20a686d2c9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="506" y="5" width="49" height="20" uuid="2a2ebef8-2102-41bf-b6cf-6a65d74e918e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vigencia]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="26" height="20" uuid="c16f20df-7015-4b36-80bb-04a6e1d94e6f"/>
+				<textFieldExpression><![CDATA[$F{idproducto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="26" y="0" width="150" height="20" uuid="621a9424-7d60-405c-bcc4-78284a6a41b1"/>
+				<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="181" y="0" width="100" height="20" uuid="3a1b2720-e701-4753-b2c0-c3def28411af"/>
+				<textFieldExpression><![CDATA[$F{marcaproducto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="286" y="0" width="100" height="20" uuid="b390ffc0-2dcf-46a0-8c82-6c20162e2b4b"/>
+				<textFieldExpression><![CDATA[$F{tipoproducto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="391" y="0" width="50" height="20" uuid="9bde69bd-5b53-4f13-ad7d-324b1450d714"/>
+				<textFieldExpression><![CDATA[$F{stock}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###,##0.00">
+				<reportElement x="446" y="0" width="60" height="20" uuid="880702cf-6e34-4658-9b52-488726c8f462"/>
+				<textFieldExpression><![CDATA[$F{precioactual}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="506" y="0" width="49" height="20" uuid="59579d91-7ac8-438b-a284-94c8f2e50fbc"/>
+				<textFieldExpression><![CDATA[$F{estado_vigencia}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="55">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" backcolor="#1F2937" uuid="e531061b-7299-4c82-8750-536cee94f075"/>
+			</rectangle>
+			<textField>
+				<reportElement x="439" y="18" width="67" height="28" uuid="e937ac2b-87d1-4020-ad79-d9ccd3bb7a54"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="506" y="18" width="32" height="28" uuid="789bff7d-9766-416f-8568-58ece32bdbaa"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="26" y="18" width="290" height="14" uuid="cf31a48e-d951-4c32-8e0d-ec77d7c52ac0"/>
+				<text><![CDATA[Encargado: ...]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="26" y="31" width="290" height="15" uuid="a043aa70-fab3-4189-a34d-da67c14d8064"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42"/>
+	</summary>
+</jasperReport>

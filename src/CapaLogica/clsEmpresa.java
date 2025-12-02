@@ -27,7 +27,7 @@ public class clsEmpresa extends clsCliente{
     String [] strSQLGrupo;
     
     public ResultSet listarEmpresa()throws Exception{
-    rstSQL ="Select * from empresa order by 1 ";
+    rstSQL ="select  * from empresa e inner join cliente c on c.idcliente = e.idcliente order by 1 ";
         try {
             rs=objConectar.consultarBD(rstSQL);
             return rs;
@@ -55,7 +55,7 @@ public class clsEmpresa extends clsCliente{
     String telefono,
     int idDistrito,
     int idrepresentante,
-    String idempresa,
+    int idempresa,
     String razon
     )throws Exception{
     strSQLGrupo =new String[2];
@@ -76,7 +76,7 @@ public class clsEmpresa extends clsCliente{
     String telefono,
     int idDistrito,
     int idrepresentante,
-    String idempresa,
+   int idempresa,
     String razon
     )throws Exception{
         strSQLGrupo =new String[2];
@@ -92,7 +92,14 @@ public class clsEmpresa extends clsCliente{
             " where insert into empresa values("+idempresa+","+razon+","+idcliente+")";
     }
     
-    public void eliminar(int idEmpresa)throws Exception{}
+    public void eliminar(int idEmpresa)throws Exception{
+        strSQL = "delete from empresa where idempresa="+ idEmpresa;
+        try {
+         objConectar.ejecutarBD(strSQL);   
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
      //******************************************************
 
     public clsEmpresa(int idempresa, String razonsocia, int idcliente, String tipocliente, Date fecharegistro, String direccion, String correo, String telefono, int idtipodocumento, int iddistrito, int idrepresentate) {

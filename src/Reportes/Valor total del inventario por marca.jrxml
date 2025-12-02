@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="INVENTARIO_MARCA" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62b1e898-4694-4fc6-bdb0-64ca9e0a9b65">
+	<property name="ireport.zoom" value="1.0245201830476065"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select
+    mp.marcaproducto,
+    sum(p.stock * p.precioactual) as valor_inventario
+from producto p
+join marca_producto mp
+    on mp.idmarcaproducto = p.idmarcaproducto
+where p.vigencia = true
+group by mp.marcaproducto
+order by valor_inventario desc;]]>
+	</queryString>
+	<field name="marcaproducto" class="java.lang.String"/>
+	<field name="valor_inventario" class="java.math.BigDecimal"/>
+	<title>
+		<band height="233">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" backcolor="#1F2937" uuid="1654ac9b-101d-48b1-b439-a9bbf389c8f6"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="208" y="24" width="290" height="49" uuid="f60525cb-ba4a-4608-bdb9-3a3641bf9f77"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="36" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[WASHYCAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="73" width="290" height="14" uuid="819551d2-f5e4-4c1f-90a0-06b79775ac90"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Av. Miguel Grau 892 - La Victoria - Chiclayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="83" width="290" height="14" uuid="87cc5d76-ccd1-4dbf-b278-210e865bec2d"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Jr. Callao 134 - Miraflores - Chiclayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="93" width="290" height="14" uuid="5627002a-41e0-42b0-ac18-c32ac7827ea7"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Telf. 265-6091 / 998657423 / 968754123]]></text>
+			</staticText>
+			<image>
+				<reportElement x="51" y="0" width="284" height="136" uuid="d8ecd7a0-0bf6-4985-87bf-3f664e6da458"/>
+				<imageExpression><![CDATA["C:\\Users\\Josselyn\\Downloads\\58308-shop-repair-motor-service-car-cars-vehicle_400x400.png"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="26" y="123" width="503" height="1" forecolor="#1F2937" uuid="c806b312-ccd9-484c-8cf7-9ae9d6157e73"/>
+			</line>
+			<staticText>
+				<reportElement x="31" y="129" width="200" height="17" uuid="1378ce46-8439-4ead-a057-e71944a04d75"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE SOBRE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="159" width="555" height="43" uuid="a9444677-1437-4daf-aec1-ed113903860d"/>
+				<textElement textAlignment="Center">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor total del inventario por marca]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="222" width="555" height="11" backcolor="#1F2937" uuid="25930aef-7837-44bc-a669-aab71e240cff"/>
+			</rectangle>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="35">
+			<staticText>
+				<reportElement x="40" y="10" width="250" height="18" uuid="9b2dd5c5-4c6b-46e7-bdcd-908278d8e5e9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="10" width="200" height="18" uuid="a3c7bef2-c364-4491-a4b6-dd0df6547b59"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor total del inventario]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22">
+			<textField>
+				<reportElement x="40" y="2" width="250" height="18" uuid="49a9ffe7-b0f9-4001-bebe-2c7463e38cfb"/>
+				<textFieldExpression><![CDATA[$F{marcaproducto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###,##0.00">
+				<reportElement x="300" y="2" width="200" height="18" uuid="4df3058d-c009-4a94-a600-5945e529886f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{valor_inventario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="55">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" backcolor="#1F2937" uuid="ddb4f72b-90d4-4fde-a3bf-44835af718aa"/>
+			</rectangle>
+			<textField>
+				<reportElement x="439" y="18" width="67" height="28" uuid="b5d20b4f-a34d-41f6-b2f2-3e2e205a5dd6"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="26" y="18" width="200" height="15" uuid="97f52ab6-2cb7-481d-afa0-5964c902df19"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

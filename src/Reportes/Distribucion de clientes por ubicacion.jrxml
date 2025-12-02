@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PLANTILLA REPORTE" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62b1e898-4694-4fc6-bdb0-64ca9e0a9b65">
+	<property name="ireport.zoom" value="1.0245201830476065"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="145"/>
+	<queryString>
+		<![CDATA[select
+    dpto.departamento,
+    prov.provincia,
+    dist.distrito,
+    case
+        when c.tipocliente = 'E' then 'EMPRESA'
+        when c.tipocliente = 'N' then 'PERSONA NATURAL'
+        else c.tipocliente
+    end as tipo_cliente,
+    count(*) as cantidad_clientes
+from cliente c
+join distrito dist on dist.iddistrito = c.iddistrito
+join provincia prov on prov.idprovincia = dist.idprovincia
+join departamento dpto on dpto.iddepartamento = prov.iddepartamento
+where c.estado = true
+group by
+    dpto.departamento,
+    prov.provincia,
+    dist.distrito,
+    case
+        when c.tipocliente = 'E' then 'EMPRESA'
+        when c.tipocliente = 'N' then 'PERSONA NATURAL'
+        else c.tipocliente
+    end
+order by
+    dpto.departamento,
+    prov.provincia,
+    dist.distrito,
+    tipo_cliente;]]>
+	</queryString>
+	<field name="departamento" class="java.lang.String"/>
+	<field name="provincia" class="java.lang.String"/>
+	<field name="distrito" class="java.lang.String"/>
+	<field name="tipo_cliente" class="java.lang.String"/>
+	<field name="cantidad_clientes" class="java.lang.Long"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="233">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" backcolor="#1F2937" uuid="7f30ac6c-9085-408e-a022-9fb14d3cda2e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="208" y="24" width="290" height="49" uuid="32a4f41a-48ef-4263-8a25-d65f23d8fa9f"/>
+				<textElement textAlignment="Center">
+					<font size="36" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA["WASHYCAR"]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="73" width="290" height="14" uuid="f9b47bc1-8f63-4fa2-be7e-a78ed54bcb62"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Av. Miguel Grau 892 - La Victoria - Chiclayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="83" width="290" height="14" uuid="fcd215c6-2554-4cd1-ae70-1ed1f837c907"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Jr. Callao 134 - Miraflores - Chiclayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="93" width="290" height="14" uuid="47ef3437-0626-49d0-9673-e9f110f3598b"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Telf. 265-6091 / 998657423 / 968754123]]></text>
+			</staticText>
+			<line>
+				<reportElement x="26" y="123" width="503" height="1" forecolor="#1F2937" uuid="7bc487c2-5955-406b-8ec0-9f51400a36e1"/>
+			</line>
+			<staticText>
+				<reportElement x="31" y="129" width="180" height="17" uuid="e60dc045-83c6-4007-9dba-be64be6e6935"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE SOBRE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="146" width="526" height="43" uuid="06b8600b-dc5d-4eaa-8d8e-c37c054d2c14"/>
+				<textElement textAlignment="Center">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Distribución de Clientes por Ubicación]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="222" width="555" height="11" backcolor="#1F2937" uuid="b46b2b94-b1e0-4d59-a6a1-c504e6dc5c67"/>
+			</rectangle>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30">
+			<staticText>
+				<reportElement x="0" y="5" width="120" height="20" uuid="62d3e331-be73-449d-ba6e-232b72dfc34e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Departamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="5" width="120" height="20" uuid="c5980a75-63ae-4725-a00a-830a190b0499"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Provincia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="5" width="120" height="20" uuid="b506ea5a-7715-483e-be1a-4b4a01babf1f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Distrito]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="5" width="120" height="20" uuid="28883e88-7f14-495d-9b07-6500bb089f03"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="5" width="45" height="20" uuid="06708944-0f07-4895-9502-bb6bc877a98a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cant.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="120" height="20" uuid="2965ca0d-e2a5-4590-980e-1a25c95def5c"/>
+				<textFieldExpression><![CDATA[$F{departamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="0" width="120" height="20" uuid="c1ed122e-ebb2-4e5a-9a58-17d2a65a7481"/>
+				<textFieldExpression><![CDATA[$F{provincia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="0" width="120" height="20" uuid="b8f82032-d4e7-434b-b627-cc483346ea9c"/>
+				<textFieldExpression><![CDATA[$F{distrito}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="0" width="120" height="20" uuid="33d850d1-4b72-4d8e-b93f-798ea96b8460"/>
+				<textFieldExpression><![CDATA[$F{tipo_cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="510" y="0" width="45" height="20" uuid="49dd6c99-e56c-450b-ae4b-ff0cb2858196"/>
+				<textFieldExpression><![CDATA[$F{cantidad_clientes}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="55">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="11" backcolor="#1F2937" uuid="9e45c49e-4435-4a22-b8b2-fb99c577f12f"/>
+			</rectangle>
+			<textField>
+				<reportElement x="439" y="18" width="67" height="28" uuid="600c412f-7675-4661-918c-9a960fac0bca"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="506" y="18" width="32" height="28" uuid="08e82e2f-8dd1-416b-85da-249a301906e5"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="26" y="18" width="290" height="14" uuid="bb50395a-263a-4c5d-87e4-9ffbca18f7c4"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Encargado:Julon]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="26" y="31" width="290" height="15" uuid="ed09f28a-768b-4bb3-97ed-85a59f9c368a"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42"/>
+	</summary>
+</jasperReport>

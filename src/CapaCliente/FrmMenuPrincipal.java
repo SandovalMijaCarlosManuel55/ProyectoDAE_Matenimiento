@@ -383,7 +383,8 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnServiciosActionPerformed
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
-        JdMatenimientoCliente objCliente = new JdMatenimientoCliente(this, false);
+        JdGestionarCliente objCliente = new JdGestionarCliente(this, false);
+        objCliente.setLocationRelativeTo(this);
         objCliente.setVisible(true);
     }//GEN-LAST:event_btnClientesActionPerformed
 
