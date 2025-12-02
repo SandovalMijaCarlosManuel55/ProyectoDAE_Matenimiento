@@ -103,7 +103,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al cargar clientes -> " + e.getMessage(), "Sistema", JOptionPane.ERROR_MESSAGE);
         }
-    }
+    } 
     
     private void cargarDatos(int idcita){
         try{
@@ -632,7 +632,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
                                 int[] columnasAPasar = {1,2, 4};
                                 Object[][] datosFiltrados = extraerColumnas(this.tblDetalle, columnasAPasar);
                                 String[] encabezados = {"Servicio", "Precio", "Tipo de Vehiculo"};
-                                JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha, id, tipoComprobante, true, cboVehiculo.getSelectedItem().toString());
+                                JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha,lblHora.getText(), id, tipoComprobante, true, cboVehiculo.getSelectedItem().toString());
                                 dialogDestino.setVisible(true);
                         }
                     }
