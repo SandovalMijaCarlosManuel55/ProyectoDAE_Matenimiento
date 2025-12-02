@@ -108,16 +108,48 @@ public class clsCita {
         }    
     }
     
-    public void modificar(int idcita, String fecha, String hora,String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador, JTable servicios) throws Exception {        
-        strSQL = "update Cita set fecha = " + fecha + ", hora = " + hora + ", estado = ' " + estado + "', comentario = ' "+ comentario + 
-                 "', fechaRecojo = " + fechaRecojo + ", idVehiculo = " + idVehiculo + ", idTrabajador =  "+ idTrabajador +
-                 " where idcita=" + idcita +";";
-        try {
-            objConectar.ejecutarBD(strSQL);
-        } catch (Exception ex) {
-            throw new Exception("Error al modificar la cita" + ex.getMessage());
+    public void modificar(int idcita, String fecha, String hora, String estado, String comentario, String fechaRecojo, Integer idVehiculo, Integer idTrabajador, JTable servicios) throws Exception {
+    try {
+        objConectar.conectar();
+        con = (Connection) objConectar.getCon();
+        con.setAutoCommit(false); 
+        sent = (Statement) con.createStatement();
+
+        strSQL = "update Cita set fecha = '" + fecha + "', hora = '" + hora + "', estado = '" + estado + "', " +
+                 "comentario = '" + comentario + "', fechaRecojo = '" + fechaRecojo + "', " +
+                 "idVehiculo = " + idVehiculo + ", idTrabajador = " + idTrabajador +
+                 " where idcita=" + idcita;
+        
+        sent.executeUpdate(strSQL);
+
+        String sqlDelete = "delete from Detalle_Cita where idcita = " + idcita;
+        sent.executeUpdate(sqlDelete);
+
+        int ctd = servicios.getRowCount();
+        for (int i = 0; i < ctd; i++) {
+            int idTipoVehiculo = objTV.obtenerCodigoTipoVehiculo(servicios.getValueAt(i, 4).toString());
+            
+            String strSQLInsert = "insert into Detalle_Cita(precioventa,cantidad,idcita,idtipovehiculo,idservicio) values (" +
+                    servicios.getValueAt(i, 2) + ", " + 
+                    1 + ", " +                          
+                    idcita + ", " +                     
+                    idTipoVehiculo + ", " +           
+                    servicios.getValueAt(i, 0) + ")";   
+            
+            sent.executeUpdate(strSQLInsert);
         }
+
+        con.commit();
+
+    } catch (Exception ex) {
+        if (con != null) {
+            con.rollback();
+        }
+        throw new Exception("Error al modificar la cita y sus detalles: " + ex.getMessage());
+    } finally {
+        objConectar.desconectar();
     }
+}
 
     public ResultSet buscarCitaPorCodigo(Integer cod) throws Exception {
         strSQL = "SELECT C.*, DC.PRECIOVENTA,TV.TIPOVEHICULO,S.SERVICIO, T.TRABAJADOR, V.placa, CV.tipocomprobante, " +

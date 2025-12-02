@@ -40,6 +40,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
     clsServicio objServicio = new clsServicio();
     Boolean nuevo = true;
     private DefaultTableModel modelo;
+    int idEditar;
 
     public JdGestionarCitas(java.awt.Frame parent, boolean modal) throws Exception {
         super(parent, modal);
@@ -62,6 +63,8 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         cboVehiculo.setEnabled(false);
         columnasTabla();
         cargarDatos(idcita);
+        idEditar = idcita;
+        cboTipoComprobante.setSelectedIndex(0);
     }
 
     private void limpiarDatos() {
@@ -610,9 +613,12 @@ public class JdGestionarCitas extends javax.swing.JDialog {
             Integer idTrabajador = 1;
             int filas = tblDetalle.getRowCount();
                 
-            if (txtFecha.equals("") || cboClientes.getSelectedItem().toString().equals("") || cboTipoComprobante.getSelectedIndex() == -1) {
+            if (txtFecha.equals("") || cboClientes.getSelectedItem().toString().equals("")|| cboTipoComprobante.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(this, "Debe llenar todos los campos obligatorios");
             }else{
+                if (cboClientes.getSelectedItem() == null || cboVehiculo.getSelectedItem() == null) {
+                    JOptionPane.showMessageDialog(this, "Error: Debe seleccionar un Cliente y un Vehículo obligatoriamente.");
+                }else{
                 if (fechaRecojo1.before(fechaEnvio)) {
                     JOptionPane.showMessageDialog(this, "La fecha de recojo no puede ser anterior a la fecha actual");
                 }else{
@@ -632,17 +638,17 @@ public class JdGestionarCitas extends javax.swing.JDialog {
                                 if(nuevo == true){
                                 objCita.registrar(filas, id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador, tblDetalle);
                                 }else{
-                                    objCita.modificar(id, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador, tblDetalle);
+                                    objCita.modificar(idEditar, fecha, hora, estado, comentario, fechaRecojo, idVehiculo, idTrabajador, tblDetalle);
                                 }
                                 int[] columnasAPasar = {1,2, 4};
-                                Object[][] datosFiltrados = extraerColumnas(this.tblDetalle, columnasAPasar);
+                                Object[][] datosFiltrados = extraerColumnas(tblDetalle, columnasAPasar);
                                 String[] encabezados = {"Servicio", "Precio", "Tipo de Vehiculo"};
                                 JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha,lblHora.getText(), id, tipoComprobante, true, cboVehiculo.getSelectedItem().toString());
                                 dialogDestino.setVisible(true);
                         }
                     }
                 }
-            }
+            }}
             
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar datos: " +ex.getMessage());
