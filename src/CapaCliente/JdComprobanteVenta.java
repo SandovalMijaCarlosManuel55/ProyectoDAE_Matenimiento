@@ -981,6 +981,7 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
                 );
 
                 JOptionPane.showMessageDialog(this, "Transacción registrada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error en la transacción: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

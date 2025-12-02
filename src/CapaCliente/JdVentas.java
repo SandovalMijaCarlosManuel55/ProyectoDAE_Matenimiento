@@ -470,6 +470,7 @@ public class JdVentas extends javax.swing.JDialog {
             
             JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha, hora, cod, tipoComprobante, false, "");
             dialogDestino.setVisible(true);
+            dispose();
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
