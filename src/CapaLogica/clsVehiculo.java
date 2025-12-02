@@ -52,6 +52,72 @@ public class clsVehiculo {
             throw new Exception("Error al buscar vehiculos por placa: " + ex.getMessage());
         }
     }
+    public ResultSet buscarVehiculoxId(int id)throws Exception{
+    strSQL="select * from vehiculo where idvehiculo =" +id;
+        try {
+           rs = objConectar.consultarBD(strSQL);
+            return rs;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
     
+    public void eliminarVehiculo(int id) throws Exception{
+    strSQL= "delete from vehiculo where idvehiculo ="+id;
+        try {
+            objConectar.ejecutarBD(strSQL);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     
+    }
+    
+    public ResultSet listarVehiculo()throws Exception{
+    strSQL="""
+           select c.numdocumento,mv.modelovehiculo, v.* from vehiculo v
+           inner join modelo_vehiculo mv on mv.idmodelovehiculo = v.idmodelovehiculo
+           inner join cliente c on c.idcliente = v.idcliente
+           order by 1
+           
+           """;
+        try {
+            rs = objConectar.consultarBD(strSQL);
+            return rs;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+    
+    public int obtenercod()throws Exception{
+    strSQL = """
+             select coalesce(max(idvehiculo),0)+1 from vehiculo
+             """;
+        try {
+            rs = objConectar.consultarBD(strSQL);
+           if(rs.next()) return rs.getInt(1);
+           else return -1;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+    
+    public void registrar(
+    int idvehiculo, String placa,  int anofabricacion,int idmodelovehiculo, int idcliente
+    )throws Exception{
+    strSQL= "insert into vehiculo values("+idvehiculo+",'"+placa+"',"+anofabricacion+","+idmodelovehiculo+","+idcliente+")";
+        try {
+            objConectar.ejecutarBD(strSQL);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+    
+    public void Modificar(int id,String placa, int doc, int fabricacion,int modelo)throws Exception{
+    strSQL = "update vehiculo set placa= '"+placa+"',anofabricacion = "+fabricacion+",idmodelovehiculo= "+modelo+",idcliente= +"+doc+" where idvehiculo = "+id;
+        try {
+            objConectar.ejecutarBD(strSQL);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 }

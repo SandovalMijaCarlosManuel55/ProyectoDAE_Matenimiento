@@ -374,7 +374,9 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReportesActionPerformed
 
     private void btnVehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVehiculosActionPerformed
-        // TODO add your handling code here:
+        JdGestionarVehiculo obj = new JdGestionarVehiculo(this, true);
+        obj.setLocationRelativeTo(this);
+        obj.setVisible(true);
     }//GEN-LAST:event_btnVehiculosActionPerformed
 
     private void btnServiciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiciosActionPerformed
