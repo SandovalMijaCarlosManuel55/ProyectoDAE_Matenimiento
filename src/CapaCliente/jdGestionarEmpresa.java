@@ -20,49 +20,42 @@ public class jdGestionarEmpresa extends javax.swing.JDialog {
     ResultSet rs = null;
     clsEmpresa objEmpresa = new clsEmpresa();
     clsUbicacion objUbicacion = new clsUbicacion();
-     private boolean cargar_datos = false, cargar_datos2 = false;
+    private boolean cargar_datos = false, cargar_datos2 = false;
 
     public jdGestionarEmpresa(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         listar();
     }
+
     /**
-     int idcliente,
-    String direccion,
-    String correo,
-    String telefono,
-    int idDistrito,
-    int idrepresentante,
-    int idempresa,
-    String razon
- 
- **/
-    
-        public void listar() {
+     * int idcliente, String direccion, String correo, String telefono, int
+     * idDistrito, int idrepresentante, int idempresa, String razon
+     *
+     *
+     */
+    public void listar() {
         Object[] obj;
 
         DefaultTableModel mdl = new DefaultTableModel();
         mdl.addColumn("ID");
-        mdl.addColumn("DNI");
-        mdl.addColumn("Nombre");
-        mdl.addColumn("Sexo");
+        mdl.addColumn("razonsocial");
+        mdl.addColumn("fecharegistro");
         mdl.addColumn("Direccion");
         mdl.addColumn("Correo");
+        mdl.addColumn("telefono");
+        mdl.addColumn("RUCe");
         try {
             rs = objEmpresa.listarEmpresa();
             while (rs.next()) {
-                obj = new Object[6];
+                obj = new Object[7];
                 obj[0] = rs.getInt("idempresa");
-                obj[1] = rs.getInt("idpersona");
-                obj[2] = rs.getString("persona");
-                if (rs.getString("sexo").equals("M")) {
-                    obj[3] = "Masculino";
-                } else {
-                    obj[3] = "Feminino";
-                }
-                obj[4] = rs.getString("direccion");
-                obj[5] = rs.getString("correo");
+                obj[1] = rs.getString("razonsocial");
+                obj[2] = rs.getString("fecharegistro");
+                obj[3] = rs.getString("direccion");
+                obj[4] = rs.getString("correo");
+                obj[5] = rs.getString("telefono");
+                obj[6] = rs.getString("numdocumento");
                 mdl.addRow(obj);
             }
             tblEmpresa.setModel(mdl);
@@ -72,8 +65,7 @@ public class jdGestionarEmpresa extends javax.swing.JDialog {
 
     }
 
-    
-        public void cargarDepartamento() {
+    public void cargarDepartamento() {
         try {
             rs = objUbicacion.listarDepartamento();
             cboDepartamento.removeAllItems();
@@ -117,7 +109,6 @@ public class jdGestionarEmpresa extends javax.swing.JDialog {
         }
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -467,7 +458,7 @@ public class jdGestionarEmpresa extends javax.swing.JDialog {
         try {
             int distrito = objUbicacion.buscarIdxDistrito(distritoStr);
             objEmpresa.RegistrarEmpresa(id, direccion, correo, telefono, distrito, -1, id, razon);
-JOptionPane.showMessageDialog(this,"Distrito encontrdo");
+            JOptionPane.showMessageDialog(this, "Distrito encontrdo");
         } catch (Exception e) {
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
@@ -480,9 +471,12 @@ JOptionPane.showMessageDialog(this,"Distrito encontrdo");
             rs = objEmpresa.buscar(id);
             
             txtFechaRegistro.setText(rs.getString("fecharegistro"));
+            txtCorreo.setText(rs.getString("fecharegistro"));
+            txtDireccion.setText(rs.getString("direccion"));
             txtRuc.setText(rs.getString("numdocumento"));
+            txtTelefono.setText(rs.getString("telefono"));
             txtRazonSocial.setText("razonsocial");
-            JOptionPane.showMessageDialog(this, "Empresa registrada adecuadamente");
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al buscar Empresa" + e.getMessage());
         }
@@ -532,9 +526,9 @@ JOptionPane.showMessageDialog(this,"Distrito encontrdo");
         try {
             int distrito = objUbicacion.buscarIdxDistrito(distritoStr);
             objEmpresa.ModificarEmpresa(id, direccion, correo, telefono, distrito, -1, id, razon);
-JOptionPane.showMessageDialog(this,"Distrito encontrdo");
+            JOptionPane.showMessageDialog(this, "Distrito encontrdo");
         } catch (Exception e) {
-        }      
+        }
     }//GEN-LAST:event_btnCancelar2ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
