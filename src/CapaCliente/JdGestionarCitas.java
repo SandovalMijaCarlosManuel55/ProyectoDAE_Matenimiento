@@ -112,30 +112,30 @@ public class JdGestionarCitas extends javax.swing.JDialog {
         ResultSet rsCita = objCita.buscarCitaPorCodigo(idcita); 
 
         if (rsCita.next()) {
-            // Recuperamos los datos de la cita
-            String nombreCliente = rsCita.getString("CLIENTE_NOMBRE"); // <- Asumiendo nombre de columna
-            String placaVehiculo = rsCita.getString("placa"); // <- Asumiendo nombre de columna
-            String tipoComprobante = rsCita.getString("tipocomprobante"); // <- Asumiendo nombre de columna
-            String comentario = rsCita.getString("comentario"); // <- Asumiendo nombre de columna
-            java.sql.Date fechaCita = rsCita.getDate("fecha"); // <- Asumiendo nombre de columna
-
+            String nombreCliente = rsCita.getString("CLIENTE_NOMBRE"); 
+            String placaVehiculo = rsCita.getString("placa"); 
+            String tipoComprobante = rsCita.getString("tipocomprobante"); 
+            String comentario = rsCita.getString("comentario");
+            java.sql.Date fechaCita = rsCita.getDate("fecha"); 
+            java.sql.Date fechaRecojo = rsCita.getDate("fecharecojo");
+            java.sql.Time hora = rsCita.getTime("hora");
             cboClientes.setSelectedItem(nombreCliente);
             cboTipoComprobante.setSelectedItem(tipoComprobante);
             txtComentario.setText(comentario);
-
-            // Formatear y setear la fecha (si 'txtFecha' es un JTextField)
+            lblHora.setText(""+hora);
             if (fechaCita != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                txtFecha.setText(sdf.format(fechaCita));
+                lblFechaCorta.setText(sdf.format(fechaCita));
+                txtFecha.setText(sdf.format(fechaRecojo));
             }
 
-            cboVehiculo.setEnabled(true); // Lo activamos
-            cboVehiculo.removeAllItems(); // Limpiamos ítems por si acaso
+            cboVehiculo.setEnabled(true); 
+            cboVehiculo.removeAllItems(); 
 
             ResultSet rsVehiculos = objVehiculo.buscarVehiculoPorPersona(rsCita.getInt("idcliente"));
             
             while (rsVehiculos.next()) {
-                cboVehiculo.addItem(rsVehiculos.getString("PLACA")); // <- Asumiendo nombre de columna
+                cboVehiculo.addItem(rsVehiculos.getString("PLACA")); 
             }
             rsVehiculos.close();
 
@@ -161,7 +161,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Error al cargar datos de la cita: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace(); // Muy útil para ver el error en consola
+        e.printStackTrace(); 
     }
     }
     
@@ -185,6 +185,11 @@ public class JdGestionarCitas extends javax.swing.JDialog {
     }
     
     public void agregarServicio(int codigo, String nombre, float precio, int duracion, String tipo, String estado) {
+        if (estado.equalsIgnoreCase("t")) {
+            estado = "Vigente";
+        }else{
+            estado = "No vigente";
+        }
         modelo.addRow(new Object[]{codigo, nombre, precio, duracion, tipo, estado});
         actualizarTotal();
     }
@@ -605,7 +610,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
             Integer idTrabajador = 1;
             int filas = tblDetalle.getRowCount();
                 
-            if (txtFecha.equals("") || cboClientes.getSelectedItem().toString().equals("")) {
+            if (txtFecha.equals("") || cboClientes.getSelectedItem().toString().equals("") || cboTipoComprobante.getSelectedIndex() == -1) {
                 JOptionPane.showMessageDialog(this, "Debe llenar todos los campos obligatorios");
             }else{
                 if (fechaRecojo1.before(fechaEnvio)) {
@@ -632,7 +637,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
                                 int[] columnasAPasar = {1,2, 4};
                                 Object[][] datosFiltrados = extraerColumnas(this.tblDetalle, columnasAPasar);
                                 String[] encabezados = {"Servicio", "Precio", "Tipo de Vehiculo"};
-                                JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha, id, tipoComprobante, true, cboVehiculo.getSelectedItem().toString());
+                                JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha,lblHora.getText(), id, tipoComprobante, true, cboVehiculo.getSelectedItem().toString());
                                 dialogDestino.setVisible(true);
                         }
                     }
@@ -655,7 +660,7 @@ public class JdGestionarCitas extends javax.swing.JDialog {
     }//GEN-LAST:event_cboVehiculoItemStateChanged
 
     private void cboClientesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboClientesItemStateChanged
-        if (cboClientes.getSelectedItem() != null) {
+         if (cboClientes.getSelectedItem() != null) {
         cboVehiculo.setEnabled(true);  
         try {
             cboVehiculo.removeAllItems();

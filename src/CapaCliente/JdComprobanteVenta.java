@@ -18,7 +18,6 @@ import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Rectangle;
@@ -30,12 +29,16 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -48,26 +51,26 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class JdComprobanteVenta extends javax.swing.JDialog {
 
     FondoLogo logo = new FondoLogo();
-    clsComprobante objComprobante = new clsComprobante();
     clsCliente objCliente = new clsCliente();
+    clsComprobante objComprobante = new clsComprobante();
     public JTable tabla;
-    String Nomcliente, Nomfecha, NomtipoComprobante,vehiculo;
+    String Nomcliente, Nomfecha, nomHora, NomtipoComprobante;
+    LocalDate fechaa;
     int codigo;
-    boolean servicio = false;
 
-    public JdComprobanteVenta(java.awt.Dialog parent, boolean modal, Object[][] datos, String[] columnas, String cliente, String fecha, int cod, String tipoComprobante, boolean servicio1, String vehiculo1){
+    public JdComprobanteVenta(java.awt.Dialog parent, boolean modal, Object[][] datos, String[] columnas, String cliente, String fecha, String hora, int cod, String tipoComprobante, boolean servicio1, String vehiculo) {
         super(parent, modal);
         initComponents();
         this.tabla = tblDatosComprobante;
         tblDatosComprobante.setModel(new DefaultTableModel(datos, columnas));
         tblDatosComprobante.setRowHeight(22);
-        Nomcliente = cliente; Nomfecha = fecha; NomtipoComprobante = tipoComprobante; codigo = cod;
+        Nomcliente = cliente;
+        Nomfecha = fecha;
+        NomtipoComprobante = tipoComprobante;
+        nomHora = hora;
+        codigo = cod;
         mostrarDatos();
         listarMedioPago();
-        lblVehiculo.setVisible(false);
-        lblVehiculo1.setVisible(false);
-        servicio = servicio1;
-        vehiculo = vehiculo1;
     }
 
     public static double sumarColumna(JTable tabla, int indiceColumna) {
@@ -93,7 +96,7 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         }
         return suma;
     }
-    
+
     public static void exportarPanelAPdf(JPanel panel) {
         // 1. Mostrar diálogo de guardar archivo
         JFileChooser fileChooser = new JFileChooser();
@@ -101,61 +104,61 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         // Filtro para asegurar la extensión .pdf
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos PDF (*.pdf)", "pdf");
         fileChooser.setFileFilter(filter);
-        
+
         int userSelection = fileChooser.showSaveDialog(panel);
-        
+
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             String path = fileChooser.getSelectedFile().getAbsolutePath();
-            
+
             // Aseguramos que la extensión .pdf esté presente
             if (!path.toLowerCase().endsWith(".pdf")) {
                 path += ".pdf";
             }
-            
+
             // 2. Definir el tamaño del documento PDF
             int panelWidth = panel.getWidth();
             int panelHeight = panel.getHeight();
             Rectangle pagesize = new Rectangle(panelWidth, panelHeight);
-            
+
             Document document = new Document(pagesize);
-            
+
             try {
                 // 3. Crear el escritor PDF
                 PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
                 document.open();
-                
+
                 // 4. Obtener el contexto gráfico del PDF
                 PdfContentByte cb = writer.getDirectContent();
                 Graphics2D g2 = cb.createGraphics(panelWidth, panelHeight);
-                
+
                 // 5. Pintar el contenido del JPanel en el contexto gráfico del PDF
                 panel.printAll(g2); // Usamos printAll() para dibujar todos los componentes hijos
-                
+
                 g2.dispose(); // Liberar recursos
                 document.close();
-                
+
                 System.out.println("PDF creado exitosamente en: " + path);
-                javax.swing.JOptionPane.showMessageDialog(panel, 
-                        "¡PDF guardado con éxito!", 
-                        "Éxito", 
+                javax.swing.JOptionPane.showMessageDialog(panel,
+                        "¡PDF guardado con éxito!",
+                        "Éxito",
                         javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                
+
             } catch (Exception e) {
                 e.printStackTrace();
-                javax.swing.JOptionPane.showMessageDialog(panel, 
-                        "Error al crear el PDF: " + e.getMessage(), 
-                        "Error", 
+                javax.swing.JOptionPane.showMessageDialog(panel,
+                        "Error al crear el PDF: " + e.getMessage(),
+                        "Error",
                         javax.swing.JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-    
+
     public static void exportarPanelAImagen(JPanel panel) {
-        
+
         // 1. Mostrar diálogo de guardar archivo
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar Imagen");
-        
+
         // Filtros de extensión para PNG y JPG
         FileNameExtensionFilter pngFilter = new FileNameExtensionFilter("Imagen PNG (*.png)", "png");
         FileNameExtensionFilter jpgFilter = new FileNameExtensionFilter("Imagen JPEG (*.jpg)", "jpg", "jpeg");
@@ -167,21 +170,21 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
-            
+
             // 2. Determinar el formato y asegurar la extensión
             String formatName = "png"; // PNG por defecto
             String path = fileToSave.getAbsolutePath();
-            
+
             // Determinar el formato basándose en el filtro seleccionado
             if (fileChooser.getFileFilter() == jpgFilter) {
                 formatName = "jpg";
             }
-            
+
             // Asegurar que la extensión sea correcta
             if (!path.toLowerCase().endsWith("." + formatName)) {
                 fileToSave = new File(path + "." + formatName);
             }
-            
+
             // 3. Crear el buffer de imagen con el tamaño del panel
             Dimension d = panel.getSize();
             // Creamos un BufferedImage de tipo RGB que representará la imagen final
@@ -197,21 +200,21 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
                 ImageIO.write(image, formatName, fileToSave);
 
                 System.out.println("Imagen creada exitosamente en: " + fileToSave.getAbsolutePath());
-                javax.swing.JOptionPane.showMessageDialog(panel, 
-                        "¡Imagen guardada con éxito!", 
-                        "Éxito", 
+                javax.swing.JOptionPane.showMessageDialog(panel,
+                        "¡Imagen guardada con éxito!",
+                        "Éxito",
                         javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
             } catch (IOException e) {
                 e.printStackTrace();
-                javax.swing.JOptionPane.showMessageDialog(panel, 
-                        "Error al crear la imagen: " + e.getMessage(), 
-                        "Error", 
+                javax.swing.JOptionPane.showMessageDialog(panel,
+                        "Error al crear la imagen: " + e.getMessage(),
+                        "Error",
                         javax.swing.JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-    
+
     private void mostrarDatos() {
         lblTipoComprobante.setText(NomtipoComprobante.toUpperCase());
         lblFechaEmision.setText(Nomfecha);
@@ -229,34 +232,33 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
 
         String montoLetras = objComprobante.numeroALetras(total);
         lblPrecioLetras.setText(montoLetras);
-        
+
         try {
             String nroDocumento = objCliente.obtenerNumeroDocumento(Nomcliente);
             lblDocumentoIdentidad.setText(nroDocumento);
-            
+
             String nroComprobante = objComprobante.mostrarNuevoNumeroComprobante(NomtipoComprobante);
             lblNumComprobante.setText(nroComprobante);
         } catch (Exception ex) {
             Logger.getLogger(JdComprobanteVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         lblTrabajador.setText("Ricardo Torres Vega");   //PRUEBAAAAAAAAAAAAAAAAAAAAA
-        
+
     }
-    
-    private void listarMedioPago(){
-        try{
+
+    private void listarMedioPago() {
+        try {
             ResultSet rs = objComprobante.listarMedioPago();
-            while (rs.next()){
+            while (rs.next()) {
                 String mediopago = rs.getString("mediopago");
                 cboMedioPago.addItem(mediopago);
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al cargar medio de pago -> " + e.getMessage(), "Sistema", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private void calcularVueltoAutomatico() {
         try {
             // 1. Obtener los valores de los campos de texto
@@ -305,7 +307,6 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         lblTipoComprobante = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblNumComprobante = new javax.swing.JLabel();
-        JpLogo = new FondoLogo();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -337,8 +338,7 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         txtMontoPagado = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         lblPrecioLetras = new javax.swing.JLabel();
-        lblVehiculo1 = new javax.swing.JLabel();
-        lblVehiculo = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
@@ -393,9 +393,10 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         );
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
-        jLabel3.setText("N° ");
+        jLabel3.setText("N°");
 
         lblNumComprobante.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        lblNumComprobante.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -424,20 +425,7 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(lblNumComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
-
-        JpLogo.setPreferredSize(new java.awt.Dimension(222, 139));
-
-        javax.swing.GroupLayout JpLogoLayout = new javax.swing.GroupLayout(JpLogo);
-        JpLogo.setLayout(JpLogoLayout);
-        JpLogoLayout.setHorizontalGroup(
-            JpLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        JpLogoLayout.setVerticalGroup(
-            JpLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 146, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
@@ -583,20 +571,21 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         lblVuelto.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
         lblVuelto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblVuelto.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        lblVuelto.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                lblVueltoKeyReleased(evt);
-            }
-        });
 
         jLabel31.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
         jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel31.setText("Vuelto:");
 
         txtMontoPagado.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
+        txtMontoPagado.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtMontoPagado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMontoPagadoActionPerformed(evt);
+            }
+        });
+        txtMontoPagado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtMontoPagadoKeyReleased(evt);
             }
         });
 
@@ -607,24 +596,20 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         lblPrecioLetras.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
         lblPrecioLetras.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
-        lblVehiculo1.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
-        lblVehiculo1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblVehiculo1.setText("Vehículo:");
-
-        lblVehiculo.setFont(new java.awt.Font("Verdana", 0, 15)); // NOI18N
-        lblVehiculo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/logo (1).png"))); // NOI18N
 
         javax.swing.GroupLayout JpExportarLayout = new javax.swing.GroupLayout(JpExportar);
         JpExportar.setLayout(JpExportarLayout);
         JpExportarLayout.setHorizontalGroup(
             JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JpExportarLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createSequentialGroup()
-                        .addComponent(JpLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-                        .addGap(44, 44, 44)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -656,50 +641,47 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
                                 .addComponent(jLabel26)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createSequentialGroup()
-                            .addComponent(jLabel31)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(lblVuelto, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createSequentialGroup()
-                            .addComponent(jLabel10)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(39, 39, 39)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblFechaEmision, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(JpExportarLayout.createSequentialGroup()
-                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblVehiculo1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel16))
+                        .addGap(860, 860, 860)
+                        .addComponent(jLabel31)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblVuelto, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpExportarLayout.createSequentialGroup()
                         .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(JpExportarLayout.createSequentialGroup()
+                                .addComponent(jLabel16)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                                    .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(JpExportarLayout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(JpExportarLayout.createSequentialGroup()
+                                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblFechaEmision, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(JpExportarLayout.createSequentialGroup()
                                 .addComponent(jLabel20)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblDocumentoIdentidad, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(1, 1, 1))
-                            .addGroup(JpExportarLayout.createSequentialGroup()
-                                .addComponent(lblVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addGap(35, 35, 35))
+                                    .addComponent(lblDocumentoIdentidad, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(1, 1, 1)))
+                .addGap(38, 38, 38))
         );
         JpExportarLayout.setVerticalGroup(
             JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JpExportarLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(JpExportarLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -710,23 +692,22 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel9))
-                    .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(JpLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(24, 24, 24)
-                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(JpExportarLayout.createSequentialGroup()
-                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(JpExportarLayout.createSequentialGroup()
-                        .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblFechaEmision, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(JpExportarLayout.createSequentialGroup()
+                            .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(0, 0, 0)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(JpExportarLayout.createSequentialGroup()
+                            .addComponent(lblFechaEmision, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 0, 0)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel14))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(JpExportarLayout.createSequentialGroup()
@@ -741,16 +722,9 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
                             .addComponent(lblDocumentoIdentidad, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, 0)
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(JpExportarLayout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(lblVehiculo1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
-                    .addGroup(JpExportarLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel22))
@@ -771,11 +745,10 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
                 .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtMontoPagado)
                     .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0)
                 .addGroup(JpExportarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel31)
-                    .addComponent(lblVuelto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19))
+                    .addComponent(lblVuelto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel31))
+                .addGap(20, 20, 20))
         );
 
         jPanel5.setBackground(new java.awt.Color(31, 41, 55));
@@ -797,6 +770,11 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         btnGuardar.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
         btnGuardar.setText("Guardar Comprobante");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         btnExportarPdf.setBackground(new java.awt.Color(31, 41, 55));
         btnExportarPdf.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
@@ -877,7 +855,7 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
                         .addComponent(jLabel19)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblCodVentaCita, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -932,30 +910,89 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMontoPagadoActionPerformed
 
-    private void lblVueltoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lblVueltoKeyReleased
-        
+    private void txtMontoPagadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoPagadoKeyReleased
         calcularVueltoAutomatico();
-        
-    }//GEN-LAST:event_lblVueltoKeyReleased
+    }//GEN-LAST:event_txtMontoPagadoKeyReleased
 
     private void btnExportarPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarPdfActionPerformed
-        
         JPanel panelAExportar = this.JpExportar;
         exportarPanelAPdf(panelAExportar);
-        
+
     }//GEN-LAST:event_btnExportarPdfActionPerformed
 
     private void btnExportarImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarImgActionPerformed
-        
         JPanel panelAExportar = this.JpExportar;
         exportarPanelAImagen(panelAExportar);
-        
     }//GEN-LAST:event_btnExportarImgActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+
+        if (txtMontoPagado.getText().equalsIgnoreCase("")) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar un monto a pagar", "Sistema", JOptionPane.WARNING_MESSAGE);
+        } else if (Float.parseFloat(txtMontoPagado.getText()) < Float.parseFloat(lblTotal.getText())) {
+            JOptionPane.showMessageDialog(this, "El monto pagado debe ser mayor al total", "Sistema", JOptionPane.INFORMATION_MESSAGE);
+        } else if (cboEstado.getSelectedItem().toString().equalsIgnoreCase("")) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un estado del comprobante", "Sistema", JOptionPane.WARNING_MESSAGE);
+        } else if (cboMedioPago.getSelectedItem().toString().equalsIgnoreCase("")) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un medio de pago", "Sistema", JOptionPane.WARNING_MESSAGE);
+        } else {
+            // Ejemplo de obtención de datos del encabezado en tu JFrame
+            String fecha = Nomfecha.toString();
+            String hora = nomHora;
+            String numComprobante = lblNumComprobante.getText();
+            String estado = cboEstado.getSelectedItem().toString(); // "Pagado" o "Pendiente"
+            String tipoComprobante = NomtipoComprobante;
+            int idCita = Integer.parseInt(lblCodVentaCita.getText()); // Asumiendo que es un campo de texto
+            String medioPago = cboMedioPago.getSelectedItem().toString();
+            String trabajador = lblTrabajador.getText();
+            String cliente = lblCliente.getText();
+
+            LocalDate fechaCorta;
+            fechaCorta = LocalDate.now();
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd", new Locale("es", "ES"));
+            
+            String fechaFormateada = fechaCorta.format(formato);
+
+            DefaultTableModel modelo = (DefaultTableModel) tblDatosComprobante.getModel();
+
+            List<Object[]> listaDetalles = new ArrayList<>();
+
+            for (int i = 0; i < modelo.getRowCount(); i++) {
+                try {
+                    String nombreProducto = modelo.getValueAt(i, 1).toString();
+                    int cantidad = Integer.parseInt(modelo.getValueAt(i, 0).toString());
+                    float valorVenta = Float.parseFloat(modelo.getValueAt(i, 4).toString());
+
+                    Object[] filaDetalle = {nombreProducto, cantidad, valorVenta};
+
+                    listaDetalles.add(filaDetalle);
+
+                } catch (NumberFormatException e) {
+                    System.err.println("Error de formato en la fila " + (i + 1) + ": " + e.getMessage());
+                    return;
+                }
+            }
+
+            try {
+                objComprobante.transaccion(
+                        fechaFormateada, hora, numComprobante, estado,
+                        tipoComprobante, idCita, medioPago, trabajador, cliente,
+                        listaDetalles
+                );
+
+                JOptionPane.showMessageDialog(this, "Transacción registrada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error en la transacción: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JpExportar;
-    private javax.swing.JPanel JpLogo;
     private javax.swing.JButton btnExportarImg;
     private javax.swing.JButton btnExportarPdf;
     private javax.swing.JButton btnGuardar;
@@ -979,6 +1016,7 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1005,23 +1043,8 @@ public class JdComprobanteVenta extends javax.swing.JDialog {
     private javax.swing.JLabel lblTipoComprobante;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JLabel lblTrabajador;
-    private javax.swing.JLabel lblVehiculo;
-    private javax.swing.JLabel lblVehiculo1;
     private javax.swing.JLabel lblVuelto;
     private javax.swing.JTable tblDatosComprobante;
     private javax.swing.JTextField txtMontoPagado;
     // End of variables declaration//GEN-END:variables
-}
-
-class FondoLogo extends JPanel {
-
-    private Image imagen;
-
-    @Override
-    public void paint(Graphics g) {
-        imagen = new ImageIcon(getClass().getResource("/Recursos/logo.png")).getImage();
-        g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-        setOpaque(false);
-        super.paint(g);
-    }
 }

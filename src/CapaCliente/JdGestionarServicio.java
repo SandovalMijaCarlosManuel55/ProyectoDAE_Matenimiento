@@ -40,12 +40,24 @@ public class JdGestionarServicio extends javax.swing.JDialog {
     
     
     private void cargarDatos(Integer id, Integer id2) throws Exception{
+        
         ResultSet tipoVehiculo = objTipoVehiculo.buscarTipoVehiculo(id2);
         String tipo = "";
         if (tipoVehiculo.next()) { 
             tipo = tipoVehiculo.getString("tipovehiculo");
         } else {
-            throw new Exception("Tipo de vehículo no encontrado con ID: " + id2);
+            if (id2 == 0) {
+            ResultSet rsServicio = objServicio.buscarServicioPorCodigo(id);
+                if (rsServicio.next()) {
+                    txtCodigo.setText(""+id);
+                    txtNombre.setText(rsServicio.getString("servicio"));
+                    txtDuracion.setText("00.00");
+                    txtPrecio.setText("00.00");
+                }
+            cboTipoVehiculo.setSelectedItem("No asignado");
+        }else{
+              throw new Exception("Tipo de vehículo no encontrado con ID: " + id2);  
+            } 
         }
         ResultSet rs = objServicio.buscarServicioPorTipoYCodigo(tipo, id);
         if(rs.next()){
@@ -54,8 +66,6 @@ public class JdGestionarServicio extends javax.swing.JDialog {
         txtNombre.setText(rs.getString("servicio"));
         txtPrecio.setText(rs.getString("precioActual"));
         cboTipoVehiculo.setSelectedItem(rs.getString("tipoVehiculo"));    
-        }else {
-                JOptionPane.showMessageDialog(this, "Servicio no encontrado.");
         }   
     }
     
@@ -71,7 +81,6 @@ public class JdGestionarServicio extends javax.swing.JDialog {
     private void listarTiposVehiculos() {
         ResultSet rs = null;
         DefaultComboBoxModel modeloTV = new DefaultComboBoxModel();
-        modeloTV.addElement("Todos");
         try {
             rs = objTipoVehiculo.listarTipoVehiculo();
             while (rs.next()) {
@@ -80,6 +89,7 @@ public class JdGestionarServicio extends javax.swing.JDialog {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al listar tipoVehiculos"+ e.getMessage());
         }
+        modeloTV.addElement("No asignado");
         cboTipoVehiculo.setModel(modeloTV);
     }
     
@@ -90,7 +100,6 @@ public class JdGestionarServicio extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         cboTipoVehiculo = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
         txtNombre = new javax.swing.JTextField();
         txtPrecio = new javax.swing.JTextField();
         txtDuracion = new javax.swing.JTextField();
@@ -109,11 +118,6 @@ public class JdGestionarServicio extends javax.swing.JDialog {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         cboTipoVehiculo.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-
-        jButton1.setBackground(new java.awt.Color(31, 41, 55));
-        jButton1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Gestionar Tipo de Vh.");
 
         txtNombre.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
 
@@ -181,8 +185,7 @@ public class JdGestionarServicio extends javax.swing.JDialog {
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addComponent(jLabel6)
                                         .addGap(89, 89, 89))
-                                    .addComponent(cboTipoVehiculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(cboTipoVehiculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
@@ -214,9 +217,7 @@ public class JdGestionarServicio extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cboTipoVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(38, 38, 38)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -261,15 +262,20 @@ public class JdGestionarServicio extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String error = "Error al guardar datos, complete los campos numéricos de forma correcta";
         try {
+            if (txtNombre.getText().equalsIgnoreCase("")) {
+                error ="Error al guardar datos, debe ingresar un nombre";
+            }else{
             Integer id = Integer.parseInt(txtCodigo.getText());
             String nombre = txtNombre.getText();
             Integer tiempoEstimado = Integer.parseInt(txtDuracion.getText());
             Float precio = Float.parseFloat(txtPrecio.getText());
-            Integer idTipoVehiculo = objTipoVehiculo.obtenerCodigoTipoVehiculo(cboTipoVehiculo.getSelectedItem().toString());
-            if (cboTipoVehiculo.getSelectedItem().toString().equalsIgnoreCase("Todos")) {
-                JOptionPane.showMessageDialog(this, "No puede registrar un servicio para todos los tipos de vehiculos");
-            } else{
+            String TipoVehiculo = cboTipoVehiculo.getSelectedItem().toString();
+                if (TipoVehiculo.equalsIgnoreCase("No asignado")) {
+                    error="Error al guardar datos, debe seleccionar un tipo de vehículo";
+                }
+            Integer idTipoVehiculo = objTipoVehiculo.obtenerCodigoTipoVehiculo(TipoVehiculo);
                 if(nuevo == true){
                 objServicio.registrar(id, nombre, precio, tiempoEstimado, idTipoVehiculo);
                 }else{
@@ -279,7 +285,7 @@ public class JdGestionarServicio extends javax.swing.JDialog {
             }
             
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al guardar datos: " +ex.getMessage());
+            JOptionPane.showMessageDialog(this, error);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -292,7 +298,6 @@ public class JdGestionarServicio extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cboTipoVehiculo;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;

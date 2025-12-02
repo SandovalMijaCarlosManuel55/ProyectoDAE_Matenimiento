@@ -460,14 +460,17 @@ public class JdVentas extends javax.swing.JDialog {
         } else {
             String cliente = cboClientes.getSelectedItem().toString();
             String fecha = lblFecha.getText();
+            String hora = lblHora.getText();
             int cod = Integer.parseInt(lblNumVenta.getText());
             String tipoComprobante = cboTipoComprobante.getSelectedItem().toString();
 
-            int[] columnasAPasar = {4, 1, 3, 5};
+            int[] columnasAPasar = {4, 1, 2, 3, 5};
             Object[][] datosFiltrados = extraerColumnas(this.tblDetalle, columnasAPasar);
-            String[] encabezados = {"Código", "Detalle", "Precio Unitario", "Valor de Venta"};
-            JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha, cod, tipoComprobante, false,"");
+            String[] encabezados = {"Cantidad", "Detalle", "Marca", "Precio Unitario", "Valor de Venta"};
+            
+            JdComprobanteVenta dialogDestino = new JdComprobanteVenta(this, true, datosFiltrados, encabezados, cliente, fecha, hora, cod, tipoComprobante, false, "");
             dialogDestino.setVisible(true);
+            dispose();
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed

@@ -102,6 +102,9 @@ public class JdSeleccionarProductoVenta extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "La cantidad no debe superar el stock", "Sistema", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if (cantidad < 0) {
+            JOptionPane.showMessageDialog(this, "La cantidad no debe ser menor de 0", "Sistema", JOptionPane.WARNING_MESSAGE);
+        }
         
         try {
             int codigo = Integer.parseInt(modelo.getValueAt(fila, 0).toString());

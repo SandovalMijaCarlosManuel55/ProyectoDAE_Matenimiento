@@ -58,7 +58,7 @@ public class clsServicio {
         }
     }
     
-    public void modificar(int idservicio, String nombre, Float precio, Integer tiempoEstimado, int idTipoVehiculo) throws Exception {        
+    public void modificar(int idservicio, String nombre, Float precio, Integer tiempoEstimado, int idTipoVehiculo) throws Exception {
         strSQL = "update Servicio set servicio = '" + nombre + "' where idServicio=" + idservicio +"; "
                + "update Tarifario set precioactual = " 
                + precio + ", tiempoestimado = " + tiempoEstimado 

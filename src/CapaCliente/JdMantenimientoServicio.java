@@ -21,6 +21,7 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
 
     clsServicio objServicio = new clsServicio();
     clsTipoVehiculo objTipoVehiculo = new clsTipoVehiculo();
+    String estado = "";
             
     public JdMantenimientoServicio(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -239,7 +240,7 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
 
             String textoCodigo = txtBuscarServicios.getText().trim();
             String tipoSeleccionado = (String) cboTipoVehiculo.getSelectedItem();
-
+            
             try {
                 modelo.setRowCount(0);
 
@@ -257,7 +258,6 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
                     rsServicio = objServicio.buscarServicioPorTipo(tipoSeleccionado);
                 }
 
-                // Mostrar resultados
                 boolean encontrado = false;
                 while (rsServicio != null && rsServicio.next()) {
                     registro = new Vector();
@@ -266,7 +266,12 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
                     registro.add(2, rsServicio.getString("precioActual"));
                     registro.add(3, rsServicio.getString("duracion"));
                     registro.add(4, rsServicio.getString("tipoVehiculo"));
-                    registro.add(5, rsServicio.getBoolean("estado"));
+                    if (rsServicio.getBoolean("estado")==true) {
+                         estado = "Vigente";
+                    }else{
+                        estado = "No vigente";
+                    }
+                    registro.add(5, estado);
                     modelo.addRow(registro);
                     encontrado = true;
                 }
@@ -296,7 +301,12 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
                     registro.add(2, rs.getString("precioActual"));
                     registro.add(3, rs.getString("duracion"));
                     registro.add(4, rs.getString("tipoVehiculo"));
-                    registro.add(5, rs.getBoolean("estado"));
+                    if (rs.getBoolean("estado")==true) {
+                         estado = "Vigente";
+                    }else{
+                        estado = "No vigente";
+                    }
+                    registro.add(5, estado);
                     modelo.addRow(registro);
                 }} catch (Exception ex){ 
                 JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -314,7 +324,6 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
         }
 
         try {
-            // Convertir la fila seleccionada al modelo (por si hay ordenamiento/filtro)
             int modelRow = tblServicios.convertRowIndexToModel(selectedRow);
             DefaultTableModel modelo = (DefaultTableModel) tblServicios.getModel();
 
@@ -386,16 +395,21 @@ public class JdMantenimientoServicio extends javax.swing.JDialog {
                 registro.add(2, rs.getString("precioActual"));
                 registro.add(3, rs.getString("duracion"));
                 registro.add(4, rs.getString("tipoVehiculo"));
-                registro.add(5, rs.getBoolean("estado"));
+                if (rs.getBoolean("estado")==true) {
+                         estado = "Vigente";
+                    }else{
+                        estado = "No vigente";
+                    }
+                    registro.add(5, estado);
                 modelo.addRow(registro);
             }
             tblServicios.setModel(modelo);
             tblServicios.setRowHeight(22);
 
             // Configurar ancho de columnas
-            tblServicios.getColumnModel().getColumn(0).setPreferredWidth(80);
-            tblServicios.getColumnModel().getColumn(1).setPreferredWidth(200);
-            tblServicios.getColumnModel().getColumn(2).setPreferredWidth(100);
+            tblServicios.getColumnModel().getColumn(0).setPreferredWidth(60);
+            tblServicios.getColumnModel().getColumn(1).setPreferredWidth(240);
+            tblServicios.getColumnModel().getColumn(2).setPreferredWidth(80);
             tblServicios.getColumnModel().getColumn(3).setPreferredWidth(120);
             tblServicios.getColumnModel().getColumn(4).setPreferredWidth(120);
             tblServicios.getColumnModel().getColumn(5).setPreferredWidth(80);

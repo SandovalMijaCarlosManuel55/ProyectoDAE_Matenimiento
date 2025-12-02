@@ -342,13 +342,10 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
     JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 10));
     panelBotones.setOpaque(false);
     
-    JButton btnIniciar = crearBoton("️ Iniciar", new Color(142, 68, 173));
-    JButton btnConfirmar = crearBoton(" Confirmar", new Color(52, 152, 219));
     JButton btnEditar = crearBoton("️ Editar", new Color(241, 196, 15));
     JButton btnEliminar = crearBoton("️ Eliminar", new Color(231, 76, 60));
 
-    btnIniciar.setVisible("Confirmada".equals(estado));
-    btnConfirmar.setVisible("Pendiente".equals(estado));
+    btnEditar.setVisible(!"Realizado".equals(estado));
     
     btnEditar.addActionListener(e -> {
         try {
@@ -375,8 +372,6 @@ public class JdMantenimientoCitas extends javax.swing.JDialog {
         }
     });
 
-    panelBotones.add(btnIniciar);
-    panelBotones.add(btnConfirmar);
     panelBotones.add(btnEditar);
     panelBotones.add(btnEliminar);
     card.add(Box.createVerticalStrut(10));
